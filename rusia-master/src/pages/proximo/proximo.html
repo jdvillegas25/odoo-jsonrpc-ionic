@@ -1,0 +1,62 @@
+<!--
+  Generated template for the ProximoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Proximos Tours</ion-title>      
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <div *ngIf="cargar" style="text-align: center">    
+    <ion-spinner name="circles"></ion-spinner><br>
+    <b>Cargando...</b>
+  </div>
+  
+  <h3>{{viewTitle}}</h3>
+	<calendar *ngIf="!cargar"
+        [formatWeekTitle]="calendar.formatWeekTitle"
+        [allDayLabel]="calendar.allDayLabel"
+        [eventSource]="calendar.eventSource"
+        [calendarMode]="calendar.mode"
+        [locale]="calendar.locale"
+        [currentDate]="calendar.currentDate"   
+        [formatDayHeader]="calendar.formatDayHeader"            
+        [formatMonthTitle]="calendar.formatMonthTitle"
+        [noEventsLabel]="calendar.noEventsLabel"          
+        (onEventSelected)="onEventSelected($event)"
+        (onTitleChanged)="onViewTitleChanged($event)"
+        step="30">
+  </calendar>
+
+  <!-- <div>{{mensaje}}</div> -->
+
+</ion-content>
+
+<ion-footer>
+  <!-- Segment buttons with text -->
+  <ion-segment [(ngModel)]="calendar.mode" color="primary">
+    <ion-segment-button (ionSelect)="today()">
+      Hoy
+    </ion-segment-button>
+    <ion-segment-button (ionSelect)="changeMode('month')">
+      Mes
+    </ion-segment-button>
+    <ion-segment-button (ionSelect)="changeMode('week')">
+      Semana
+    </ion-segment-button>
+    <ion-segment-button (ionSelect)="changeMode('day')">
+      Dia
+    </ion-segment-button>
+  </ion-segment>
+</ion-footer>

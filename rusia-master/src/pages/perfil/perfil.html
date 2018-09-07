@@ -1,0 +1,46 @@
+<!--
+  Generated template for the PerfilPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Perfil</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+	<!-- <div>{{mensaje}}</div> -->
+	<div *ngIf="cargar" style="text-align: center">    
+    	<ion-spinner name="circles"></ion-spinner><br>
+    	<b>Guardando...</b>
+  	</div>
+	<ion-fab top right>
+   		<button ion-fab color="dark" (click)="cambiarImagen()"><ion-icon name="create"></ion-icon></button>
+ 	</ion-fab>
+
+	 <ion-list>
+
+	    <ion-item>
+			<div style="width: 100%;text-align: center;"><img [src]="user.image" alt="Sin imagen" height="250px"></div>
+		</ion-item>
+		<ion-item>		
+	        <ion-input type="text"  [(ngModel)]="user.name" name='name' [readonly]="true"></ion-input>
+		</ion-item>
+		<ion-item>		
+	        <ion-input type="text"  [(ngModel)]="user.login" name='login' [readonly]="true"></ion-input>
+		</ion-item>
+		<ion-item>
+        	<button ion-button block type="button" color="danger" (click)="salir()">Salir</button>
+      	</ion-item>
+	 </ion-list>
+
+</ion-content>

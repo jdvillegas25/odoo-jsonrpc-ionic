@@ -1,0 +1,57 @@
+<!--
+  Generated template for the PuntoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Punto de encuentro</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content>
+
+  <div *ngIf="cargar" style="text-align: center">    
+    <ion-spinner name="circles"></ion-spinner><br>
+    <b>{{mensaje}}</b>
+  </div>
+
+  
+ <ion-slides pager=true zoom="true">
+    <ion-slide *ngFor="let item of items;" (ionSlideDidChange)="slideChanged()">      
+      <ion-card>
+
+        <img [src]="item.punto_encuentro2" (click)="zoomImage(item)" alt="Sin mapa">
+
+        <ion-item>
+          <ion-icon name="pin" item-start large></ion-icon>
+          <h1>{{item.name}}</h1>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="call" item-left large ></ion-icon>
+          <h2>En caso de emergencia, pulse el boton</h2>          
+          <a href="tel:{{item.phone}}" ion-button color="danger">Llamar: {{item.phone}}</a><br>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="navigate" item-start large></ion-icon>
+          <!-- <button ion-button icon-left clear item-end>
+            Ver en Mapa
+          </button> -->
+          <a href="{{item.url_map}}" ion-button color="light">Ver en Mapa</a>
+        </ion-item>
+
+      </ion-card>
+    </ion-slide>
+  </ion-slides> 
+
+</ion-content>

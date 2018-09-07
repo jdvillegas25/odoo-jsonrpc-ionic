@@ -1,0 +1,14 @@
+{
+  "name": "rusia",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://moscutourgratis.com:8069"
+    }
+  ],
+  "pro_id": "2eda812e"
+}

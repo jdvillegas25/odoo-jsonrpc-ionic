@@ -1,0 +1,62 @@
+<!--
+  Generated template for the CrearCuentaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Solicitar Cuenta</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+<form (ngSubmit)="solicitar()">
+	<div style="text-align: center">
+        <img src="assets/imgs/icon.png?v=1" alt="ToursGratisRusia"/>                
+    </div>
+
+
+  <div *ngIf="cargar" style="text-align: center">    
+    <ion-spinner name="circles"></ion-spinner><br>
+    <b>Creando cuenta...</b>
+  </div>
+    
+	<ion-list *ngIf="!cargar"> 
+	 
+	  <ion-item>
+	    <ion-label color="primary" stacked>Nombre *</ion-label>
+	    <ion-input required type="text" [(ngModel)]="mail.nombre" name="nombre" placeholder="Tu nombre completo"></ion-input>
+	  </ion-item>
+	  <ion-item>
+	    <ion-label color="primary" stacked>Email *</ion-label>
+	    <ion-input required type="email" [(ngModel)]="mail.email" name="email" placeholder="Correo electrónico"></ion-input>
+	  </ion-item>
+	  <ion-item>
+	    <ion-label color="primary" stacked>Teléfono *</ion-label>
+	    <ion-input required type="tel" [(ngModel)]="mail.tel" name="tel" placeholder="Teléfono o Whatsapp"></ion-input>
+	  </ion-item>
+	  <ion-item>
+	    <ion-label color="primary" stacked>Hotel *</ion-label>
+	    <ion-input required type="text" [(ngModel)]="mail.hotel" name="hotel" placeholder="Hotel donde te quedaras"></ion-input>
+	  </ion-item>
+	  <ion-item>
+        <ion-label color="primary" stacked>Contraseña *</ion-label>
+        <ion-input type="password" [(ngModel)]="mail.password" required name='password'  placeholder="Ingresa la Contraseña"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" stacked>Repetir Contraseña *</ion-label>
+        <ion-input type="password" [(ngModel)]="mail.password2" required name='password2'  placeholder="Repite la Contraseña"></ion-input>
+      </ion-item>
+
+	  <ion-item>
+	   <button ion-button block type="submit">Solicitar</button>
+	  </ion-item>
+	</ion-list>
+</form>
+
+</ion-content>
