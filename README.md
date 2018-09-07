@@ -1,0 +1,1 @@
+# odoo-jsonrpc-ionic
