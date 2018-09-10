@@ -1,11 +1,11 @@
-<ion-content class="background">
+<ion-content class="background" text-center>
+  <ion-img chache bounds style="width: 30%;height: 30%;" src="../../assets/imgs/LOGO_ALL_SERVICE _HYNO.png" alt="Logo All Service"></ion-img>
   <ion-card>
     <ion-card-content>
-
       <div class="spacer" style="height: 10px;"></div>
       <ion-item>
-        <ion-label style="color: #fff">Select Protocol</ion-label>
-        <ion-select [(ngModel)]="selectedProtocol" style="color: #fff" name="dbNames">
+        <ion-label style="color: #818181">Seleccione Protocolo</ion-label>
+        <ion-select [(ngModel)]="selectedProtocol" style="color: #818181" name="dbNames">
           <ion-option *ngFor="let item of listForProtocol" value="{{item.protocol}}">{{item.protocol}}</ion-option>
         </ion-select>
       </ion-item>
@@ -14,29 +14,29 @@
         <ion-input [(ngModel)]="odooUrl" type="url" name="odooUrl" placeholder="Odoo Url"></ion-input>
       </ion-item>
       <div class="spacer" style="height: 10px;"></div>
-      <button ion-button block round outline color="light" (click)="checkUrl()" text-center>
-        Check Url
+      <button ion-button block round color="secondary" (click)="checkUrl()" text-center>
+        Revisar Url
         <ion-icon name="md-arrow-round-forward"></ion-icon>
       </button>
       <div [hidden]="!perfectUrl">
         <form (ngSubmit)="login()" #registerForm="ngForm">
           <div class="spacer" style="height: 10px;"></div>
           <ion-item>
-            <ion-input type="email" [(ngModel)]="email" name="email" placeholder="Email" required></ion-input>
+            <ion-input type="email" [(ngModel)]="email" name="email" placeholder="Correo o Usuario" required></ion-input>
           </ion-item>
           <div class="spacer" style="height: 5px;"></div>
           <ion-item>
-            <ion-input type="password" [(ngModel)]="password" name="pass" placeholder="Password" required></ion-input>
+            <ion-input type="password" [(ngModel)]="password" name="pass" placeholder="Contraseña" required></ion-input>
           </ion-item>
           <div class="spacer" style="height: 10px;"></div>
           <div class="spacer" style="height: 10px;"></div>
           <ion-item>
-            <ion-label style="color: #fff">Select Database</ion-label>
-            <ion-select [(ngModel)]="selectedDatabase" name="selectDatabase" style="color: #fff" required>
+            <ion-label style="color: #818181">Seleccion Base de Datos</ion-label>
+            <ion-select [(ngModel)]="selectedDatabase" name="selectDatabase" style="color: #818181" required>
               <ion-option *ngFor="let item of dbList" value="{{item.dbName}}">{{item.dbName}}</ion-option>
             </ion-select>
           </ion-item>
-          <button ion-button block round outline color="light" [disabled]="!registerForm.form.valid" (click)="login()">Login</button>
+          <button ion-button block round color="secondary" [disabled]="!registerForm.form.valid" (click)="login()">Login</button>
         </form>
       </div>
     </ion-card-content>
