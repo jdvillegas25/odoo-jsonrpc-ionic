@@ -32,7 +32,7 @@ export class MyApp {
     });
 
     if (localStorage.getItem("token")) {
-      let response = localStorage.getItem("token");
+      let response = window.localStorage.getItem("token");
 
       let jsonData = JSON.parse(response);
       let username = jsonData["username"];

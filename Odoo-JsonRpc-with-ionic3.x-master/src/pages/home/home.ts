@@ -14,7 +14,7 @@ import { ProfilePage } from "../profile/profile";
 export class HomePage {
   // splash = true;
 
-  private partnerArray: Array<{
+  private probabilidadArray: Array<{
     id: number;
     imageUrl: string;
     name: string;
@@ -28,7 +28,7 @@ export class HomePage {
     email: string;
   }> = [];
 
-  private partner = "res.partner";
+  private partner = "crm.lead";
 
   constructor(
     private navCtrl: NavController,
@@ -55,7 +55,7 @@ export class HomePage {
       let query = json["result"].records;
 
       for (let i in query) {
-        this.partnerArray.push({
+        this.probabilidadArray.push({
           id: query[i].id,
           imageUrl: "data:image/*;base64," + query[i].image_small,
           name: query[i].name == false ? "N/A" : query[i].name,
@@ -67,13 +67,13 @@ export class HomePage {
 
   private view(idx: number): void {
     let params = {
-      id: this.partnerArray[idx].id
+      id: this.probabilidadArray[idx].id
     };
     this.navCtrl.push(ViewPage, params);
   }
 
   initializeItems(): void {
-    this.partnerArray = this.items;
+    this.probabilidadArray = this.items;
   }
 
   getItems(searchbar) {
@@ -88,7 +88,7 @@ export class HomePage {
       return;
     }
 
-    this.partnerArray = this.partnerArray.filter(v => {
+    this.probabilidadArray = this.probabilidadArray.filter(v => {
       if (v.name && q) {
         if (v.name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
           return true;
@@ -101,14 +101,14 @@ export class HomePage {
   }
 
   private delete(idx: number) {
-    this.odooRpc.deleteRecord(this.partner, this.partnerArray[idx].id);
+    this.odooRpc.deleteRecord(this.partner, this.probabilidadArray[idx].id);
     this.utils.presentToast(
-      this.partnerArray[idx].name + " Deleted Successfully",
+      this.probabilidadArray[idx].name + " Deleted Successfully",
       2000,
       true,
       "top"
     );
-    this.partnerArray.splice(idx, 1);
+    this.probabilidadArray.splice(idx, 1);
   }
 
   viewProfile(): void {

@@ -1,18 +1,18 @@
-<ion-header>
-  <ion-navbar>
+  <ion-header>
+  <ion-navbar color="secondary">
     <ion-title>
-      Home
+      Bienvenido
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="viewProfile()">
-        <ion-icon name="md-happy"></ion-icon>
+        <ion-icon name="person"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list no-lines [virtualScroll]="partnerArray">
+  <ion-list no-lines [virtualScroll]="probabilidadArray">
     <ion-item-sliding *virtualItem="let item; let i=index">
       <ion-item (click)="view(i)">
         <ion-avatar item-start>
@@ -30,7 +30,7 @@
   </ion-list>
 
   <ion-fab right bottom>
-    <button ion-fab color="primary" (click)="addCustomer()">
+    <button ion-fab color="secondary" (click)="addCustomer()">
       <ion-icon name="md-add"></ion-icon>
     </button>
   </ion-fab>
