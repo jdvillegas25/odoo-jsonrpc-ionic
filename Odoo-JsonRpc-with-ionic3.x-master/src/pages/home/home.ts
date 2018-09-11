@@ -14,18 +14,18 @@ import { ProfilePage } from "../profile/profile";
 export class HomePage {
   // splash = true;
 
-  private probabilidadArray: Array<{
+  private partnerArray: Array<{
     id: number;
-    imageUrl: string;
+    probability: number;
+    partner_id: string;
     name: string;
-    email: string;
   }> = [];
 
   private items: Array<{
     id: number;
-    imageUrl: string;
+    probability: number;
+    partner_id: string;
     name: string;
-    email: string;
   }> = [];
 
   private partner = "crm.lead";
@@ -55,11 +55,11 @@ export class HomePage {
       let query = json["result"].records;
 
       for (let i in query) {
-        this.probabilidadArray.push({
+        this.partnerArray.push({
           id: query[i].id,
-          imageUrl: "data:image/*;base64," + query[i].image_small,
+          probability: query[i].probability == false ? "N/A" : query[i].probability,
           name: query[i].name == false ? "N/A" : query[i].name,
-          email: query[i].email == false ? "N/A" : query[i].email
+          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id
         });
       }
     }
@@ -67,13 +67,13 @@ export class HomePage {
 
   private view(idx: number): void {
     let params = {
-      id: this.probabilidadArray[idx].id
+      id: this.partnerArray[idx].id
     };
     this.navCtrl.push(ViewPage, params);
   }
 
   initializeItems(): void {
-    this.probabilidadArray = this.items;
+    this.partnerArray = this.items;
   }
 
   getItems(searchbar) {
@@ -88,7 +88,7 @@ export class HomePage {
       return;
     }
 
-    this.probabilidadArray = this.probabilidadArray.filter(v => {
+    this.partnerArray = this.partnerArray.filter(v => {
       if (v.name && q) {
         if (v.name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
           return true;
@@ -101,14 +101,14 @@ export class HomePage {
   }
 
   private delete(idx: number) {
-    this.odooRpc.deleteRecord(this.partner, this.probabilidadArray[idx].id);
+    this.odooRpc.deleteRecord(this.partner, this.partnerArray[idx].id);
     this.utils.presentToast(
-      this.probabilidadArray[idx].name + " Deleted Successfully",
+      this.partnerArray[idx].name + " Deleted Successfully",
       2000,
       true,
       "top"
     );
-    this.probabilidadArray.splice(idx, 1);
+    this.partnerArray.splice(idx, 1);
   }
 
   viewProfile(): void {

@@ -12,18 +12,21 @@
 </ion-header>
 
 <ion-content>
-  <ion-list no-lines [virtualScroll]="probabilidadArray">
+  <ion-list no-lines [virtualScroll]="partnerArray">
     <ion-item-sliding *virtualItem="let item; let i=index">
       <ion-item (click)="view(i)">
-        <ion-avatar item-start>
-          <ion-img class="image" [src]="item.imageUrl" style="height: 50px; width: 50px"></ion-img>
-        </ion-avatar>
-        <h2>{{item.name}}</h2>
-        <p>{{item.email}}</p>
+        <h1>{{item.name}}</h1>
+        <p>{{item.partner_id}}</p>
+        <h2 ng-if="item.probability < 30.0"><p style="color:#F44336">{{item.probability}}%</p></h2>
+        <!-- <h2 *ngif="item.probability"><p style="color:#FF9800">{{item.probability}}%</p></h2>
+        <h2 *ngif="item.probability"><p style="color:#4CAF50">{{item.probability}}%</p></h2> -->
       </ion-item>
       <ion-item-options>
+        <button ion-button color="primary" (click)="update(i)">
+          Actualizar
+        </button>
         <button ion-button color="danger" (click)="delete(i)">
-          Delete
+          Eliminar
         </button>
       </ion-item-options>
     </ion-item-sliding>
