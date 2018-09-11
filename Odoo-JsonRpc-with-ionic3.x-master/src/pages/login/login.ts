@@ -39,44 +39,30 @@ export class LoginPage {
     // this.listForProtocol.push({
     //   protocol: "https"
     // });
-    this.odooRpc.init({
-      odoo_server: "https://tudirectorio.com.co",
-      http_auth: "username:password" // optional
-    });
-    this.odooRpc.getDbList().then((dbList: any) => {
-      this.perfectUrl = true;
-      this.utils.dismissLoading();
-      this.fillData(dbList);
-    }).catch((err: any) => {
-      this.utils.presentAlert("Error", "You Entered a wrong Odoo URL", [
-        {
-          text: "Ok"
-        }
-      ]);
-      this.utils.dismissLoading();
-    });
+    this.checkUrl();
   }
 
-  // public checkUrl() {
-  //   this.utils.presentLoading("Please Wait");
-  //   this.odooRpc.init({
-  //     odoo_server: this.selectedProtocol + "://" + this.odooUrl,
-  //     http_auth: "username:password" // optional
-  //   });
+  public checkUrl() {
+    this.utils.presentLoading("Please Wait");
+    this.odooRpc.init({
+      odoo_server: "https://tudirectorio.com.co",
+      // odoo_server: this.selectedProtocol + "://" + this.odooUrl,
+      http_auth: "username:password" // optional
+    });
 
-  //   this.odooRpc.getDbList().then((dbList: any) => {
-  //       this.perfectUrl = true;
-  //       this.utils.dismissLoading();
-  //       this.fillData(dbList);
-  //     }).catch((err: any) => {
-  //       this.utils.presentAlert("Error", "You Entered a wrong Odoo URL", [
-  //         {
-  //           text: "Ok"
-  //         }
-  //       ]);
-  //       this.utils.dismissLoading();
-  //     });
-  // }
+    this.odooRpc.getDbList().then((dbList: any) => {
+        this.perfectUrl = true;
+        this.utils.dismissLoading();
+        this.fillData(dbList);
+      }).catch((err: any) => {
+        this.utils.presentAlert("Error", "You Entered a wrong Odoo URL", [
+          {
+            text: "Ok"
+          }
+        ]);
+        this.utils.dismissLoading();
+      });
+  }
 
   public fillData(res: any) {
     let body = JSON.parse(res._body);

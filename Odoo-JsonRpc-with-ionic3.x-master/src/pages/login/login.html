@@ -9,7 +9,7 @@
   <ion-card>
     <ion-card-content>
       <div class="spacer" style="height: 10px;"></div>
-      <ion-item>
+      <!-- <ion-item>
         <ion-label style="color: #818181">Seleccione Protocolo</ion-label>
         <ion-select [(ngModel)]="selectedProtocol" style="color: #818181" name="dbNames">
           <ion-option *ngFor="let item of listForProtocol" value="{{item.protocol}}">{{item.protocol}}</ion-option>
@@ -23,7 +23,7 @@
       <button ion-button block round color="secondary" (click)="checkUrl()" text-center>
         Revisar Url
         <ion-icon name="md-arrow-round-forward"></ion-icon>
-      </button>
+      </button> -->
       <div [hidden]="!perfectUrl">
         <form (ngSubmit)="login()" #registerForm="ngForm">
           <div class="spacer" style="height: 10px;"></div>
