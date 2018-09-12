@@ -7,6 +7,7 @@ import { NavController, AlertController } from "ionic-angular";
 import { Network } from "@ionic-native/network";
 import { ProfilePage } from "../profile/profile";
 
+
 @Component({
   selector: "page-home",
   templateUrl: "home.html"
@@ -36,7 +37,7 @@ export class HomePage {
     private alertCtrl: AlertController,
     private network: Network,
     private alert: AlertController,
-    private utils: Utils
+    private utils: Utils,
   ) {
     this.display();
   }

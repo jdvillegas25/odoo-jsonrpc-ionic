@@ -1,17 +1,21 @@
-  <ion-header>
-  <ion-navbar color="secondary">
+<ion-header>
+  <ion-toolbar color="secondary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>  
     <ion-title>
-      Bienvenido
+      Oportunidades
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="viewProfile()">
         <ion-icon name="person"></ion-icon>
       </button>
     </ion-buttons>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <button ion-button secondary menuToggle>Toggle Menu</button>
   <ion-list no-lines [virtualScroll]="partnerArray">
     <ion-item-sliding *virtualItem="let item; let i=index">
       <ion-item (click)="view(i)">
