@@ -20,6 +20,9 @@ export class HomePage {
     probability: number;
     partner_id: string;
     name: string;
+    colorDanger:boolean;
+    colorwarning:boolean;
+    colorSuccess:boolean;
   }> = [];
 
   private items: Array<{
@@ -27,24 +30,21 @@ export class HomePage {
     probability: number;
     partner_id: string;
     name: string;
+    colorDanger:boolean;
+    colorwarning:boolean;
+    colorSuccess:boolean;
   }> = [];
 
   private partner = "crm.lead";
 
-  constructor(
-    private navCtrl: NavController,
-    private odooRpc: OdooJsonRpc,
-    private alertCtrl: AlertController,
-    private network: Network,
-    private alert: AlertController,
-    private utils: Utils,
-  ) {
+  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils) {
     this.display();
   }
 
   private display(): void {
+    let domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
     this.odooRpc
-      .searchRead(this.partner, [], [], 0, 0, "")
+      .searchRead(this.partner, domain, [], 0, 0, "")
       .then((partner: any) => {
         this.fillParners(partner);
       });
@@ -54,13 +54,15 @@ export class HomePage {
     let json = JSON.parse(partners._body);
     if (!json.error) {
       let query = json["result"].records;
-
       for (let i in query) {
         this.partnerArray.push({
           id: query[i].id,
           probability: query[i].probability == false ? "N/A" : query[i].probability,
           name: query[i].name == false ? "N/A" : query[i].name,
-          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id
+          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
+          colorDanger:query[i].probability < 30 ? true : false,
+          colorwarning:query[i].probability >= 30 && query[i].probability < 70 ? true : false,
+          colorSuccess:query[i].probability > 70 ? true : false,
         });
       }
     }
@@ -102,16 +104,15 @@ export class HomePage {
   }
 
   private delete(idx: number) {
-    this.odooRpc.deleteRecord(this.partner, this.partnerArray[idx].id);
+    this.odooRpc.updateRecord(this.partner, this.partnerArray[idx].id,{active:false});
     this.utils.presentToast(
-      this.partnerArray[idx].name + " Deleted Successfully",
-      2000,
+      this.partnerArray[idx].name + " se Elimino con Exito",
+      5000,
       true,
       "top"
     );
     this.partnerArray.splice(idx, 1);
   }
-
   viewProfile(): void {
     this.navCtrl.push(ProfilePage);
   }

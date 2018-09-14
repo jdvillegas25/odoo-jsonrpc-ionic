@@ -15,15 +15,15 @@
 </ion-header>
 
 <ion-content>
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
   <ion-list no-lines [virtualScroll]="partnerArray">
     <ion-item-sliding *virtualItem="let item; let i=index">
       <ion-item (click)="view(i)">
         <h1>{{item.name}}</h1>
         <p>{{item.partner_id}}</p>
-        <h2 ng-if="item.probability < 30.0"><p style="color:#F44336">{{item.probability}}%</p></h2>
-        <!-- <h2 *ngif="item.probability"><p style="color:#FF9800">{{item.probability}}%</p></h2>
-        <h2 *ngif="item.probability"><p style="color:#4CAF50">{{item.probability}}%</p></h2> -->
+        <h2 *ngIf="item.colorDanger"><p style="color:#F44336;">{{item.probability}}%</p></h2>
+        <h2 *ngIf="item.colorwarning"><p style="color: #FF9800;">{{item.probability}}%</p></h2>
+        <h2 *ngIf="item.colorSuccess"><p style="color:#4CAF50;">{{item.probability}}%</p></h2>
       </ion-item>
       <ion-item-options>
         <button ion-button color="primary" (click)="update(i)">

@@ -199,6 +199,7 @@ export class OdooJsonRpc {
      * @param sort sorting order of data (e.g) let sort = "ascending"
      */
     public searchRead(model: string, domain: any, fields: any, limit: number, offset: any, sort: string) {
+        console.log(domain)
         let params = {
             model: model,
             fields: fields,
@@ -208,6 +209,7 @@ export class OdooJsonRpc {
             sort: sort,
             context: this.getContext()
         };
+        console.log(this.sendRequest("/web/dataset/search_read", params));
         return this.sendRequest("/web/dataset/search_read", params);
     }
 

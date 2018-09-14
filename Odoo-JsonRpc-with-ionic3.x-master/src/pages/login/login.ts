@@ -87,7 +87,7 @@ export class LoginPage {
         this.utils.dismissLoading();
         this.utils.presentAlert(
           "Error",
-          "Username or password must be incorrect",
+          "Usuario o Contraseña Incorrecta",
           [
             {
               text: "Ok"
