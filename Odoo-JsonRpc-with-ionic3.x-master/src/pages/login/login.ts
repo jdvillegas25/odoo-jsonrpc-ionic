@@ -43,7 +43,7 @@ export class LoginPage {
   }
 
   public checkUrl() {
-    this.utils.presentLoading("Please Wait");
+    this.utils.presentLoading("Por Favor Espere");
     this.odooRpc.init({
       odoo_server: "https://tudirectorio.com.co",
       // odoo_server: this.selectedProtocol + "://" + this.odooUrl,
@@ -74,7 +74,7 @@ export class LoginPage {
   }
 
   private login() {
-    this.utils.presentLoading("Please wait", 0, true);
+    this.utils.presentLoading("Por Favor Espere", 0, true);
     this.odooRpc
       .login(this.selectedDatabase, this.email, this.password)
       .then((res: any) => {

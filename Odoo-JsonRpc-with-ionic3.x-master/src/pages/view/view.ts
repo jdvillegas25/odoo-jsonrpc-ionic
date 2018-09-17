@@ -41,6 +41,7 @@ export class ViewPage {
     colorDanger:boolean;
     colorwarning:boolean;
     colorSuccess:boolean;
+    contact_name:string;
   }> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils) {
@@ -62,6 +63,7 @@ export class ViewPage {
       "partner_id",
       "city",
       "partner_name",
+      "contact_name",
       "company_id",
       "description",
       "create_uid",
@@ -73,7 +75,7 @@ export class ViewPage {
       "street",
       "state_id",
       "email_from",
-      "title",
+      "title"
     ];
     let domain = [["id", "=", this.oportunity]];
     let sort = "";
@@ -110,9 +112,10 @@ export class ViewPage {
             state_id:data[record].state_id == false? "" :data[record].state_id,
             email_from:data[record].email_from == false? "" :data[record].email_from,
             title:data[record].title == false? "" :data[record].title,
-            colorDanger:data[record] < 30 ? true : false,
-            colorwarning:data[record] >= 30 && data[record] < 70 ? true : false,
-            colorSuccess:data[record] > 70 ? true : false,
+            colorDanger:data[record].probability < 30 ? true : false,
+            colorwarning:data[record].probability >= 30 && data[record].probability < 70 ? true : false,
+            colorSuccess:data[record].probability > 70 ? true : false,
+            contact_name:data[record].contact_name == false ? "" :data[record].contact_name,
           });
         }
       });

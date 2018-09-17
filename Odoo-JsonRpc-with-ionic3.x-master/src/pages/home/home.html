@@ -2,13 +2,13 @@
   <ion-toolbar color="secondary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
-    </button>  
+    </button>
     <ion-title>
       Oportunidades
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="viewProfile()">
-        <ion-icon name="person"></ion-icon>
+        <ion-icon ios="ios-person-outline" md="ios-person-outline"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
@@ -21,9 +21,15 @@
       <ion-item (click)="view(i)">
         <h1>{{item.name}}</h1>
         <p>{{item.partner_id}}</p>
-        <h2 *ngIf="item.colorDanger"><p style="color:#F44336;">{{item.probability}}%</p></h2>
-        <h2 *ngIf="item.colorwarning"><p style="color: #FF9800;">{{item.probability}}%</p></h2>
-        <h2 *ngIf="item.colorSuccess"><p style="color:#4CAF50;">{{item.probability}}%</p></h2>
+        <h2 *ngIf="item.colorDanger">
+          <p style="color:#F44336;">{{item.probability}}%</p>
+        </h2>
+        <h2 *ngIf="item.colorwarning">
+          <p style="color: #FF9800;">{{item.probability}}%</p>
+        </h2>
+        <h2 *ngIf="item.colorSuccess">
+          <p style="color:#4CAF50;">{{item.probability}}%</p>
+        </h2>
       </ion-item>
       <ion-item-options>
         <button ion-button color="primary" (click)="update(i)">

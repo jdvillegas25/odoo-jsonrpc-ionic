@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Utils } from '../../services/utils';
+import { variable } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'page-profile',
@@ -91,11 +92,11 @@ export class ProfilePage {
   }
 
   logout() {
-    this.utils.presentAlert("Logout", "Are you sure! You really want to logged out", [{
-      text: "Cancel"
+    this.utils.presentAlert("Cerrar Sesión", "¿Esta seguro de cerra la sesión?", [{
+      text: "Cancelar"
     },
     {
-      text: "Logout",
+      text: "Cerrar Sesión",
       handler: () => {
         localStorage.clear()
         this.odooRpc.destroy()

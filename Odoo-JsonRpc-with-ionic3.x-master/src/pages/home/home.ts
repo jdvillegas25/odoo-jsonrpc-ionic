@@ -20,9 +20,9 @@ export class HomePage {
     probability: number;
     partner_id: string;
     name: string;
-    colorDanger:boolean;
-    colorwarning:boolean;
-    colorSuccess:boolean;
+    colorDanger: boolean;
+    colorwarning: boolean;
+    colorSuccess: boolean;
   }> = [];
 
   private items: Array<{
@@ -30,9 +30,9 @@ export class HomePage {
     probability: number;
     partner_id: string;
     name: string;
-    colorDanger:boolean;
-    colorwarning:boolean;
-    colorSuccess:boolean;
+    colorDanger: boolean;
+    colorwarning: boolean;
+    colorSuccess: boolean;
   }> = [];
 
   private partner = "crm.lead";
@@ -59,10 +59,10 @@ export class HomePage {
           id: query[i].id,
           probability: query[i].probability == false ? "N/A" : query[i].probability,
           name: query[i].name == false ? "N/A" : query[i].name,
-          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
-          colorDanger:query[i].probability < 30 ? true : false,
-          colorwarning:query[i].probability >= 30 && query[i].probability < 70 ? true : false,
-          colorSuccess:query[i].probability > 70 ? true : false,
+          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
+          colorDanger: query[i].probability < 30 ? true : false,
+          colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
+          colorSuccess: query[i].probability >= 70 ? true : false,
         });
       }
     }
@@ -104,14 +104,36 @@ export class HomePage {
   }
 
   private delete(idx: number) {
-    this.odooRpc.updateRecord(this.partner, this.partnerArray[idx].id,{active:false});
-    this.utils.presentToast(
-      this.partnerArray[idx].name + " Se elimino con exito",
-      5000,
-      true,
-      "top"
-    );
-    this.partnerArray.splice(idx, 1);
+    const confirm = this.alertCtrl.create({
+      title: '¡Atención!',
+      message: '¿Esta seguro de Eliminar el Registro?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.odooRpc.updateRecord(this.partner, this.partnerArray[idx].id, { active: false });
+            this.utils.presentToast(
+              this.partnerArray[idx].name + " se Elimino con Exito",
+              5000,
+              true,
+              "top"
+            );
+            this.partnerArray.splice(idx, 1);
+          }
+        }
+      ]
+    });
+    confirm.present();
+
+
+
+
   }
   viewProfile(): void {
     this.navCtrl.push(ProfilePage);
