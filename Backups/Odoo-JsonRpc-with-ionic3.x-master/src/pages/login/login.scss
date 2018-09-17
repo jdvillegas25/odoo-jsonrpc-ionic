@@ -1,0 +1,54 @@
+page-login {
+    .background {
+        // background-color: #fff;
+        height: 100%;
+        width: 100%;
+        background-size: cover !important;
+        background-position: center center !important;
+        background-image: url('../assets/imgs/fondo_all_service_1.jpg')
+    }
+
+    ion-card.card {
+        margin-top: 1%;
+        box-shadow: none;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+    }
+    a, p,
+    ion-card-header.card-header {
+        color: #818181!important;
+    }
+     
+    .list > .item-block:first-child {
+        border: medium none;
+    }
+     
+    .item {
+        margin-bottom: 10px;
+        background: rgb(255, 255, 255);
+        color:gray;
+        // background: rgba(255, 255, 255, 0.5);
+        border: medium none;
+     
+        .text-input, {
+            color: #818181;
+        }
+     
+        
+        input::-moz-placeholder{
+            color: #818181!important;
+        }
+        input:-moz-placeholder {
+            color: #818181!important;
+        }
+        *:-moz-placeholder{
+            color: #818181!important;
+        }
+        *:-ms-input-placeholder{
+            color: #818181!important;
+        }
+        *::-webkit-input-placeholder{
+            color: #818181!important;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+<ion-content class="background" text-center>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-lg-12>
+        <ion-img chache bounds style="background: transparent; width: 30%;height: 30%; background-size: cover !important; background-position: center center !important;" src="../assets/imgs/LOGO_ALL_SERVICE _HYNO.png" alt="Logo All Service"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card>
+    <ion-card-content>
+      <div class="spacer" style="height: 10px;"></div>
+      <!-- <ion-item>
+        <ion-label style="color: #818181">Seleccione Protocolo</ion-label>
+        <ion-select [(ngModel)]="selectedProtocol" style="color: #818181" name="dbNames">
+          <ion-option *ngFor="let item of listForProtocol" value="{{item.protocol}}">{{item.protocol}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <div class="spacer" style="height: 10px;"></div>
+      <ion-item>
+        <ion-input [(ngModel)]="odooUrl" type="url" name="odooUrl" placeholder="Odoo Url"></ion-input>
+      </ion-item>
+      <div class="spacer" style="height: 10px;"></div>
+      <button ion-button block round color="secondary" (click)="checkUrl()" text-center>
+        Revisar Url
+        <ion-icon name="md-arrow-round-forward"></ion-icon>
+      </button> -->
+      <div [hidden]="!perfectUrl">
+        <form (ngSubmit)="login()" #registerForm="ngForm">
+          <div class="spacer" style="height: 10px;"></div>
+          <ion-item>
+            <ion-input type="email" [(ngModel)]="email" name="email" placeholder="Correo o Usuario" required></ion-input>
+          </ion-item>
+          <div class="spacer" style="height: 5px;"></div>
+          <ion-item>
+            <ion-input type="password" [(ngModel)]="password" name="pass" placeholder="Contraseña" required></ion-input>
+          </ion-item>
+          <div class="spacer" style="height: 10px;"></div>
+          <div class="spacer" style="height: 10px;"></div>
+          <ion-item>
+            <ion-label style="color: #818181">Seleccion Base de Datos</ion-label>
+            <ion-select [(ngModel)]="selectedDatabase" name="selectDatabase" style="color: #818181" required>
+              <ion-option *ngFor="let item of dbList" value="{{item.dbName}}">{{item.dbName}}</ion-option>
+            </ion-select>
+          </ion-item>
+          <button ion-button block round color="secondary" [disabled]="!registerForm.form.valid" (click)="login()">Login</button>
+        </form>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
