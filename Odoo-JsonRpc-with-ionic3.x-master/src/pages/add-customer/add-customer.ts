@@ -15,10 +15,7 @@ export class AddCustomerPage {
   private email
   private website
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    private odooRpc: OdooJsonRpc,
-    private utils:Utils) { }
+  constructor(public navCtrl: NavController,public navParams: NavParams,private odooRpc: OdooJsonRpc,private utils:Utils) { }
 
 
   saveData(): void {

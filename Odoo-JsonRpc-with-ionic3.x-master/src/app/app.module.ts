@@ -13,6 +13,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ViewPage } from '../pages/view/view';
+import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ViewPage } from '../pages/view/view';
     ViewPage,
     ProfilePage,
     ParallaxDirective,
-    AddCustomerPage
+    AddCustomerPage,
+    FormProbabilidadPage,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,8 @@ import { ViewPage } from '../pages/view/view';
     LoginPage,
     ViewPage,
     ProfilePage,
-    AddCustomerPage
+    AddCustomerPage,
+    FormProbabilidadPage,
   ],
   providers: [
     Network,
