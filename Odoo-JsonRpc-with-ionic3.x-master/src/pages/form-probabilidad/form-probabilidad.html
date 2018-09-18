@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title>Formulario de Oportunidad</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="saveData()">
+        <ion-icon name="paper-plane"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-label floating>Cliente</ion-label>
+      <ion-select [(ngModel)]="cliente">
+        <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Correo</ion-label>
+      <ion-input type="email" [(ngModel)]="email" name="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Telefono</ion-label>
+      <ion-input type="tel" [(ngModel)]="telefono" name="telefono"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Telefono mobil</ion-label>
+      <ion-input type="tel" [(ngModel)]="mobil" name="mobil"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Siguiente Actividad</ion-label>
+      <ion-select [(ngModel)]="nextAcitivity">
+        <ion-option value="c">Correo</ion-option>
+        <ion-option value="ll">Llamar</ion-option>
+        <ion-option value="t">Tarea</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+        <ion-label floating>Cierre Previsto</ion-label>
+        <ion-datetime displayFormat="DD-MM-YYYY" pickerFormat="DD-MM-YYYY" [(ngModel)]="cierrePrevisto"></ion-datetime>
+      </ion-item>
+    <ion-item>
+      <ion-label floating>URL</ion-label>
+      <ion-input type="url" [(ngModel)]="website" name="website"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Vendedor</ion-label>
+      <ion-input [(ngModel)]="vendedor" class="capitalize" name="vendedor" readonly="true" style="text-transform: capitalize;"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Calificación</ion-label>
+      <ion-input type="url" [(ngModel)]="website" name="website"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Etiquetas</ion-label>
+      <ion-input [(ngModel)]="etiquetas" name="etiquetas"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
