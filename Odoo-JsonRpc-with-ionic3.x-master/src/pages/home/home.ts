@@ -1,9 +1,9 @@
-import { AddCustomerPage } from "../add-customer/add-customer";
+import { FormProbabilidadPage } from "../form-probabilidad/form-probabilidad";
 import { Utils } from "../../services/utils";
 import { ViewPage } from "../view/view";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, AlertController } from "ionic-angular";
+import { NavController, AlertController, LoadingController } from "ionic-angular";
 import { Network } from "@ionic-native/network";
 import { ProfilePage } from "../profile/profile";
 
@@ -37,11 +37,12 @@ export class HomePage {
 
   private partner = "crm.lead";
 
-  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils) {
+  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
   }
 
   private display(): void {
+
     let domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
     this.odooRpc
       .searchRead(this.partner, domain, [], 0, 0, "")
@@ -51,6 +52,10 @@ export class HomePage {
   }
 
   private fillParners(partners: any): void {
+    let loading = this.loadingCtrl.create({
+      content: "Estamos preparando todo..."
+    });
+    loading.present();
     let json = JSON.parse(partners._body);
     if (!json.error) {
       let query = json["result"].records;
@@ -66,6 +71,7 @@ export class HomePage {
         });
       }
     }
+    loading.dismiss();
   }
 
   private view(idx: number): void {
@@ -99,8 +105,6 @@ export class HomePage {
         return false;
       }
     });
-
-    console.log(q, this.items.length);
   }
 
   private delete(idx: number) {
@@ -139,7 +143,7 @@ export class HomePage {
     this.navCtrl.push(ProfilePage);
   }
 
-  addCustomer(): void {
-    this.navCtrl.push(AddCustomerPage);
+  addProbabilidad(): void {
+    this.navCtrl.push(FormProbabilidadPage);
   }
 }

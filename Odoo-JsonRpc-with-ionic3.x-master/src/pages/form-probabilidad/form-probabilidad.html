@@ -1,0 +1,135 @@
+<!-- Header-->
+<ion-header>
+
+  <!-- navegador-->
+  <ion-navbar color="secondary">
+    <ion-title>Formulario de Oportunidad</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only clear (click)="saveData()">
+        <ion-icon name="paper-plane"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <!-- fin del navegador-->
+  <!-- Segmentos o pestañas-->
+  <ion-toolbar no-border-top no-border-button color="no-color">
+    <ion-segment [(ngModel)]="pest" color="secondary">
+      <ion-segment-button value="oportunidad">
+        Oportunidad
+      </ion-segment-button>
+      <ion-segment-button value="infoContacto">
+        Información de Contacto
+      </ion-segment-button>
+      <ion-segment-button value="notasInt">
+        Notas Internas
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <!-- Final de Segmentos o pestañas-->
+</ion-header>
+<!-- Final de header-->
+
+<ion-content padding>
+  <div [ngSwitch]="pest">
+    <ion-list no-lines *ngSwitchCase="'oportunidad'">
+      <ion-item>
+        <ion-label floating>Probabilidad</ion-label>
+        <ion-range min="0" max="100" step="30" [(ngModel)]="probabilidad">
+            <ion-label range-left>0%</ion-label>
+            <ion-label range-right>100%</ion-label>
+        </ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Cliente</ion-label>
+        <ion-select [(ngModel)]="cliente">
+          <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Correo</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Telefono</ion-label>
+        <ion-input type="tel" [(ngModel)]="telefono" name="telefono"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Telefono mobil</ion-label>
+        <ion-input type="tel" [(ngModel)]="mobil" name="mobil"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Siguiente Actividad</ion-label>
+        <ion-select [(ngModel)]="nextAcitivity">
+          <ion-option value="c">Correo</ion-option>
+          <ion-option value="ll">Llamar</ion-option>
+          <ion-option value="t">Tarea</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Cierre Previsto</ion-label>
+        <ion-datetime displayFormat="DD-MM-YYYY" pickerFormat="DD-MM-YYYY" [(ngModel)]="cierrePrevisto"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>URL</ion-label>
+        <ion-input type="url" [(ngModel)]="website" name="website"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Vendedor</ion-label>
+        <ion-input [(ngModel)]="vendedor" class="capitalize" name="vendedor" readonly="true" style="text-transform: capitalize;"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Calificación</ion-label>
+        <ion-range min="1" max="10" step="1" [(ngModel)]="calificacion">
+          <ion-icon small range-left name="star" style="color: #FFEA00;"></ion-icon>
+          <ion-icon large range-right name="star" style="color: #FFEA00;"></ion-icon>
+        </ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Etiquetas</ion-label>
+        <ion-select [(ngModel)]="tags" multiple="true">
+          <ion-option *ngFor="let i of listaTags" value="{{i.id}}">{{i.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-list no-lines *ngSwitchCase="'infoContacto'">
+      <ion-item>
+        <ion-label floating>Cliente</ion-label>
+        <ion-select [(ngModel)]="cliente">
+          <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Dirección</ion-label>
+        <ion-input [(ngModel)]="dirContact" name="dirContact"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Nombre Contacto</ion-label>
+        <ion-input [(ngModel)]="nameContact" name="nameContact"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Función</ion-label>
+        <ion-input [(ngModel)]="functionContact" name="functionContact"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Móvil</ion-label>
+        <ion-input [(ngModel)]="movilContact" name="movilContact"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Móvil</ion-label>
+        <ion-input [(ngModel)]="movilContact" name="movilContact"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Correo</ion-label>
+        <ion-input [(ngModel)]="emailContact" name="emailContact"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list no-lines *ngSwitchCase="'notasInt'">
+      <ion-item>
+        <ion-label floating>Notas Internas</ion-label>
+        <ion-input placeholder="Text Input" [(ngModel)]="notaInterna" name="notaInterna"></ion-input>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
