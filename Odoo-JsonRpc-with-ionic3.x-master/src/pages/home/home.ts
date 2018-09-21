@@ -38,7 +38,7 @@ export class HomePage {
   private partner = "crm.lead";
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
-    this.display();
+    // this.display();
   }
 
   private display(): void {

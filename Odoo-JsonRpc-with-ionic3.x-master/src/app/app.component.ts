@@ -1,5 +1,6 @@
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
+import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { OdooJsonRpc } from "../services/odoojsonrpc";
 import { Component, ViewChild } from "@angular/core";
 import { AlertController, Platform, Nav } from "ionic-angular";
@@ -15,7 +16,8 @@ import { ProfilePage } from "../pages/profile/profile";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = LoginPage;
+  rootPage: any = ProspectoPage;
+  // rootPage: any = LoginPage;
   pages: Array<{title: string, component: any, icon: any}>;
   constructor(
     platform: Platform,

@@ -14,6 +14,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ViewPage } from '../pages/view/view';
 import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
+import { ProspectoPage } from "../pages/prospecto/prospecto";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilid
     ParallaxDirective,
     AddCustomerPage,
     FormProbabilidadPage,
+    ProspectoPage,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +42,7 @@ import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilid
     ProfilePage,
     AddCustomerPage,
     FormProbabilidadPage,
+    ProspectoPage,
   ],
   providers: [
     Network,
