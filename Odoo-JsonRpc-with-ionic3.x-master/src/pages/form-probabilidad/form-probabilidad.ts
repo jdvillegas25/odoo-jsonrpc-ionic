@@ -182,8 +182,8 @@ export class FormProbabilidadPage {
     }
   }
   public persistCliente(cli) {
-    for(let client of this.listaClientes){
-      if(cli == client.id){
+    for (let client of this.listaClientes) {
+      if (cli == client.id) {
         this.email = client.email;
         this.telefono = client.phone;
         this.mobil = client.mobil;
