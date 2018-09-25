@@ -1,0 +1,107 @@
+<ion-header>
+
+  <ion-navbar color="secondary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Prospecto</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list radio-group [(ngModel)]="lugarImplementacion">
+          <ion-list-header>
+            Lugar Implementación
+          </ion-list-header>
+          <ion-item>
+            <ion-label>Residencial</ion-label>
+            <ion-radio value="residencial"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Comercial</ion-label>
+            <ion-radio value="comercial"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Empresarial</ion-label>
+            <ion-radio value="empresarial"></ion-radio>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <ion-item>
+          <ion-label stacked>Necesidad del Cliente</ion-label>
+          <ion-select [(ngModel)]="necCliente" multiple="true" interface="popover" cancelText="Cancelar">
+            <ion-option value="alarma">Alarma</ion-option>
+            <ion-option value="cctv">Cctv</ion-option>
+            <ion-option value="cae">CAE</ion-option>
+            <ion-option value="eps">EPS</ion-option>
+            <ion-option value="els">ELS</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <ion-item>
+          <ion-label stacked>Zonas a Proteger</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="zonasProteger" #zona (change)="habilitarZonas(zona.value)" name="zonasProteger"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let i of listaNombreZonas">
+      <strong>Zona #{{i.id}}</strong>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
+          <ion-input [(ngModel)]="nombreZona[i.id]" name="nombreZona_{{i.id}}"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="camarasZona[i.id]" name="camarasZona_{{i.id}}"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="aproMts[i.id]" name="aproMts_{{i.id}}"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="altMts[i.id]" name="altMts_{{i.id}}"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list radio-group [(ngModel)]="sistemaMonitoreo">
+          <ion-list-header>
+            Sistema de Monitoreo
+          </ion-list-header>
+          <ion-item>
+            <ion-label>Radio</ion-label>
+            <ion-radio value="radio"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Línea Telefónica</ion-label>
+            <ion-radio value="lineaTelefonica"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>APPS</ion-label>
+            <ion-radio value="apps"></ion-radio>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row align="right">
+      <ion-col>
+        <button ion-button color="secondary">Continuar</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
