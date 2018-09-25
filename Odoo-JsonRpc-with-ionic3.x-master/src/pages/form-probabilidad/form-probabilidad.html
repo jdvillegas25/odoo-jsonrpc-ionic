@@ -46,9 +46,7 @@
       <ion-item>
         <ion-label floating>Cliente</ion-label>
         <ion-select [(ngModel)]="cliente" #cli (ionChange)="persistCliente(cli.value)">
-          <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option> v 
-
-
+          <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
@@ -70,6 +68,25 @@
           <ion-option value="ll">Llamar</ion-option>
           <ion-option value="t">Tarea</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-list radio-group [(ngModel)]="tipoOportunidad">
+          <ion-list-header>
+            Tipo de Oportunidad
+          </ion-list-header>
+          <ion-item>
+            <ion-label>Intalación</ion-label>
+            <ion-radio value="instalacion"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Mantenimiento</ion-label>
+            <ion-radio value="mantenimiento"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Suministro</ion-label>
+            <ion-radio value="suministro"></ion-radio>
+          </ion-item>
+        </ion-list>
       </ion-item>
       <ion-item>
         <ion-label floating>Fecha de Actividad</ion-label>
