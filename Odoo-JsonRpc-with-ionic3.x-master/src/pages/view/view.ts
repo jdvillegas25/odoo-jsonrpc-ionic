@@ -2,6 +2,7 @@ import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { Utils } from "../../services/utils";
+import {ProspectoPage} from "../prospecto/prospecto"
 
 @Component({
   selector: "page-view",
@@ -119,5 +120,11 @@ export class ViewPage {
           });
         }
       });
+  }
+  private addProspecto (){
+    let params = {
+      id: this.oportunity
+    };
+    this.navCtrl.push(ProspectoPage, params);
   }
 }

@@ -33,7 +33,7 @@
         </h2>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="primary" (click)="update(i)">
+        <button ion-button color="primary" (click)="FormProbabilidad('update',i)">
           Actualizar
         </button>
         <button ion-button color="danger" (click)="delete(i)">
@@ -44,7 +44,7 @@
   </ion-list>
 
   <ion-fab right bottom>
-    <button ion-fab color="secondary" (click)="addProbabilidad()">
+    <button ion-fab color="secondary" (click)="FormProbabilidad('create')">
       <ion-icon name="md-add"></ion-icon>
     </button>
   </ion-fab>

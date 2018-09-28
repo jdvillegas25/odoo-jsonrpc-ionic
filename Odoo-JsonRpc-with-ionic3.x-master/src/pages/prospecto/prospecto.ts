@@ -12,9 +12,11 @@ export class ProspectoPage {
   private camarasZona: Array<any> = [];
   private aproMts: Array<any> = [];
   private altMts: Array<any> = [];
+  private oportunity: any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController) {
+    this.oportunity = navParams.get("id");
   }
   public habilitarZonas(zonas) {
     this.listaNombreZonas = [];

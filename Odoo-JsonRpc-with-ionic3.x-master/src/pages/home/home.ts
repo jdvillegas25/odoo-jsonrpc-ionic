@@ -135,15 +135,16 @@ export class HomePage {
     });
     confirm.present();
 
-
-
-
   }
   viewProfile(): void {
     this.navCtrl.push(ProfilePage);
   }
 
-  addProbabilidad(): void {
-    this.navCtrl.push(FormProbabilidadPage);
+  FormProbabilidad(tipo:any, idx:any): void {
+    let params = {
+      tipo: tipo,
+      id: this.partnerArray[idx].id
+    }
+    this.navCtrl.push(FormProbabilidadPage,params);
   }
 }

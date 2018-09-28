@@ -40,7 +40,13 @@ export class FormProbabilidadPage {
   private listCity: any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController,private utils:Utils) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private utils: Utils) {
+
+    if(navParams.get("tipo") == 'update'){
+      this.getOportunidad(navParams.get("id"))
+    }else{
+
+    }
     this.getClientes();
     this.getTags();
     this.getCity();
@@ -49,12 +55,38 @@ export class FormProbabilidadPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FormProbabilidadPage');
+    this.name = '';
+    this.probabilidad = '';
+    this.email = '';
+    this.telefono = '';
+    this.mobil = '';
+    this.nextAcitivity = '';
+    this.fechaActividad = '';
+    this.cierrePrevisto = '';
+    this.website = '';
+    this.calificacion = '';
+    this.tags = '';
+    this.city = '';
+    this.cliente = '';
+    this.dirContact = '';
+    this.nameContact = '';
+    this.functionContact = '';
+    this.movilContact = '';
+    this.emailContact = '';
+    this.notaInterna = '';
+    this.titleAction = '';
+    this.listaClientes = '';
+    this.namePartner = '';
+    this.listaTags = '';
+    this.listCity = '';
+  }
+  private getOportunidad(idOportunidad){
+    console.log(idOportunidad);
   }
   private getClientes() {
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
-    })
+    });
     loading.present();
     let table_cliente = "res.partner"
     let domain = [["active", "=", "t"], ["customer", "=", "t"]];
@@ -75,9 +107,9 @@ export class FormProbabilidadPage {
       }
     });
   }
-  private getCity (){
+  private getCity() {
     let tableCity = "res.country.state"
-    this.odooRpc.searchRead(tableCity, [["country_id","=",50]], [], 0, 0, "").then((city: any) => {
+    this.odooRpc.searchRead(tableCity, [["country_id", "=", 50]], [], 0, 0, "").then((city: any) => {
       let json = JSON.parse(city._body);
       if (!json.error) {
         this.listCity = json["result"].records;
@@ -167,6 +199,10 @@ export class FormProbabilidadPage {
       toast.present();
     }
     else {
+      let loading = this.loadingCtrl.create({
+        content: "Por Favor Espere..."
+      })
+      loading.present();
       let params = {
         date_closed: this.cierrePrevisto,
         probability: this.probabilidad,
@@ -179,32 +215,41 @@ export class FormProbabilidadPage {
         next_activity_id: this.nextAcitivity,
         type: "opportunity",
         function: this.functionContact,
-        description: (!this.notaInterna)?'':this.notaInterna,
+        description: (!this.notaInterna) ? '' : this.notaInterna,
         create_uid: JSON.parse(localStorage.getItem('token'))['uid'],
         title_action: this.titleAction,
         phone: this.movilContact,
         user_id: JSON.parse(localStorage.getItem('token'))['uid'],
         date_action: this.fechaActividad,
         name: this.name,
+        day_open: 0,
+        planned_revenue: 0,
         stage_id: 1,
+        date_deadline: new Date,
         mobile: this.telefono,
         street: this.dirContact,
         state_id: this.city[0],
         city: this.city[1],
+        email_from: this.email,
+
       };
-      console.log(params); 
       let model = "crm.lead";
-      this.odooRpc.createRecord(model,params).then((res:any)=>{
-        console.log(res);
-      }).catch((err:any)=>{
+      this.odooRpc.createRecord(model, params).then((res: any) => {
+        let json = JSON.parse(res._body);
+        if (!json.error) {
+          this.utils.presentToast("Oportunidad Creada Correctamente",1000,false,'top')
+          this.navCtrl.pop()
+        }
+      }).catch((err: any) => {
         alert(err)
       })
+      loading.dismiss();
     }
   }
   public persistCliente() {
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
-        this.email = (client.email == false)?'':client.email;
+        this.email = (client.email == false) ? '' : client.email;
         this.telefono = client.phone;
         this.mobil = client.mobil;
         this.namePartner = client.name;
