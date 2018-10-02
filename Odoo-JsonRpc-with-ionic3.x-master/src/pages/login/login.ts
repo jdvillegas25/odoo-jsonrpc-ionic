@@ -1,12 +1,9 @@
 import { HomePage } from "../home/home";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import {
-  AlertController,
-  LoadingController,
-  NavController,
-  NavParams
-} from "ionic-angular";
+import { NavController, NavParams} 
+// import { AlertController, LoadingController, NavController, NavParams} 
+from "ionic-angular";
 import { Utils } from "../../services/utils";
 
 @Component({
@@ -14,48 +11,32 @@ import { Utils } from "../../services/utils";
   templateUrl: "login.html"
 })
 export class LoginPage {
-  private listForProtocol: Array<{
-    protocol: string;
-  }> = [];
+  // private listForProtocol: Array<{protocol: string;}> = [];
   public perfectUrl: boolean = false;
   public odooUrl;
   public selectedProtocol;
-  private dbList: Array<{
-    dbName: string;
-  }> = [];
+  private dbList: Array<{dbName: string;}> = [];
   private selectedDatabase;
   private email;
   private password;
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private odooRpc: OdooJsonRpc,
-    private utils: Utils
-  ) {
-    // this.listForProtocol.push({
-    //   protocol: "http"
-    // });
-    // this.listForProtocol.push({
-    //   protocol: "https"
-    // });
+  constructor(public navCtrl: NavController,public navParams: NavParams,private odooRpc: OdooJsonRpc,private utils: Utils) {
     this.checkUrl();
   }
 
   public checkUrl() {
-    this.utils.presentLoading("Por Favor Espere");
+    this.utils.presentLoading("Por Favor Espere...");
     this.odooRpc.init({
       odoo_server: "https://tudirectorio.com.co",
       // odoo_server: this.selectedProtocol + "://" + this.odooUrl,
       http_auth: "username:password" // optional
     });
-
     this.odooRpc.getDbList().then((dbList: any) => {
         this.perfectUrl = true;
         this.utils.dismissLoading();
         this.fillData(dbList);
       }).catch((err: any) => {
-        this.utils.presentAlert("Error", "You Entered a wrong Odoo URL", [
+        this.utils.presentAlert("Error", "Usted ha Ingrasado una ruta incorrecta de Odoo", [
           {
             text: "Ok"
           }

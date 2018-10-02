@@ -1,4 +1,4 @@
-// import { OdooJsonRpc } from '../../services/odoojsonrpc';
+import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 
@@ -13,10 +13,27 @@ export class ProspectoPage {
   private aproMts: Array<any> = [];
   private altMts: Array<any> = [];
   private oportunity: any;
+  private list_necesidades:any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController) {
     this.oportunity = navParams.get("id");
+    this.get_necesidad_cliente();
+
+  }
+  private get_necesidad_cliente(){
+    let loading = this.loadingCtrl.create({
+      content: "Por Favor Espere..."
+    });
+    loading.present();
+    let table ="product.category"
+    this.odooRpc.searchRead(table, [], [], 0, 0, "").then((tags: any) => {
+      let json = JSON.parse(tags._body);
+      if (!json.error) {
+        this.list_necesidades = json["result"].records;
+        loading.dismiss();
+      }
+    });
   }
   public habilitarZonas(zonas) {
     this.listaNombreZonas = [];

@@ -1,7 +1,9 @@
+import { HomePage } from "../home/home";
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Utils } from '../../services/utils';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
+// import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 
 
 @Component({
@@ -38,16 +40,43 @@ export class FormProbabilidadPage {
   private isAndroid: boolean = false;
   private listaTags: any;
   private listCity: any;
+  private idOportunidad: any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private utils: Utils) {
 
-    if(navParams.get("tipo") == 'update'){
-      this.getOportunidad(navParams.get("id"))
-    }else{
-
+    // validamos si es actualizar o crear una oportunidad
+    if (navParams.get("tipo") == 'update') {
+      //si es modificar una oportunidad, consultamos toda la informacion de la oportunidad y asigamos idOportunidad al id que viene por get
+      this.idOportunidad = navParams.get("id");
+      this.getOportunidad(this.idOportunidad)
     }
-    this.getClientes();
+    // de lo contrario dejamos el formulairo vacio para crear una nueva oportunidad
+    else {
+      this.name = '';
+      this.probabilidad = '';
+      this.email = '';
+      this.telefono = '';
+      this.mobil = '';
+      this.nextAcitivity = '';
+      this.fechaActividad = '';
+      this.cierrePrevisto = '';
+      this.website = '';
+      this.calificacion = '';
+      this.tags = '';
+      this.city = '';
+      this.cliente = '';
+      this.dirContact = '';
+      this.nameContact = '';
+      this.functionContact = '';
+      this.movilContact = '';
+      this.emailContact = '';
+      this.notaInterna = '';
+      this.titleAction = '';
+      this.namePartner = '';
+      this.listaTags = '';
+      this.getClientes();
+    }
     this.getTags();
     this.getCity();
     this.isAndroid = platform.is('android');
@@ -55,33 +84,46 @@ export class FormProbabilidadPage {
   }
 
   ionViewDidLoad() {
-    this.name = '';
-    this.probabilidad = '';
-    this.email = '';
-    this.telefono = '';
-    this.mobil = '';
-    this.nextAcitivity = '';
-    this.fechaActividad = '';
-    this.cierrePrevisto = '';
-    this.website = '';
-    this.calificacion = '';
-    this.tags = '';
-    this.city = '';
-    this.cliente = '';
-    this.dirContact = '';
-    this.nameContact = '';
-    this.functionContact = '';
-    this.movilContact = '';
-    this.emailContact = '';
-    this.notaInterna = '';
-    this.titleAction = '';
-    this.listaClientes = '';
-    this.namePartner = '';
-    this.listaTags = '';
-    this.listCity = '';
+
   }
-  private getOportunidad(idOportunidad){
-    console.log(idOportunidad);
+  private getOportunidad(idOportunidad) {
+    this.getClientes();
+    let table_oportunidad = "crm.lead";
+    let domain = [["id", "=", idOportunidad]];
+    this.odooRpc
+      .searchRead(table_oportunidad, domain, [], 0, 0, "")
+      .then((partner: any) => {
+        let loading = this.loadingCtrl.create({
+          content: "Estamos preparando todo..."
+        });
+        loading.present();
+        let json = JSON.parse(partner._body);
+        if (!json.error) {
+          let query = json["result"].records;
+          for (let i in query) {
+            this.name = query[i].name;
+            this.probabilidad = query[i].probability;
+            this.email = query[i].email_from;
+            this.telefono = query[i].phone;
+            this.mobil = query[i].mobile;
+            this.nextAcitivity = query[i].next_activity_id[0];
+            this.fechaActividad = query[i].date_action;
+            this.cierrePrevisto = query[i].date_closed;
+            this.city = query[i].state_id;
+            this.cliente = query[i].partner_id[0];
+            this.dirContact = query[i].street;
+            this.nameContact = query[i].contact_name;
+            this.functionContact = query[i].function;
+            this.movilContact = query[i].phone;
+            this.emailContact = query[i].email_from;
+            this.notaInterna = query[i].description;
+            this.titleAction = query[i].title_action;
+            this.namePartner = query[i].partner_name;
+          }
+        }
+        loading.dismiss();
+      });
+
   }
   private getClientes() {
     let loading = this.loadingCtrl.create({
@@ -226,7 +268,7 @@ export class FormProbabilidadPage {
         planned_revenue: 0,
         stage_id: 1,
         date_deadline: new Date,
-        mobile: this.telefono,
+        mobile: this.mobil,
         street: this.dirContact,
         state_id: this.city[0],
         city: this.city[1],
@@ -234,16 +276,32 @@ export class FormProbabilidadPage {
 
       };
       let model = "crm.lead";
-      this.odooRpc.createRecord(model, params).then((res: any) => {
-        let json = JSON.parse(res._body);
-        if (!json.error) {
-          this.utils.presentToast("Oportunidad Creada Correctamente",1000,false,'top')
-          this.navCtrl.pop()
-        }
-      }).catch((err: any) => {
-        alert(err)
-      })
-      loading.dismiss();
+      if (this.idOportunidad == '') {
+        this.odooRpc.createRecord(model, params).then((res: any) => {
+          let json = JSON.parse(res._body);
+          if (!json.error) {
+            this.utils.presentToast("Oportunidad Creada Correctamente", 1000, false, 'top');
+            this.navCtrl.pop();
+          }
+        }).catch((err: any) => {
+          alert(err);
+        })
+        loading.dismiss();
+        this.navCtrl.setRoot(HomePage);
+      } else {
+        console.log(params);
+        this.odooRpc.updateRecord(model, this.idOportunidad, params).then((res: any) => {
+          let json = JSON.parse(res._body);
+          if (!json.error) {
+            this.utils.presentToast("Oportunidad Modificada Correctamente", 1000, false, 'top');
+            this.navCtrl.pop();
+          }
+        }).catch((err: any) => {
+          alert(err);
+        });
+        loading.dismiss();
+        this.navCtrl.setRoot(HomePage);
+      }
     }
   }
   public persistCliente() {

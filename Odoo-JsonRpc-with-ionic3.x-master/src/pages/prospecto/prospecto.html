@@ -34,12 +34,8 @@
       <ion-col col-6>
         <ion-item>
           <ion-label stacked>Necesidad del Cliente</ion-label>
-          <ion-select [(ngModel)]="necCliente" multiple="true" interface="popover" cancelText="Cancelar">
-            <ion-option value="alarma">Alarma</ion-option>
-            <ion-option value="cctv">Cctv</ion-option>
-            <ion-option value="cae">CAE</ion-option>
-            <ion-option value="eps">EPS</ion-option>
-            <ion-option value="els">ELS</ion-option>
+          <ion-select [(ngModel)]="necCliente" cancelText="Cancelar">
+              <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
           </ion-select>
         </ion-item>
       </ion-col>

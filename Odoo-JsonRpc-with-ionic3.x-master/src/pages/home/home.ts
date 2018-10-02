@@ -140,10 +140,10 @@ export class HomePage {
     this.navCtrl.push(ProfilePage);
   }
 
-  FormProbabilidad(tipo:any, idx:any): void {
+  FormProbabilidad(tipo:any, idx:any = ""): void {
     let params = {
       tipo: tipo,
-      id: this.partnerArray[idx].id
+      id: (idx != "")?this.partnerArray[idx].id:""
     }
     this.navCtrl.push(FormProbabilidadPage,params);
   }

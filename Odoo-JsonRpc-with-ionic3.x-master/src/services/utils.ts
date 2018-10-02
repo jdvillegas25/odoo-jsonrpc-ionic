@@ -17,7 +17,7 @@ export class Utils {
 
     public presentAlert(title: string,
         message: string,
-        buttons: [{}],
+        buttons: any,
         subtitle?: string,
         enableBackdropDismiss?: boolean,
         inputs?: [{}]): void {

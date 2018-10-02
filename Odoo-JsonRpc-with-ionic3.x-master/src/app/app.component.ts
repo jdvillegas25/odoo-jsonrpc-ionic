@@ -16,17 +16,10 @@ import { ProfilePage } from "../pages/profile/profile";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  // rootPage: any = ProspectoPage;
-  rootPage: any = LoginPage;
+  rootPage: any = ProspectoPage;
+  // rootPage: any = LoginPage;
   pages: Array<{title: string, component: any, icon: any}>;
-  constructor(
-    platform: Platform,
-    private statusBar: StatusBar,
-    splashScreen: SplashScreen,
-    public odooRpc: OdooJsonRpc,
-    public alert: AlertController,
-    private network: Network
-  ) {
+  constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network) {
     platform.ready().then(() => {
       splashScreen.hide();
       // let status bar overlay webview
@@ -41,14 +34,13 @@ export class MyApp {
       { title: 'Oportunidades', component: HomePage, icon: 'stats' },
       { title: 'Perfil', component: ProfilePage, icon: 'contact' }
     ];
-
     if (localStorage.getItem("token")) {
       let response = window.localStorage.getItem("token");
 
       let jsonData = JSON.parse(response);
       let username = jsonData["username"];
       let pass = jsonData["password"];
-      let url = jsonData["web.base.url"];
+      let url = (jsonData["web.base.url"])?jsonData["web.base.url"]:"https://tudirectorio.com.co";
       let db = jsonData["db"];
 
       this.odooRpc.init({

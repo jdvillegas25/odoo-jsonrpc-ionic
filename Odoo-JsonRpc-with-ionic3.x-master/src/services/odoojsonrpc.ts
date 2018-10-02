@@ -209,7 +209,6 @@ export class OdooJsonRpc {
             sort: sort,
             context: this.getContext()
         };
-        console.log(this.sendRequest("/web/dataset/search_read", params));
         return this.sendRequest("/web/dataset/search_read", params);
     }
 
