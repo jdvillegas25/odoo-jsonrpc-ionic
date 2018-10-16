@@ -18,7 +18,7 @@
 <ion-content>
   <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
   <ion-list no-lines [virtualScroll]="partnerArray">
-    <ion-item-sliding *virtualItem="let item; let i=index">
+    <ion-item-sliding *virtualItem="let item; let i = index">
       <ion-item (click)="view(i)">
         <h1>{{item.name}}</h1>
         <p>{{item.partner_id}}</p>

@@ -16,8 +16,8 @@ import { ProfilePage } from "../pages/profile/profile";
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = ProspectoPage;
-  // rootPage: any = LoginPage;
+  //rootPage: any = ProspectoPage;
+  rootPage: any = LoginPage;
   pages: Array<{title: string, component: any, icon: any}>;
   constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network) {
     platform.ready().then(() => {

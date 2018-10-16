@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-navbar color="secondary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
@@ -7,97 +6,216 @@
     <ion-title>Prospecto</ion-title>
   </ion-navbar>
 </ion-header>
+
 <ion-content padding>
+
   <ion-grid>
+
     <ion-row>
-      <ion-col>
-        <ion-list radio-group [(ngModel)]="lugarImplementacion">
-          <ion-list-header>
-            Lugar Implementación
-          </ion-list-header>
-          <ion-item>
-            <ion-label>Residencial</ion-label>
-            <ion-radio value="residencial"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Comercial</ion-label>
-            <ion-radio value="comercial"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Empresarial</ion-label>
-            <ion-radio value="empresarial"></ion-radio>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
+      <ion-col col-12>
         <ion-item>
           <ion-label stacked>Necesidad del Cliente</ion-label>
-          <ion-select [(ngModel)]="necCliente" cancelText="Cancelar">
-              <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
+          <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="habilita_formulario(necesidad.value)">
+            <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
           </ion-select>
         </ion-item>
       </ion-col>
-      <ion-col col-6>
-        <ion-item>
-          <ion-label stacked>Zonas a Proteger</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="zonasProteger" #zona (change)="habilitarZonas(zona.value)" name="zonasProteger"></ion-input>
-        </ion-item>
-      </ion-col>
     </ion-row>
-    <ion-row *ngFor="let i of listaNombreZonas">
-      <strong>Zona #{{i.id}}</strong>
+
+    <ion-row *ngIf="div_cctv">
+
       <ion-col col-12>
-        <ion-item>
-          <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
-          <ion-input [(ngModel)]="nombreZona[i.id]" name="nombreZona_{{i.id}}"></ion-input>
-        </ion-item>
+        <ion-toolbar no-border-top no-border-button color="no-color">
+          <ion-segment [(ngModel)]="pestanias" color="secondary">
+            <ion-segment-button value="prospecto">
+              Prospecto
+            </ion-segment-button>
+            <ion-segment-button value="catalogo">
+              Catálogo
+            </ion-segment-button>
+            <ion-segment-button value="cotizacion">
+              Cotización
+            </ion-segment-button>
+          </ion-segment>
+        </ion-toolbar>
       </ion-col>
-      <ion-col col-12>
-        <ion-item>
-          <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="camarasZona[i.id]" name="camarasZona_{{i.id}}"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col col-12>
-        <ion-item>
-          <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="aproMts[i.id]" name="aproMts_{{i.id}}"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col col-12>
-        <ion-item>
-          <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="altMts[i.id]" name="altMts_{{i.id}}"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-list radio-group [(ngModel)]="sistemaMonitoreo">
-          <ion-list-header>
-            Sistema de Monitoreo
-          </ion-list-header>
+
+      <div [ngSwitch]="pestanias">
+        <ion-list no-list *ngSwitchCase="'prospecto'">
+
           <ion-item>
-            <ion-label>Radio</ion-label>
-            <ion-radio value="radio"></ion-radio>
+            <ion-label stacked>Zonas a Proteger</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="zonasProteger" #zona (change)="habilitarZonas(zona.value)"
+              name="zonasProteger"></ion-input>
           </ion-item>
+
+          <div *ngFor="let i of listaNombreZonas">
+            <strong>Zona #{{i.id}}</strong>
+            <ion-item>
+              <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
+              <ion-input [(ngModel)]="nombreZona[i.id]" name="nombreZona_{{i.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
+              <ion-input type="number" min="0" [(ngModel)]="camarasZona[i.id]" name="camarasZona_{{i.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
+              <ion-input type="number" min="0" [(ngModel)]="aproMts[i.id]" name="aproMts_{{i.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
+              <ion-input type="number" min="0" [(ngModel)]="altMts[i.id]" name="altMts_{{i.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <button ion-button (click)="take_pictures(i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            </ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col col-4 *ngFor="let image of pictures[i.id]">
+                  <img src="{{image}}" alt="picture{{i.id}}">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <ion-list radio-group [(ngModel)]="lugarImplementacion">
+            <ion-list-header>
+              Lugar Implementación
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Residencial</ion-label>
+              <ion-radio value="residencial"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Comercial</ion-label>
+              <ion-radio value="comercial"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Empresarial</ion-label>
+              <ion-radio value="empresarial"></ion-radio>
+            </ion-item>
+          </ion-list>
+
+          <ion-list radio-group [(ngModel)]="sistemaMonitoreo">
+            <ion-list-header>
+              Sistema de Monitoreo
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Radio</ion-label>
+              <ion-radio value="radio"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Línea Telefónica</ion-label>
+              <ion-radio value="lineaTelefonica"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>APPS</ion-label>
+              <ion-radio value="apps"></ion-radio>
+            </ion-item>
+          </ion-list>
+
           <ion-item>
-            <ion-label>Línea Telefónica</ion-label>
-            <ion-radio value="lineaTelefonica"></ion-radio>
+            <ion-label stacked>Canales para Unidad Central de Proceso</ion-label>
+            <ion-select [(ngModel)]="canalUnidadCentralProceso" cancelText="Cancelar">
+              <ion-option value="4">x4CH</ion-option>
+              <ion-option value="8">x8CH</ion-option>
+              <ion-option value="12">x12CH</ion-option>
+              <ion-option value="16">x16CH</ion-option>
+            </ion-select>
           </ion-item>
+          <ion-list radio-group [(ngModel)]="sistemaMonitoreo">
+            <ion-list-header>
+              ¿Desea que su sistema sea monitoreado?
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Deseo que el sistema sea monitoreado</ion-label>
+              <ion-radio value="1"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>No deseo que el sistema sea monitoreado</ion-label>
+              <ion-radio value="0"></ion-radio>
+            </ion-item>
+          </ion-list>
           <ion-item>
-            <ion-label>APPS</ion-label>
-            <ion-radio value="apps"></ion-radio>
+            <button ion-button color="secondary" (click)="cambiaPestania()">Continuar</button>
           </ion-item>
         </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row align="right">
-      <ion-col>
-        <button ion-button color="secondary">Continuar</button>
-      </ion-col>
+
+        <ion-list no-list *ngSwitchCase="'catalogo'">
+          <h1>Posibles Opciones de CCTV</h1>
+          <ion-card *ngFor="let item of list_items">
+            <img [src]="sanitize('data:image/jpeg;base64,'+item.image_medium)" alt="{{item.name}}">
+            <p><strong>{{item.name}}</strong></p>
+            <ion-card-content>
+              <p>
+                <ion-icon name="logo-usd"></ion-icon>{{ item.currency_id[1] }} {{ item.list_price | number:'3.2-5'}}
+              </p>
+              <button ion-button color="danger" (click)="agregaCarrito(item)">Agregar al Carrito</button>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+        <ion-list no-list *ngSwitchCase="'cotizacion'">
+          <h1>Cotización</h1>
+          <button ion-button>
+            <ion-icon name="cart"></ion-icon>
+          </button>
+          <ion-card *ngFor="let itc of list_items_carrito">
+            <img [src]="sanitize('data:image/jpeg;base64,'+itc.image_medium)" alt="{{itc.name}}">
+            <ion-card-header>
+              {{itc.name}}
+            </ion-card-header>
+            <ion-card-content>
+              <p>
+                <ion-label>Costo</ion-label>
+                <ion-icon name="logo-usd"></ion-icon>
+                <strong>
+                  {{ itc.currency_id[1] }} {{ itc.list_price | number:'3.2-5'}}
+                </strong>
+              </p>
+              <ion-item>
+                <ion-label stacked> % Utilidad</ion-label>
+                <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar">
+                  <ion-option value="25">25%</ion-option>
+                  <ion-option value="50">50%</ion-option>
+                  <ion-option value="75">75%</ion-option>
+                  <ion-option value="100">100%</ion-option>
+                </ion-select>
+              </ion-item>
+              <p>
+                <ion-label>precio</ion-label>
+                <ion-icon name="logo-usd"></ion-icon>
+                <strong>{{ itc.list_price + (itc.list_price * porcentajeUtilidad[itc.id] / 100) | number:'3.2-5'}}
+                </strong>
+              </p>
+            </ion-card-content>
+          </ion-card>
+          <ion-card>
+            <ion-card-header>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-row>
+                <ion-col>
+                  <strong>subTotal:</strong>
+                  <p>$66.666.00</p>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                  <ion-col>
+                    <strong>Impuesto:</strong>
+                    <p>% 19</p>
+                  </ion-col>
+                </ion-row>
+              <ion-row>
+                <ion-col>
+                  <strong>Total:</strong>
+                  <p>$66.666.00</p>
+                </ion-col>
+              </ion-row>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+      </div>
     </ion-row>
   </ion-grid>
 </ion-content>

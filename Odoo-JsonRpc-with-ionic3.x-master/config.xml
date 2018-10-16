@@ -85,6 +85,10 @@
     <plugin name="cordova-sqlite-storage" spec="^2.1.1" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <allow-navigation href="http://10.0.2.78:8101" sessionid="b18ffca6" />
+    <plugin name="cordova-plugin-camera" spec="^4.0.3">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="the app need the camera" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="the app need the photolibrary" />
+    </plugin>
     <engine name="android" spec="6.3.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

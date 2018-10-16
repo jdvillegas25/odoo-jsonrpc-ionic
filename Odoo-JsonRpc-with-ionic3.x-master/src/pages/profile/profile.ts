@@ -33,16 +33,10 @@ export class ProfilePage {
     website: any
   }> = []
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public odooRpc: OdooJsonRpc,
-    public utils: Utils) { }
+  constructor(public navCtrl: NavController,public navParams: NavParams,public odooRpc: OdooJsonRpc, public utils: Utils) {}
 
   ionViewDidLoad() {
     let response = localStorage.getItem('token');
-    console.log("-------Tokan-------" + response);
-
     let jsonData = JSON.parse(response);
     this.name = jsonData['name'];
     this.partnerId = jsonData['partner_id'];
@@ -69,7 +63,7 @@ export class ProfilePage {
 
   fillData(data: any) {
     let json = JSON.parse(data._body)["result"].records;
-    console.log("PROFILE DATA " + JSON.stringify(json));
+    console.log(json)
     for (let record in json) {
       this.imageSrc = json[record].image
       this.email = json[record].email
@@ -83,8 +77,8 @@ export class ProfilePage {
         street: json[record].street == false ? "" : json[record].street,
         street2: json[record].street2 == false ? "" : json[record].street2,
         city: json[record].city == false ? "" : json[record].city,
-        state_id: json[record].state_id == false ? "" : json[record].state_id,
-        country_id: json[record].country_id == false ? "" : json[record].country_id,
+        state_id: json[record].state_id == false ? "" : json[record].state_id[1],
+        country_id: json[record].country_id == false ? "" : json[record].country_id[1],
         zip: json[record].zip == false ? "" : json[record].zip,
         website: json[record].website == false ? "N/A" : json[record].website
       })

@@ -142,8 +142,12 @@ export class HomePage {
 
   FormProbabilidad(tipo:any, idx:any = ""): void {
     let params = {
-      tipo: tipo,
-      id: (idx != "")?this.partnerArray[idx].id:""
+      tipo: tipo
+    }
+    if(idx !== ""){
+      params['id'] = this.partnerArray[idx].id;
+    }else{
+      params['id'] = "";
     }
     this.navCtrl.push(FormProbabilidadPage,params);
   }

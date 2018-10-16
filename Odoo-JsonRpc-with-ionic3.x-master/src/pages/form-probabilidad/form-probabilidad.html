@@ -6,14 +6,14 @@
     <ion-title>Formulario de Oportunidad</ion-title>
     <ion-buttons end>
       <button ion-button icon-only clear (click)="saveData()">
-        <ion-icon name="paper-plane"></ion-icon>
+        Guardar
       </button>
     </ion-buttons>
   </ion-navbar>
   <!-- fin del navegador-->
   <!-- Segmentos o pestañas-->
   <ion-toolbar no-border-top no-border-button color="no-color">
-    <ion-segment [(ngModel)]="pest" color="secondary">
+    <ion-segment [(ngModel)]="pestanias" color="secondary">
       <ion-segment-button value="oportunidad">
         Oportunidad
       </ion-segment-button>
@@ -30,7 +30,7 @@
 <!-- Final de header-->
 
 <ion-content padding>
-  <div [ngSwitch]="pest">
+  <div [ngSwitch]="pestanias">
     <ion-list no-lines *ngSwitchCase="'oportunidad'">
       <ion-item>
         <ion-label>Nombre Oportunidad</ion-label>

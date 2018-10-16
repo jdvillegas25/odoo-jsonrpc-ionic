@@ -15,6 +15,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { ViewPage } from '../pages/view/view';
 import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
 import { ProspectoPage } from "../pages/prospecto/prospecto";
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { ProspectoPage } from "../pages/prospecto/prospecto";
     ParallaxDirective,
     AddCustomerPage,
     FormProbabilidadPage,
-    ProspectoPage,
+    ProspectoPage
   ],
   imports: [
     BrowserModule,
@@ -42,14 +43,15 @@ import { ProspectoPage } from "../pages/prospecto/prospecto";
     ProfilePage,
     AddCustomerPage,
     FormProbabilidadPage,
-    ProspectoPage,
+    ProspectoPage
   ],
   providers: [
     Network,
     StatusBar,
     SplashScreen,
     OdooJsonRpc,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Camera
   ]
 })
 export class AppModule {}

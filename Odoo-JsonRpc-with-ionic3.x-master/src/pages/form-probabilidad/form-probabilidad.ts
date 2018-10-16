@@ -36,11 +36,11 @@ export class FormProbabilidadPage {
   private namePartner: any;
   private InfoVendedor: any = JSON.parse(localStorage.getItem('token'));
   private vendedor = this.InfoVendedor['username'].charAt(0).toUpperCase() + this.InfoVendedor['username'].slice(1);
-  private pest: string = "oportunidad";
+  private pestanias: string = "oportunidad";
   private isAndroid: boolean = false;
   private listaTags: any;
   private listCity: any;
-  private idOportunidad: any;
+  private idOportunidad: any = '';
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private utils: Utils) {
@@ -204,6 +204,15 @@ export class FormProbabilidadPage {
       });
       toast.present();
     }
+    else if (!this.nextAcitivity) {
+      const toast = this.toastCtrl.create({
+        message: 'Por favor seleccione una siguiente actividad',
+        duration: 3000,
+        showCloseButton: true,
+        closeButtonText: "OK"
+      });
+      toast.present();
+    }
     else if (this.nextAcitivity && !this.fechaActividad) {
       const toast = this.toastCtrl.create({
         message: 'Por favor seleccione una fecha para la proxima actividad',
@@ -277,10 +286,11 @@ export class FormProbabilidadPage {
       };
       let model = "crm.lead";
       if (this.idOportunidad == '') {
+        alert('crear')
         this.odooRpc.createRecord(model, params).then((res: any) => {
           let json = JSON.parse(res._body);
           if (!json.error) {
-            this.utils.presentToast("Oportunidad Creada Correctamente", 1000, false, 'top');
+            this.utils.presentToast("Oportunidad Creada Correctamente", 3000, false, 'top');
             this.navCtrl.pop();
           }
         }).catch((err: any) => {
@@ -289,11 +299,11 @@ export class FormProbabilidadPage {
         loading.dismiss();
         this.navCtrl.setRoot(HomePage);
       } else {
-        console.log(params);
+        alert('modificar')
         this.odooRpc.updateRecord(model, this.idOportunidad, params).then((res: any) => {
           let json = JSON.parse(res._body);
           if (!json.error) {
-            this.utils.presentToast("Oportunidad Modificada Correctamente", 1000, false, 'top');
+            this.utils.presentToast("Oportunidad Modificada Correctamente", 3000, false, 'top');
             this.navCtrl.pop();
           }
         }).catch((err: any) => {
