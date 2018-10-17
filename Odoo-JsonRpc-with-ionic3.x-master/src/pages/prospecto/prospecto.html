@@ -117,7 +117,8 @@
 
           <ion-item>
             <ion-label stacked>Canales para Unidad Central de Proceso</ion-label>
-            <ion-select [(ngModel)]="canalUnidadCentralProceso" cancelText="Cancelar">
+            <ion-select [(ngModel)]="canalUnidadCentralProceso" cancelText="Cancelar" value="">
+              <ion-option value="0">Seleccione...</ion-option>
               <ion-option value="4">x4CH</ion-option>
               <ion-option value="8">x8CH</ion-option>
               <ion-option value="12">x12CH</ion-option>
@@ -175,7 +176,8 @@
               </p>
               <ion-item>
                 <ion-label stacked> % Utilidad</ion-label>
-                <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar">
+                <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar" #sdefdef (ngModelChange)="cambiaUtilidad()" value="0">
+                  <ion-option value="0">Seleccione...</ion-option>
                   <ion-option value="25">25%</ion-option>
                   <ion-option value="50">50%</ion-option>
                   <ion-option value="75">75%</ion-option>
@@ -197,19 +199,25 @@
               <ion-row>
                 <ion-col>
                   <strong>subTotal:</strong>
-                  <p>$66.666.00</p>
+                  <p>
+                    <ion-icon name="logo-usd"></ion-icon>
+                    <strong>{{subTotal | number:'3.2-5'}}</strong>
+                  </p>
                 </ion-col>
               </ion-row>
               <ion-row>
-                  <ion-col>
-                    <strong>Impuesto:</strong>
-                    <p>% 19</p>
-                  </ion-col>
-                </ion-row>
+                <ion-col>
+                  <strong>Impuesto:</strong>
+                  <p>% 19</p>
+                </ion-col>
+              </ion-row>
               <ion-row>
                 <ion-col>
                   <strong>Total:</strong>
-                  <p>$66.666.00</p>
+                  <p>
+                    <ion-icon name="logo-usd"></ion-icon>
+                    <strong>{{total | number:'3.2-5'}}</strong>
+                  </p>
                 </ion-col>
               </ion-row>
             </ion-card-content>

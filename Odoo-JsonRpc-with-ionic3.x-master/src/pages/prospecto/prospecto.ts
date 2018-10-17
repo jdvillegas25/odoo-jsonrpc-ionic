@@ -25,6 +25,8 @@ export class ProspectoPage {
     private list_items: any;
     private list_items_carrito: Array<any> = [];
     private porcentajeUtilidad: Array<any> = []
+    private subTotal:number;
+    private total:number;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera,private sanitizer: DomSanitizer) {
         this.oportunity = navParams.get("id");
@@ -53,7 +55,6 @@ export class ProspectoPage {
             this.pictures[i] = []
             this.listaNombreZonas.push(arrayName);
         }
-        console.log(this.listaNombreZonas);
     }
     public habilita_formulario(necesidad) {
         if (necesidad == 6) {
@@ -102,7 +103,20 @@ export class ProspectoPage {
     }
     public agregaCarrito(item){
         this.list_items_carrito.push(item)
-        console.log(this.list_items_carrito)
+    }
+    public cambiaUtilidad(){
+        this.subTotal = 0;
+        this.total = 0;
+        for(let itc of this.list_items_carrito){
+            console.log(this.porcentajeUtilidad[itc.id])
+            if(this.porcentajeUtilidad[itc.id] !== undefined){
+                this.subTotal += (itc.list_price+(itc.list_price*this.porcentajeUtilidad[itc.id]/100));
+            }else{
+                this.subTotal += itc.list_price;
+            }
+        }
+        this.total = (this.subTotal+(this.subTotal*19/100));
+        
     }
 
 
