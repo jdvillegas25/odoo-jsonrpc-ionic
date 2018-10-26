@@ -2,7 +2,7 @@ import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
-import { DomSanitizer,SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'page-prospecto',
@@ -20,15 +20,18 @@ export class ProspectoPage {
     private list_necesidades: any;
     private necCliente: any;
     private div_cctv: boolean;
+    private div_eps: boolean;
+    private div_cae: boolean;
+    private toolbar: boolean;
     private zonas: any;
     private pictures: Array<any> = [];
-    private list_items: any;
+    private list_items: Array<any> = [];
     private list_items_carrito: Array<any> = [];
     private porcentajeUtilidad: Array<any> = []
-    private subTotal:number;
-    private total:number;
+    private subTotal: number;
+    private total: number;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera,private sanitizer: DomSanitizer) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer) {
         this.oportunity = navParams.get("id");
         this.get_necesidad_cliente();
     }
@@ -57,11 +60,27 @@ export class ProspectoPage {
         }
     }
     public habilita_formulario(necesidad) {
-        if (necesidad == 6) {
-            this.div_cctv = true;
-            this.get_productos();
-        } else {
-            this.div_cctv = false;
+        this.toolbar = true;
+        for (let nec of necesidad) {
+            switch (nec) {
+                case "6":
+                    this.div_cctv = true;
+                    this.get_productos(nec);
+                    break;
+                case "8":
+                    this.div_eps = true;
+                    this.get_productos(nec);
+                    break;
+                case "7":
+                    this.div_eps = true;
+                    this.get_productos(nec);
+                    break;
+                default:
+                    this.div_cctv = false;
+                    this.div_eps = false;
+                    this.toolbar = false;
+                    break;
+            }
         }
     }
     private take_pictures(picturezona) {
@@ -84,39 +103,43 @@ export class ProspectoPage {
     private cambiaPestania() {
         this.pestanias = 'cotizacion'
     }
-    private get_productos() {
+    private get_productos(nec = "") {
         let loading = this.loadingCtrl.create({
             content: "Por Favor Espere..."
         });
         loading.present();
+        let domain = (nec != "") ? [['categ_id', '=', +nec]] : []
         let table = "product.template"
-        this.odooRpc.searchRead(table, [], [], 0, 0, "").then((items: any) => {
+        console.log(domain)
+        this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
             let json = JSON.parse(items._body);
-            if (!json.error) {
-                this.list_items = json["result"].records;
+            if (!json.error && json["result"].records != []) {
+                console.log(json["result"].records)
+                for (let i of json["result"].records) {
+                    this.list_items.push(i);
+                }
                 loading.dismiss();
             }
         });
     }
-    public sanitize(url){
+    public sanitize(url) {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
-    public agregaCarrito(item){
+    public agregaCarrito(item) {
         this.list_items_carrito.push(item)
     }
-    public cambiaUtilidad(){
+    public cambiaUtilidad() {
         this.subTotal = 0;
         this.total = 0;
-        for(let itc of this.list_items_carrito){
-            console.log(this.porcentajeUtilidad[itc.id])
-            if(this.porcentajeUtilidad[itc.id] !== undefined){
-                this.subTotal += (itc.list_price+(itc.list_price*this.porcentajeUtilidad[itc.id]/100));
-            }else{
+        for (let itc of this.list_items_carrito) {
+            if (this.porcentajeUtilidad[itc.id] !== undefined) {
+                this.subTotal += (itc.list_price + (itc.list_price * this.porcentajeUtilidad[itc.id] / 100));
+            } else {
                 this.subTotal += itc.list_price;
             }
         }
-        this.total = (this.subTotal+(this.subTotal*19/100));
-        
+        this.total = (this.subTotal + (this.subTotal * 19 / 100));
+
     }
 
 
