@@ -40,7 +40,7 @@
         </ion-item>
 
         <div *ngFor="let i of listaNombreZonas">
-          <strong>Zona #{{i.id}}</strong>
+          <strong style="color:#E53935">Zona #{{i.id}}</strong>
           <ion-item>
             <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
             <ion-input [(ngModel)]="nombreZona[i.id]" name="nombreZona_{{i.id}}"></ion-input>
@@ -152,6 +152,7 @@
             <ion-input [(ngModel)]="tipoAlmacenarCual" name="tipoAlmacenarCual"></ion-input>
           </ion-item>
         </ion-list>
+
         <ion-list>
           <ion-item>
             <ion-label stacked>Elementos Necesarios para Instalación</ion-label>
@@ -171,6 +172,7 @@
             <ion-input [(ngModel)]="eniOtro" name="eniOtro"></ion-input>
           </ion-item>
         </ion-list>
+
         <ion-list>
           <ion-item>
             <ion-label>¿Desea Blindaje para su equipo?</ion-label>
@@ -194,6 +196,7 @@
             <ion-radio value="3"></ion-radio>
           </ion-item>
         </ion-list>
+
         <ion-list>
           <ion-item>
             <ion-label stacked>Color</ion-label>
@@ -211,6 +214,7 @@
             <ion-input [(ngModel)]="cbOtro" name="cbOtro"></ion-input>
           </ion-item>
         </ion-list>
+
         <ion-list>
           <ion-list-header>
             Dimenciones para su Equipo
@@ -228,42 +232,189 @@
             <ion-input [(ngModel)]="alto"></ion-input>
           </ion-item>
         </ion-list>
+
       </ion-list>
-      <ion-list *nfIf="div_cae">
+      <ion-list *ngIf="div_cae">
         <h3>Control de Acceso Electronico</h3>
+        <ion-list>
+          <ion-item>
+            <ion-label>Puntos que Desea Controlar</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="zonasControlar" #zonaControlar (change)="habilitarZonasCAE(zonaControlar.value)"
+              name="zonasControlar"></ion-input>
+          </ion-item>
+
+
+          <div *ngFor="let l of listaNombreZonasCAE">
+            <strong style="color:#E53935">Zona # {{ l.id }}</strong>
+            <ion-item>
+              <ion-label floating>Nombre de Zona a Protejer # {{ l.id }}</ion-label>
+              <ion-input [(ngModel)]="nombreZonaCAE[l.id]" name="nombreZonaCAE_{{l.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Entrada Zona #{{l.id}}</ion-label>
+              <ion-select [(ngModel)]="entZonaCAE[l.id]" multiple="true">
+                <ion-option value="biometrico">Biometrico</ion-option>
+                <ion-option value="mecanico">Mecánico</ion-option>
+                <ion-option value="boton">Boton</ion-option>
+                <ion-option value="password">Password</ion-option>
+                <ion-option value="sensor">Sensor</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Salida Zona #{{l.id}}</ion-label>
+              <ion-select [(ngModel)]="salZonaCAE[l.id]" multiple="true">
+                <ion-option value="biometrico">Biometrico</ion-option>
+                <ion-option value="mecanico">Mecánico</ion-option>
+                <ion-option value="boton">Boton</ion-option>
+                <ion-option value="password">Password</ion-option>
+                <ion-option value="sensor">Sensor</ion-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+
+
+        </ion-list>
+      </ion-list>
+      <ion-list *ngIf="div_els">
+        <h3>Equipo Pesado de Seguridad</h3><br>
+        <ion-list>
+          <ion-item>
+            <ion-label>Cantidad de Dinero a Almacenar:</ion-label>
+            <ion-input [(ngModel)]="cantDineroAl" name="cantDineroAl"></ion-input>
+          </ion-item>
+          <ion-list radio-group [(ngModel)]="lugarInstEquipo">
+            <h3>Lugar Instalación Equipo</h3>
+            <ion-item>
+              <ion-label>Residencial</ion-label>
+              <ion-radio value="residencial"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Comercial</ion-label>
+              <ion-radio value="comercial"></ion-radio>
+            </ion-item>
+          </ion-list>
+
+          <ion-list>
+            <ion-item>
+              <ion-label stacked>Tipo de Equipo que Desea</ion-label>
+              <ion-select [(ngModel)]="tipoEquipo" cancelText="Cancelar" value="" multiple="true">
+                <ion-option value="0">Seleccione...</ion-option>
+                <ion-option value="cofre">Cofre</ion-option>
+                <ion-option value="cofredvr">Cofre DVR</ion-option>
+                <ion-option value="billetero">Billetero</ion-option>
+                <ion-option value="otro">Billetero</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Otro:</ion-label>
+              <ion-input [(ngModel)]="teOtro" name="taOtro"></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-list>
+            <ion-item>
+              <ion-label stacked>Elementos Necesarios para Instalación</ion-label>
+              <ion-select [(ngModel)]="elementosNecesariosInstalacion" cancelText="Cancelar" value="" multiple="true">
+                <ion-option value="0">Seleccione...</ion-option>
+                <ion-option value="1">Cerradura Digital</ion-option>
+                <ion-option value="2">Cerradura Mecánica</ion-option>
+                <ion-option value="3">Motorizado</ion-option>
+                <ion-option value="4">Tarjeta Temporizado</ion-option>
+                <ion-option value="5">Tarjeta Sensor</ion-option>
+                <ion-option value="6">Contacto Magnetico</ion-option>
+                <ion-option value="7">Otro</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Otro:</ion-label>
+              <ion-input [(ngModel)]="eniOtro" name="eniOtro"></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-list>
+            <ion-item>
+              <ion-label stacked>Color</ion-label>
+              <ion-select [(ngModel)]="colorBlindaje" cancelText="Cancelar" value="">
+                <ion-option value="0">Seleccione...</ion-option>
+                <ion-option value="gris">Gris</ion-option>
+                <ion-option value="Blanco">Blanco</ion-option>
+                <ion-option value="negro">Negro</ion-option>
+                <ion-option value="cafe">Café</ion-option>
+                <ion-option value="otro">Otro</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Otro:</ion-label>
+              <ion-input [(ngModel)]="cbOtro" name="cbOtro"></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-list>
+            <ion-list-header>
+              Dimenciones para su Equipo
+            </ion-list-header>
+            <ion-item>
+              <ion-label>Frente: </ion-label>
+              <ion-input [(ngModel)]="frente"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Fondo: </ion-label>
+              <ion-input [(ngModel)]="fondo"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Alto: </ion-label>
+              <ion-input [(ngModel)]="alto"></ion-input>
+            </ion-item>
+          </ion-list>
+
+        </ion-list>
       </ion-list>
     </ion-list>
     <ion-list no-list *ngSwitchCase="'catalogo'">
-      <h1>Posibles Opciones de CCTV</h1>
+      <h1>Posibles Opciones</h1>
       <ion-card *ngFor="let item of list_items">
         <img [src]="sanitize('data:image/jpeg;base64,'+item.image_medium)" alt="{{item.name}}">
-        <p><strong>{{item.name}}</strong></p>
         <ion-card-content>
-          <p>
-            <ion-icon name="logo-usd"></ion-icon>{{ item.currency_id[1] }} {{ item.list_price | number:'3.2-5'}}
-          </p>
+          <ion-item>
+            <ion-icon name="information" color="danger" item-start></ion-icon>
+            Nombre:
+            <ion-badge color="danger" item-end>{{item.name}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="checkmark" color="danger" item-start></ion-icon>
+            Disponibles:
+            <ion-badge color="danger" item-end>{{item.qty_available}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            Precio:
+            <ion-badge color="danger" item-end>{{ item.currency_id[1] }} {{ item.list_price | number:'3.2-5'}}</ion-badge>
+          </ion-item>
           <button ion-button color="danger" (click)="agregaCarrito(item)">Agregar al Carrito</button>
         </ion-card-content>
       </ion-card>
     </ion-list>
     <ion-list no-list *ngSwitchCase="'cotizacion'">
       <h1>Cotización</h1>
-      <button ion-button>
-        <ion-icon name="cart"></ion-icon>
-      </button>
       <ion-card *ngFor="let itc of list_items_carrito">
         <img [src]="sanitize('data:image/jpeg;base64,'+itc.image_medium)" alt="{{itc.name}}">
-        <ion-card-header>
-          {{itc.name}}
-        </ion-card-header>
         <ion-card-content>
-          <p>
-            <ion-label>Costo</ion-label>
-            <ion-icon name="logo-usd"></ion-icon>
-            <strong>
-              {{ itc.currency_id[1] }} {{ itc.list_price | number:'3.2-5'}}
-            </strong>
-          </p>
+          <ion-item>
+            <ion-icon name="information" color="danger" item-start></ion-icon>
+            Nombre:
+            <ion-badge color="danger" item-end>{{itc.name}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="checkmark" color="danger" item-start></ion-icon>
+            Disponibles:
+            <ion-badge color="danger" item-end>{{itc.qty_available}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            Costo:
+            <ion-badge color="danger" item-end>{{ itc.currency_id[1] }} {{ itc.list_price | number:'3.2-5'}}</ion-badge>
+          </ion-item>
           <ion-item>
             <ion-label stacked> % Utilidad</ion-label>
             <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar" #sdefdef (ngModelChange)="cambiaUtilidad()"
@@ -275,42 +426,36 @@
               <ion-option value="100">100%</ion-option>
             </ion-select>
           </ion-item>
-          <p>
-            <ion-label>precio</ion-label>
-            <ion-icon name="logo-usd"></ion-icon>
-            <strong>{{ itc.list_price + (itc.list_price * porcentajeUtilidad[itc.id] / 100) | number:'3.2-5'}}
-            </strong>
-          </p>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            Precio:
+            <ion-badge color="danger" item-end>{{ itc.list_price + (itc.list_price * porcentajeUtilidad[itc.id] / 100)
+              | number:'3.2-5'}}</ion-badge>
+          </ion-item>
         </ion-card-content>
       </ion-card>
       <ion-card>
-        <ion-card-header>
-        </ion-card-header>
         <ion-card-content>
-          <ion-row>
-            <ion-col>
-              <strong>subTotal:</strong>
-              <p>
-                <ion-icon name="logo-usd"></ion-icon>
-                <strong>{{subTotal | number:'3.2-5'}}</strong>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <strong>Impuesto:</strong>
-              <p>% 19</p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <strong>Total:</strong>
-              <p>
-                <ion-icon name="logo-usd"></ion-icon>
-                <strong>{{total | number:'3.2-5'}}</strong>
-              </p>
-            </ion-col>
-          </ion-row>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            SubTotal:
+            <ion-badge color="danger" item-end>{{subTotal | number:'3.2-5'}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            Impuesto:
+            <ion-badge color="danger" item-end>19%</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+            Total:
+            <ion-badge color="danger" item-end>{{total | number:'3.2-5'}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <button ion-button>
+              <ion-icon name="cart"></ion-icon>
+            </button>
+          </ion-item>
         </ion-card-content>
       </ion-card>
     </ion-list>

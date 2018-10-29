@@ -9,27 +9,32 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
     templateUrl: 'prospecto.html',
 })
 export class ProspectoPage {
-    private pestanias: string = "prospecto";
-    private tipoGama: string = "baja";
-    private listaNombreZonas: Array<number> = [];
-    private nombreZona: Array<any> = [];
-    private camarasZona: Array<any> = [];
-    private aproMts: Array<any> = [];
-    private altMts: Array<any> = [];
-    private oportunity: any;
-    private list_necesidades: any;
-    private necCliente: any;
-    private div_cctv: boolean;
-    private div_eps: boolean;
-    private div_cae: boolean;
-    private toolbar: boolean;
-    private zonas: any;
-    private pictures: Array<any> = [];
-    private list_items: Array<any> = [];
-    private list_items_carrito: Array<any> = [];
-    private porcentajeUtilidad: Array<any> = []
-    private subTotal: number;
-    private total: number;
+    public pestanias: string = "prospecto";
+    public tipoGama: string = "baja";
+    public listaNombreZonas: Array<number> = [];
+    public listaNombreZonasCAE: Array<number> = [];
+    public nombreZona: Array<any> = [];
+    public nombreZonaCAE: Array<any> = [];
+    public camarasZona: Array<any> = [];
+    public aproMts: Array<any> = [];
+    public altMts: Array<any> = [];
+    public oportunity: any;
+    public list_necesidades: any;
+    public necCliente: any;
+    public div_cctv: boolean;
+    public div_eps: boolean;
+    public div_cae: boolean;
+    public toolbar: boolean;
+    public zonas: any;
+    public zonasCAE: any;
+    public pictures: Array<any> = [];
+    public list_items: Array<any> = [];
+    public list_items_carrito: Array<any> = [];
+    public porcentajeUtilidad: Array<any> = []
+    public subTotal: number;
+    public total: number;
+    public entZonaCAE: Array<any> = [];
+    public salZonaCAE: Array<any> = [];
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer) {
         this.oportunity = navParams.get("id");
@@ -59,6 +64,16 @@ export class ProspectoPage {
             this.listaNombreZonas.push(arrayName);
         }
     }
+    public habilitarZonasCAE(zonas) {
+        this.zonasCAE = zonas;
+        this.listaNombreZonasCAE = [];
+        let arrayName: any;
+        for (let i = 1; i <= this.zonasCAE; i++) {
+            arrayName = { id: i };
+            console.log(arrayName.id)
+            this.listaNombreZonasCAE.push(arrayName);
+        }
+    }
     public habilita_formulario(necesidad) {
         this.toolbar = true;
         for (let nec of necesidad) {
@@ -72,7 +87,7 @@ export class ProspectoPage {
                     this.get_productos(nec);
                     break;
                 case "7":
-                    this.div_eps = true;
+                    this.div_cae = true;
                     this.get_productos(nec);
                     break;
                 default:
@@ -108,19 +123,18 @@ export class ProspectoPage {
             content: "Por Favor Espere..."
         });
         loading.present();
-        let domain = (nec != "") ? [['categ_id', '=', +nec]] : []
+        let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
         let table = "product.template"
-        console.log(domain)
         this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
             let json = JSON.parse(items._body);
             if (!json.error && json["result"].records != []) {
-                console.log(json["result"].records)
                 for (let i of json["result"].records) {
                     this.list_items.push(i);
                 }
                 loading.dismiss();
             }
         });
+        console.log(this.list_items)
     }
     public sanitize(url) {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url);
