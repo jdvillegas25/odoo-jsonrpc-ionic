@@ -9,30 +9,61 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
     templateUrl: 'prospecto.html',
 })
 export class ProspectoPage {
-    public pestanias: string = "prospecto";
-    public tipoGama: string = "baja";
-    public listaNombreZonas: Array<number> = [];
-    public listaNombreZonasCAE: Array<number> = [];
-    public nombreZona: Array<any> = [];
-    public nombreZonaCAE: Array<any> = [];
-    public camarasZona: Array<any> = [];
-    public aproMts: Array<any> = [];
-    public altMts: Array<any> = [];
-    public oportunity: any;
-    public list_necesidades: any;
-    public necCliente: any;
+    //Div a habilitar segun categoria del producto
     public div_cctv: boolean;
     public div_eps: boolean;
     public div_cae: boolean;
-    public toolbar: boolean;
+    public div_els: boolean;
+    public div_alarmas: boolean;
+    public div_incendios: boolean;
+
+    //Nombre de las zonas
+    public nombreZona: Array<any> = [];
+    public nombreZonaCAE: Array<any> = [];
+    public nombreZonaAlarmas: Array<any> = [];
+    public nombreZonaIncendios: Array<any> = [];
+
+    //Zonas
     public zonas: any;
     public zonasCAE: any;
+    public zonasAlarmas: any;
+    public zonasIncendios: any;
+    
+    //Lista de nombres
+    public listaNombreZonas: Array<number> = [];
+    public listaNombreZonasCAE: Array<number> = [];
+    public listaNombreZonasAlarmas: Array<number> = [];
+    public listaNombreZonasIncendios: Array<number> = [];
+
+    public pestanias: string = "prospecto";
+    public tipoGama: string = "baja";
+    
+    public camarasZona: Array<any> = [];
+    public aproMts: Array<any> = [];
+    public altMts: Array<any> = [];
     public pictures: Array<any> = [];
+
+    public alarmasZona: Array<any> = []
+    public aproMtsAlarmas: Array<any> = [];
+    public altMtsAlarmas: Array<any> = [];
+    public picturesAlarmas: Array<any> = [];
+
+    public alarmasZona: Array<any> = []
+    public aproMtsAlarmas: Array<any> = [];
+    public altMtsAlarmas: Array<any> = [];
+    public picturesAlarmas: Array<any> = [];
+
+    public oportunity: any;
+    public list_necesidades: any;
+    public necCliente: any;
+    public toolbar: boolean;
+    
+    
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
     public porcentajeUtilidad: Array<any> = []
-    public subTotal: number;
-    public total: number;
+    public subTotal: number = 0;
+    public total: number = 0;
     public entZonaCAE: Array<any> = [];
     public salZonaCAE: Array<any> = [];
 
@@ -74,23 +105,48 @@ export class ProspectoPage {
             this.listaNombreZonasCAE.push(arrayName);
         }
     }
+    public habilitarZonasAlarmas(zonas) {
+        this.zonasAlarmas = zonas;
+        this.listaNombreZonasAlarmas = [];
+        let arrayName: any;
+        for (let i = 1; i <= this.zonasAlarmas; i++) {
+            arrayName = { id: i };
+            this.listaNombreZonasAlarmas.push(arrayName);
+        }
+    }
     public habilita_formulario(necesidad) {
         this.toolbar = true;
         for (let nec of necesidad) {
             switch (nec) {
+                //cctv
                 case "6":
                     this.div_cctv = true;
                     this.get_productos(nec);
                     break;
+                //eps
                 case "8":
                     this.div_eps = true;
                     this.get_productos(nec);
                     break;
+                //cae
                 case "7":
                     this.div_cae = true;
                     this.get_productos(nec);
                     break;
+                case "17":
+                    this.div_els = true;
+                    this.get_productos(nec);
+                    break;
+                case "3":
+                    this.div_alarmas = true;
+                    this.get_productos(nec);
+                    break;
+                case "18":
+                    this.div_incendios = true;
+                    this.get_productos(nec);
+                    break;
                 default:
+                    this.div_els = false;
                     this.div_cctv = false;
                     this.div_eps = false;
                     this.toolbar = false;
@@ -123,7 +179,8 @@ export class ProspectoPage {
             content: "Por Favor Espere..."
         });
         loading.present();
-        let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
+        // let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
+        let domain = (nec != "") ? [['categ_id', '=', +nec]] : []
         let table = "product.template"
         this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
             let json = JSON.parse(items._body);
@@ -134,13 +191,13 @@ export class ProspectoPage {
                 loading.dismiss();
             }
         });
-        console.log(this.list_items)
     }
     public sanitize(url) {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
     public agregaCarrito(item) {
         this.list_items_carrito.push(item)
+        this.cambiaUtilidad();
     }
     public cambiaUtilidad() {
         this.subTotal = 0;
