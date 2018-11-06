@@ -31,6 +31,7 @@
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
+
     <ion-list no-list *ngSwitchCase="'prospecto'">
       <ion-list *ngIf="div_cctv">
         <h3>CCTV</h3><br>
@@ -58,7 +59,7 @@
             <ion-input type="number" min="0" [(ngModel)]="altMts[i.id]" name="altMts_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="take_pictures(i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            <button ion-button (click)="take_pictures('cctv',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>
@@ -191,14 +192,14 @@
           </ion-item>
           <ion-item>
             <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="aproMtsAlarmas_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="take_pictures(i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            <button ion-button (click)="take_pictures('alarma',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>
@@ -273,30 +274,30 @@
         <h3>Incendios</h3>
         <ion-item>
           <ion-label stacked>Zonas a Cuidar</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="zonasCuidarAlarmas" #zona (change)="habilitarZonasAlarmas(zona.value)"
-            name="zonasCuidarAlarmas"></ion-input>
+          <ion-input type="number" min="0" [(ngModel)]="zonasCuidarIncendios" #zona (change)="habilitarZonasIncendios(zona.value)"
+            name="zonasCuidarIncendios"></ion-input>
         </ion-item>
 
-        <div *ngFor="let i of listaNombreZonasAlarmas">
+        <div *ngFor="let i of listaNombreZonasIncendios">
           <strong style="color:#E53935">Zona #{{i.id}}</strong>
           <ion-item>
             <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
-            <ion-input [(ngModel)]="nombreZonaAlarmas[i.id]" name="nombreZonaAlarmas_{{i.id}}"></ion-input>
+            <ion-input [(ngModel)]="nombreZonaIncendios[i.id]" name="nombreZonaIncendios_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="alarmasZona[i.id]" name="alarmasZona_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="incendiosZona[i.id]" name="incendiosZona_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsIncendio[i.id]" name="aproMtsIncendio_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[i.id]" name="altMtsIncendio_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="take_pictures(i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            <button ion-button (click)="take_pictures('incendio',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>

@@ -28,7 +28,7 @@ export class ProspectoPage {
     public zonasCAE: any;
     public zonasAlarmas: any;
     public zonasIncendios: any;
-    
+
     //Lista de nombres
     public listaNombreZonas: Array<number> = [];
     public listaNombreZonasCAE: Array<number> = [];
@@ -37,7 +37,7 @@ export class ProspectoPage {
 
     public pestanias: string = "prospecto";
     public tipoGama: string = "baja";
-    
+
     public camarasZona: Array<any> = [];
     public aproMts: Array<any> = [];
     public altMts: Array<any> = [];
@@ -48,17 +48,17 @@ export class ProspectoPage {
     public altMtsAlarmas: Array<any> = [];
     public picturesAlarmas: Array<any> = [];
 
-    public alarmasZona: Array<any> = []
-    public aproMtsAlarmas: Array<any> = [];
-    public altMtsAlarmas: Array<any> = [];
-    public picturesAlarmas: Array<any> = [];
+    public incendiosZona: Array<any> = []
+    public aproMtsIncendio: Array<any> = [];
+    public altMtsIncendio: Array<any> = [];
+    public picturesIncendio: Array<any> = [];
 
     public oportunity: any;
     public list_necesidades: any;
     public necCliente: any;
     public toolbar: boolean;
-    
-    
+
+
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
     public porcentajeUtilidad: Array<any> = []
@@ -114,6 +114,15 @@ export class ProspectoPage {
             this.listaNombreZonasAlarmas.push(arrayName);
         }
     }
+    public habilitarZonasIncendios(zonas) {
+        this.zonasIncendios = zonas;
+        this.listaNombreZonasIncendios = [];
+        let arrayName: any;
+        for (let i = 1; i <= this.zonasIncendios; i++) {
+            arrayName = { id: i };
+            this.listaNombreZonasIncendios.push(arrayName);
+        }
+    }
     public habilita_formulario(necesidad) {
         this.toolbar = true;
         for (let nec of necesidad) {
@@ -154,7 +163,7 @@ export class ProspectoPage {
             }
         }
     }
-    private take_pictures(picturezona) {
+    private take_pictures(carProd, picturezona) {
         const options: CameraOptions = {
             // quality: 70,
             // destinationType: this.camera.DestinationType.FILE_URI,
@@ -166,7 +175,14 @@ export class ProspectoPage {
             quality: 100
         }
         this.camera.getPicture(options).then((imageData) => {
-            this.pictures[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+            switch (carProd) {
+                case 'cctv':
+                    this.pictures[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    break;
+
+                default:
+                    break;
+            }
         }, (err) => {
             console.error(err);
         });
