@@ -36,34 +36,39 @@
       <ion-list *ngIf="div_cctv">
         <h3>CCTV</h3><br>
         <ion-item>
-          <ion-label stacked>Zonas a Proteger</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="zonasProteger" #zona (change)="habilitarZonas(zona.value)" name="zonasProteger"></ion-input>
+          <ion-label stacked>Habitaciones a Proteger</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesCCTV" #zona (change)="habilitarHabitacionesCCTV(zona.value)"
+            name="habitacionesCCTV"></ion-input>
         </ion-item>
 
-        <div *ngFor="let i of listaNombreZonas">
-          <strong style="color:#E53935">Zona #{{i.id}}</strong>
+        <div *ngFor="let i of listaHabitacionesCCTV">
+          <strong style="color:#E53935">Habitación #{{i.id}}</strong>
           <ion-item>
-            <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
-            <ion-input [(ngModel)]="nombreZona[i.id]" name="nombreZona_{{i.id}}"></ion-input>
+            <ion-label floating>Nombre de la Habitación #{{i.id}}</ion-label>
+            <ion-input [(ngModel)]="nombreHabitacionCCTV[i.id]" name="nombreHabitacionCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="camarasZona[i.id]" name="camarasZona_{{i.id}}"></ion-input>
+            <ion-label floating>Tipo de muro de la Habitación #{{i.id}}</ion-label>
+            <ion-input [(ngModel)]="tipoParedHabitacionCCTV[i.id]" name="tipoParedHabitacionCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMts[i.id]" name="aproMts_{{i.id}}"></ion-input>
+            <ion-label floating>Cuantas Camaras Necesita en Habitacion #{{i.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="camarasCCTV[i.id]" name="camarasCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="altMts[i.id]" name="altMts_{{i.id}}"></ion-input>
+            <ion-label floating>Aproximidad en Mts² Habitación #{{i.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsCCTV[i.id]" name="aproMtsCCTV_{{i.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>ALtura Maxima en Mts² Habitación #{{i.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsCCTV[i.id]" name="altMtsCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('cctv',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>
-              <ion-col col-4 *ngFor="let image of pictures[i.id]">
+              <ion-col col-4 *ngFor="let image of picturesCCTV[i.id]">
                 <img src="{{image}}" alt="picture{{i.id}}">
               </ion-col>
             </ion-row>
@@ -104,6 +109,10 @@
             <ion-label>APPS</ion-label>
             <ion-radio value="apps"></ion-radio>
           </ion-item>
+          <ion-item>
+            <ion-label>IP</ion-label>
+            <ion-radio value="ip"></ion-radio>
+          </ion-item>
         </ion-list>
 
         <ion-item>
@@ -130,25 +139,30 @@
           </ion-item>
         </ion-list>
       </ion-list>
+
       <ion-list *ngIf="div_cae">
         <h3>Control de Acceso Electronico</h3>
         <ion-list>
           <ion-item>
             <ion-label>Puntos que Desea Controlar</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="zonasControlar" #zonaControlar (change)="habilitarZonasCAE(zonaControlar.value)"
+            <ion-input type="number" min="0" [(ngModel)]="habitacionesCAE" #habitacionCAE (change)="habilitarHabitacionesCAE(habitacionCAE.value)"
               name="zonasControlar"></ion-input>
           </ion-item>
 
 
-          <div *ngFor="let l of listaNombreZonasCAE">
-            <strong style="color:#E53935">Zona # {{ l.id }}</strong>
+          <div *ngFor="let l of listaHabitacionesCAE">
+            <strong style="color:#E53935">Habitación # {{ l.id }}</strong>
             <ion-item>
-              <ion-label floating>Nombre de Zona a Protejer # {{ l.id }}</ion-label>
-              <ion-input [(ngModel)]="nombreZonaCAE[l.id]" name="nombreZonaCAE_{{l.id}}"></ion-input>
+              <ion-label stacked>Nombre de Habitación a Protejer # {{ l.id }}</ion-label>
+              <ion-input [(ngModel)]="nombreHabitacionCAE[l.id]" name="nombreHabitacionCAE_{{l.id}}"></ion-input>
             </ion-item>
             <ion-item>
-              <ion-label floating>Entrada Zona #{{l.id}}</ion-label>
-              <ion-select [(ngModel)]="entZonaCAE[l.id]" multiple="true">
+              <ion-label stacked>Tipo Puerta de la Habitación a Protejer # {{ l.id }}</ion-label>
+              <ion-input [(ngModel)]="tipoPuertaHabitacionCAE[l.id]" name="tipoPuertaHabitacionCAE_{{l.id}}"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Entrada Habitación #{{l.id}}</ion-label>
+              <ion-select [(ngModel)]="entradaHabitacionCAE[l.id]" multiple="true">
                 <ion-option value="biometrico">Biometrico</ion-option>
                 <ion-option value="mecanico">Mecánico</ion-option>
                 <ion-option value="boton">Boton</ion-option>
@@ -157,8 +171,8 @@
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label floating>Salida Zona #{{l.id}}</ion-label>
-              <ion-select [(ngModel)]="salZonaCAE[l.id]" multiple="true">
+              <ion-label floating>Salida Habitación #{{l.id}}</ion-label>
+              <ion-select [(ngModel)]="salidaHabitacionCAE[l.id]" multiple="true">
                 <ion-option value="biometrico">Biometrico</ion-option>
                 <ion-option value="mecanico">Mecánico</ion-option>
                 <ion-option value="boton">Boton</ion-option>
@@ -167,44 +181,54 @@
               </ion-select>
             </ion-item>
           </div>
-
-
-
+          <ion-item>
+            <ion-label stacked> Cantidad de Accesos o Usuarios</ion-label>
+            <ion-input type="number" [(ngModel)]="cantAccesosHabitacion" name="cantAccesosHabitacion"></ion-input>
+          </ion-item>
         </ion-list>
       </ion-list>
+
       <ion-list *ngIf=div_alarmas>
         <h3>Alarmas</h3>
         <ion-item>
-          <ion-label stacked>Zonas a Cuidar</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="zonasCuidarAlarmas" #zona (change)="habilitarZonasAlarmas(zona.value)"
-            name="zonasCuidarAlarmas"></ion-input>
+          <ion-label stacked>Habitaciones a Cuidar</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesAlarmas" #habitacionAlarmas (change)="habilitarHabitacionesAlarmas(habitacionAlarmas.value)"
+            name="habitacionesAlarmas"></ion-input>
         </ion-item>
 
-        <div *ngFor="let i of listaNombreZonasAlarmas">
-          <strong style="color:#E53935">Zona #{{i.id}}</strong>
+        <div *ngFor="let a of listaHabitacionesAlarmas">
+          <strong style="color:#E53935">Habitación #{{a.id}}</strong>
           <ion-item>
-            <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
-            <ion-input [(ngModel)]="nombreZonaAlarmas[i.id]" name="nombreZonaAlarmas_{{i.id}}"></ion-input>
+            <ion-label floating>Nombre de Habitacion a Cuidar #{{a.id}}</ion-label>
+            <ion-input [(ngModel)]="nombreHabitacionAlarmas[a.id]" name="nombreHabitacionAlarmas_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="alarmasZona[i.id]" name="alarmasZona_{{i.id}}"></ion-input>
+            <ion-label floating>Cuantos Sensores Necesita la Habitación #{{a.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="alarmasHabitacion[a.id]" name="alarmasHabitacion_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[i.id]" name="aproMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-label floating>Tipo de Pared de la Habitación #{{a.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionAlarma[a.id]" name="tipoParedHabitacionAlarma_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[i.id]" name="altMtsAlarmas_{{i.id}}"></ion-input>
+            <ion-label floating>Tipo de Puerta de la Habitación #{{a.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="tipoPuertaHabitacionAlarma[a.id]" name="tipoPuertaHabitacionAlarma_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="take_pictures('alarma',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            <ion-label floating>Aproximidad en Mts² Habitación #{{a.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[a.id]" name="aproMtsAlarmas_{{a.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>ALtura Maxima en Mts² Habitación #{{a.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[a.id]" name="altMtsAlarmas_{{a.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <button ion-button (click)="take_pictures('alarma',a.id)">Tomar Fotos para Zona #{{a.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>
-              <ion-col col-4 *ngFor="let image of picturesAlarmas[i.id]">
-                <img src="{{image}}" alt="picture{{i.id}}">
+              <ion-col col-4 *ngFor="let imageA of picturesAlarmas[a.id]">
+                <img src="{{imageA}}" alt="picture{{a.id}}">
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -227,24 +251,16 @@
             <ion-radio value="empresarial"></ion-radio>
           </ion-item>
         </ion-list>
-
-        <ion-list radio-group [(ngModel)]="sistemaMonitoreoAlarmas">
-          <ion-list-header>
-            Sistema de Monitoreo
-          </ion-list-header>
-          <ion-item>
-            <ion-label>Radio</ion-label>
-            <ion-radio value="radio"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>ADSL</ion-label>
-            <ion-radio value="adsl"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>APPS</ion-label>
-            <ion-radio value="apps"></ion-radio>
-          </ion-item>
-        </ion-list>
+        <ion-item>
+          <ion-label stacked> Sistema de Monitoreo</ion-label>
+          <ion-select [(ngModel)]="sisMonitoreo" multiple="true">
+            <ion-option value="sirena">Sirena</ion-option>
+            <ion-option value="luz">Luz</ion-option>
+            <ion-option value="lan">LAN</ion-option>
+            <ion-option value="gprs">GPRS</ion-option>
+            <ion-option value="discadoTelefonico">Discado Telefónico</ion-option>
+          </ion-select>
+        </ion-item>
 
         <ion-item>
           <ion-label stacked>Canales para Unidad Central de Proceso</ion-label>
@@ -270,39 +286,44 @@
           </ion-item>
         </ion-list>
       </ion-list>
+
       <ion-list *ngIf=div_incendios>
         <h3>Incendios</h3>
         <ion-item>
           <ion-label stacked>Zonas a Cuidar</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="zonasCuidarIncendios" #zona (change)="habilitarZonasIncendios(zona.value)"
-            name="zonasCuidarIncendios"></ion-input>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesIncendios" #habitacionIncendios (change)="habilitarHabitacionesIncendios(habitacionIncendios.value)"
+            name="habitacionesIncendios"></ion-input>
         </ion-item>
 
-        <div *ngFor="let i of listaNombreZonasIncendios">
-          <strong style="color:#E53935">Zona #{{i.id}}</strong>
+        <div *ngFor="let in of listaHabitacionesIncendios">
+          <strong style="color:#E53935">Habitaciones #{{in.id}}</strong>
           <ion-item>
-            <ion-label floating>Nombre de Zona a Cuidar #{{i.id}}</ion-label>
-            <ion-input [(ngModel)]="nombreZonaIncendios[i.id]" name="nombreZonaIncendios_{{i.id}}"></ion-input>
+            <ion-label floating>Nombre de Habitación a Cuidar #{{in.id}}</ion-label>
+            <ion-input [(ngModel)]="nombreHabitacionIncendios[in.id]" name="nombreHabitacionIncendios_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Cuantas Camaras Necesita Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="incendiosZona[i.id]" name="incendiosZona_{{i.id}}"></ion-input>
+            <ion-label stacked>Cuantos Sensores Necesita la Habitacion #{{in.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="sensoresIncendio[in.id]" name="sensoresIncendio_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Aproximidad en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsIncendio[i.id]" name="aproMtsIncendio_{{i.id}}"></ion-input>
+            <ion-label stacked>Tipo de Pared de la Habitacion #{{in.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionIncendio[in.id]" name="tipoParedHabitacionIncendio_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>ALtura Maxima en Mts² Zona #{{i.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[i.id]" name="altMtsIncendio_{{i.id}}"></ion-input>
+            <ion-label floating>Aproximidad en Mts² de la Habitación #{{in.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsIncendio[in.id]" name="aproMtsIncendio_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="take_pictures('incendio',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
+            <ion-label floating>ALtura Maxima en Mts² de la Habitación #{{in.id}}</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[in.id]" name="altMtsIncendio_{{in.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <button ion-button (click)="take_pictures('incendio',in.id)">Tomar Fotos para Zona #{{in.id}}</button>
           </ion-item>
           <ion-grid>
             <ion-row>
-              <ion-col col-4 *ngFor="let image of picturesAlarmas[i.id]">
-                <img src="{{image}}" alt="picture{{i.id}}">
+              <ion-col col-4 *ngFor="let image of picturesIncendio[in.id]">
+                <img src="{{image}}" alt="picture{{in.id}}">
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -368,6 +389,7 @@
           </ion-item>
         </ion-list>
       </ion-list>
+
       <ion-list *ngIf="div_eps">
         <h3>Equipo Pesado de Seguridad</h3><br>
         <ion-list>
@@ -473,6 +495,7 @@
         </ion-list>
 
       </ion-list>
+
       <ion-list *ngIf="div_els">
         <h3>Equipo Livano de Seguridad</h3><br>
 
@@ -571,6 +594,7 @@
         </ion-list>
       </ion-list>
     </ion-list>
+
     <ion-list no-list *ngSwitchCase="'catalogo'">
       <h1>Posibles Opciones</h1>
       <ion-card *ngFor="let item of list_items">

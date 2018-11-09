@@ -18,37 +18,44 @@ export class ProspectoPage {
     public div_incendios: boolean;
 
     //Nombre de las zonas
-    public nombreZona: Array<any> = [];
-    public nombreZonaCAE: Array<any> = [];
-    public nombreZonaAlarmas: Array<any> = [];
-    public nombreZonaIncendios: Array<any> = [];
+    public nombreHabitacionCCTV: Array<any> = [];
+    public nombreHabitacionCAE: Array<any> = [];
+    public nombreHabitacionAlarmas: Array<any> = [];
+    public nombreHabitacionIncendios: Array<any> = [];
 
+    //tipo pared o muro
+    public tipoParedHabitacionCCTV: Array<any> = [];
+    public tipoPuertaHabitacionCAE: Array<any> = [];
+    public tipoPuertaHabitacionAlarma: Array<any> = [];
+    public tipoParedHabitacionAlarma: Array<any> = [];
+    public tipoParedHabitacionIncendio: Array<any> = [];
+    
     //Zonas
-    public zonas: any;
-    public zonasCAE: any;
-    public zonasAlarmas: any;
-    public zonasIncendios: any;
+    public habitacionesCCTV: any;
+    public habitacionesCAE: any;
+    public habitacionesAlarmas: any;
+    public habitacionesIncendios: any;
 
     //Lista de nombres
-    public listaNombreZonas: Array<number> = [];
-    public listaNombreZonasCAE: Array<number> = [];
-    public listaNombreZonasAlarmas: Array<number> = [];
-    public listaNombreZonasIncendios: Array<number> = [];
+    public listaHabitacionesCCTV: Array<number> = [];
+    public listaHabitacionesCAE: Array<number> = [];
+    public listaHabitacionesAlarmas: Array<number> = [];
+    public listaHabitacionesIncendios: Array<number> = [];
 
     public pestanias: string = "prospecto";
     public tipoGama: string = "baja";
 
-    public camarasZona: Array<any> = [];
-    public aproMts: Array<any> = [];
-    public altMts: Array<any> = [];
-    public pictures: Array<any> = [];
+    public camarasCCTV: Array<any> = [];
+    public aproMtsCCTV: Array<any> = [];
+    public altMtsCCTV: Array<any> = [];
+    public picturesCCTV: Array<any> = [];
 
-    public alarmasZona: Array<any> = []
+    public alarmasHabitacion: Array<any> = []
     public aproMtsAlarmas: Array<any> = [];
     public altMtsAlarmas: Array<any> = [];
     public picturesAlarmas: Array<any> = [];
 
-    public incendiosZona: Array<any> = []
+    public sensoresIncendio: Array<any> = []
     public aproMtsIncendio: Array<any> = [];
     public altMtsIncendio: Array<any> = [];
     public picturesIncendio: Array<any> = [];
@@ -58,14 +65,15 @@ export class ProspectoPage {
     public necCliente: any;
     public toolbar: boolean;
 
+    public entradaHabitacionCAE: Array<any> = [];
+    public salidaHabitacionCAE: Array<any> = [];
+    public cantAccesosHabitacion: any;
 
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
     public porcentajeUtilidad: Array<any> = []
     public subTotal: number = 0;
     public total: number = 0;
-    public entZonaCAE: Array<any> = [];
-    public salZonaCAE: Array<any> = [];
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer) {
         this.oportunity = navParams.get("id");
@@ -85,46 +93,53 @@ export class ProspectoPage {
             }
         });
     }
-    public habilitarZonas(zonas) {
-        this.zonas = zonas;
-        this.listaNombreZonas = [];
+    public habilitarHabitacionesCCTV(zonas) {
+        this.habitacionesCCTV = zonas;
+        this.listaHabitacionesCCTV = [];
         let arrayName: any;
-        for (let i = 1; i <= this.zonas; i++) {
+        for (let i = 1; i <= this.habitacionesCCTV; i++) {
             arrayName = { id: i };
-            this.pictures[i] = []
-            this.listaNombreZonas.push(arrayName);
+            this.picturesCCTV[i] = []
+            this.listaHabitacionesCCTV.push(arrayName);
         }
     }
-    public habilitarZonasCAE(zonas) {
-        this.zonasCAE = zonas;
-        this.listaNombreZonasCAE = [];
+    public habilitarHabitacionesCAE(zonas) {
+        this.habitacionesCAE = zonas;
+        this.listaHabitacionesCAE = [];
         let arrayName: any;
-        for (let i = 1; i <= this.zonasCAE; i++) {
+        for (let i = 1; i <= this.habitacionesCAE; i++) {
             arrayName = { id: i };
-            console.log(arrayName.id)
-            this.listaNombreZonasCAE.push(arrayName);
+            this.listaHabitacionesCAE.push(arrayName);
         }
     }
-    public habilitarZonasAlarmas(zonas) {
-        this.zonasAlarmas = zonas;
-        this.listaNombreZonasAlarmas = [];
+    public habilitarHabitacionesAlarmas(zonas) {
+        this.habitacionesAlarmas = zonas;
+        this.listaHabitacionesAlarmas = [];
         let arrayName: any;
-        for (let i = 1; i <= this.zonasAlarmas; i++) {
+        for (let i = 1; i <= this.habitacionesAlarmas; i++) {
             arrayName = { id: i };
-            this.listaNombreZonasAlarmas.push(arrayName);
+            this.picturesAlarmas[i] = []
+            this.listaHabitacionesAlarmas.push(arrayName);
         }
     }
-    public habilitarZonasIncendios(zonas) {
-        this.zonasIncendios = zonas;
-        this.listaNombreZonasIncendios = [];
+    public habilitarHabitacionesIncendios(zonas) {
+        this.habitacionesIncendios = zonas;
+        this.listaHabitacionesIncendios = [];
         let arrayName: any;
-        for (let i = 1; i <= this.zonasIncendios; i++) {
+        for (let i = 1; i <= this.habitacionesIncendios; i++) {
             arrayName = { id: i };
-            this.listaNombreZonasIncendios.push(arrayName);
+            this.picturesIncendio[i] = []
+            this.listaHabitacionesIncendios.push(arrayName);
         }
     }
     public habilita_formulario(necesidad) {
         this.toolbar = true;
+        this.div_els = false;
+        this.div_cctv = false;
+        this.div_eps = false;
+        this.toolbar = false;
+        this.div_alarmas = false;
+        this.div_incendios = false;
         for (let nec of necesidad) {
             switch (nec) {
                 //cctv
@@ -142,14 +157,17 @@ export class ProspectoPage {
                     this.div_cae = true;
                     this.get_productos(nec);
                     break;
+                //Equipo loviano
                 case "17":
                     this.div_els = true;
                     this.get_productos(nec);
                     break;
+                //Alarmas
                 case "3":
                     this.div_alarmas = true;
                     this.get_productos(nec);
                     break;
+                //Incendios
                 case "18":
                     this.div_incendios = true;
                     this.get_productos(nec);
@@ -159,6 +177,8 @@ export class ProspectoPage {
                     this.div_cctv = false;
                     this.div_eps = false;
                     this.toolbar = false;
+                    this.div_alarmas = false;
+                    this.div_incendios = false;
                     break;
             }
         }
@@ -177,9 +197,14 @@ export class ProspectoPage {
         this.camera.getPicture(options).then((imageData) => {
             switch (carProd) {
                 case 'cctv':
-                    this.pictures[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    this.picturesCCTV[picturezona].push(`data:image/jpeg;base64,${imageData}`);
                     break;
-
+                case 'alarma':
+                    this.picturesAlarmas[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    break;
+                case 'incendio':
+                    this.picturesIncendio[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    break;
                 default:
                     break;
             }
