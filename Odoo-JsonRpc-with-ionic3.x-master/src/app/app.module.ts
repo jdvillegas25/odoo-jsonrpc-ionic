@@ -16,6 +16,8 @@ import { ViewPage } from '../pages/view/view';
 import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
 import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { Camera } from '@ionic-native/camera';
+import { FileChooser } from '@ionic-native/file-chooser';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { Camera } from '@ionic-native/camera';
     SplashScreen,
     OdooJsonRpc,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Camera
+    Camera,
+    FileChooser
   ]
 })
 export class AppModule {}

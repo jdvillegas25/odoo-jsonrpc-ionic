@@ -138,6 +138,16 @@
             <ion-radio value="0"></ion-radio>
           </ion-item>
         </ion-list>
+        <ion-item>
+          <button ion-button (click)="adjuntar_archivo('cctv')" clear color="danger">Adjuntar Archivo</button>
+        </ion-item>
+        <ion-grid>
+            <ion-row>
+              <ion-col col-4 *ngFor="let pdfcctv of adjuntosCCTV">
+                <ion-img src="assets/imgs/document.png" alt="{{pdfcctv}}">{{pdfcctv}}</ion-img>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
       </ion-list>
 
       <ion-list *ngIf="div_cae">
@@ -184,6 +194,9 @@
           <ion-item>
             <ion-label stacked> Cantidad de Accesos o Usuarios</ion-label>
             <ion-input type="number" [(ngModel)]="cantAccesosHabitacion" name="cantAccesosHabitacion"></ion-input>
+          </ion-item>
+          <ion-item>
+            <button ion-button (click)="adjuntar_archivo('cae')" clear color="danger">Adjuntar Archivo</button>
           </ion-item>
         </ion-list>
       </ion-list>
@@ -285,6 +298,9 @@
             <ion-radio value="0"></ion-radio>
           </ion-item>
         </ion-list>
+        <ion-item>
+          <button ion-button (click)="adjuntar_archivo('alarma')" clear color="danger">Adjuntar Archivo</button>
+        </ion-item>
       </ion-list>
 
       <ion-list *ngIf=div_incendios>
@@ -388,6 +404,9 @@
             <ion-radio value="0"></ion-radio>
           </ion-item>
         </ion-list>
+        <ion-item>
+          <button ion-button (click)="adjuntar_archivo('incendio')" clear color="danger">Adjuntar Archivo</button>
+        </ion-item>
       </ion-list>
 
       <ion-list *ngIf="div_eps">
@@ -493,6 +512,9 @@
             <ion-input [(ngModel)]="alto"></ion-input>
           </ion-item>
         </ion-list>
+        <ion-item>
+          <button ion-button (click)="adjuntar_archivo('cctv')" clear color="danger">Adjuntar Archivo</button>
+        </ion-item>
 
       </ion-list>
 

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { FileChooser } from '@ionic-native/file-chooser';
 
 @Component({
     selector: 'page-prospecto',
@@ -29,7 +30,7 @@ export class ProspectoPage {
     public tipoPuertaHabitacionAlarma: Array<any> = [];
     public tipoParedHabitacionAlarma: Array<any> = [];
     public tipoParedHabitacionIncendio: Array<any> = [];
-    
+
     //Zonas
     public habitacionesCCTV: any;
     public habitacionesCAE: any;
@@ -49,16 +50,19 @@ export class ProspectoPage {
     public aproMtsCCTV: Array<any> = [];
     public altMtsCCTV: Array<any> = [];
     public picturesCCTV: Array<any> = [];
+    public adjuntosCCTV: Array<any> = []
 
     public alarmasHabitacion: Array<any> = []
     public aproMtsAlarmas: Array<any> = [];
     public altMtsAlarmas: Array<any> = [];
     public picturesAlarmas: Array<any> = [];
+    public adjuntosAlarmas: Array<any> = []
 
     public sensoresIncendio: Array<any> = []
     public aproMtsIncendio: Array<any> = [];
     public altMtsIncendio: Array<any> = [];
     public picturesIncendio: Array<any> = [];
+    public adjuntosIncendio: Array<any> = []
 
     public oportunity: any;
     public list_necesidades: any;
@@ -68,6 +72,7 @@ export class ProspectoPage {
     public entradaHabitacionCAE: Array<any> = [];
     public salidaHabitacionCAE: Array<any> = [];
     public cantAccesosHabitacion: any;
+    public adjuntosCAE: Array<any> = []
 
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
@@ -75,7 +80,7 @@ export class ProspectoPage {
     public subTotal: number = 0;
     public total: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser) {
         this.oportunity = navParams.get("id");
         this.get_necesidad_cliente();
     }
@@ -252,6 +257,29 @@ export class ProspectoPage {
         }
         this.total = (this.subTotal + (this.subTotal * 19 / 100));
 
+    }
+    public adjuntar_archivo(tipo) {
+        this.fileChooser.open().then(uri => {
+            switch (tipo) {
+                case 'cctv':
+                    this.adjuntosCCTV.push(uri);
+                    break;
+                case 'cae':
+                    this.adjuntosCAE.push(`data:application/pdf;base64,${uri}`);
+                    break;
+                case 'alarma':
+                    this.adjuntosAlarmas.push(`data:application/pdf;base64,${uri}`);
+                    break;
+                case 'incendio':
+                    this.adjuntosIncendio.push(`data:application/pdf;base64,${uri}`);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }).catch(e => console.log(e));
+        console.log(this.adjuntosCCTV);
     }
 
 
