@@ -60,8 +60,12 @@
             <ion-input type="number" min="0" [(ngModel)]="aproMtsCCTV[i.id]" name="aproMtsCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>ALtura Maxima en Mts² Habitación #{{i.id}}</ion-label>
+            <ion-label floating>Altura Maxima en Mts² Habitación #{{i.id}}</ion-label>
             <ion-input type="number" min="0" [(ngModel)]="altMtsCCTV[i.id]" name="altMtsCCTV_{{i.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Observaciones para la zona.</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaCCTV[i.id]" name="obserZonaCCTV_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('cctv',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
@@ -191,6 +195,10 @@
                 <ion-option value="sensor">Sensor</ion-option>
               </ion-select>
             </ion-item>
+            <ion-item>
+              <ion-label floating>Observaciones para la zona.</ion-label>
+              <ion-input type="number" min="0" [(ngModel)]="obserZonaCAE[i.id]" name="obserZonaCAE_{{i.id}}"></ion-input>
+            </ion-item>
           </div>
           <ion-item>
             <ion-label stacked> Cantidad de Accesos o Usuarios</ion-label>
@@ -235,6 +243,10 @@
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² Habitación #{{a.id}}</ion-label>
             <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[a.id]" name="altMtsAlarmas_{{a.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Observaciones para la zona.</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaAlarmas[i.id]" name="obserZonaAlarmas_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('alarma',a.id)">Tomar Fotos para Zona #{{a.id}}</button>
@@ -333,6 +345,10 @@
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² de la Habitación #{{in.id}}</ion-label>
             <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[in.id]" name="altMtsIncendio_{{in.id}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Observaciones para la zona.</ion-label>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaIncendio[i.id]" name="obserZonaIncendio_{{i.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('incendio',in.id)">Tomar Fotos para Zona #{{in.id}}</button>

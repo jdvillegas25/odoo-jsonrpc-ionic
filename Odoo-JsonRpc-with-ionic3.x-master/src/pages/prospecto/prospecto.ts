@@ -52,18 +52,21 @@ export class ProspectoPage {
     public altMtsCCTV: Array<any> = [];
     public picturesCCTV: Array<any> = [];
     public adjuntosCCTV: Array<any> = []
+    public obserZonaCCTV: any;
 
     public alarmasHabitacion: Array<any> = []
     public aproMtsAlarmas: Array<any> = [];
     public altMtsAlarmas: Array<any> = [];
     public picturesAlarmas: Array<any> = [];
     public adjuntosAlarmas: Array<any> = []
+    public obserZonaAlarmas: any;
 
     public sensoresIncendio: Array<any> = []
     public aproMtsIncendio: Array<any> = [];
     public altMtsIncendio: Array<any> = [];
     public picturesIncendio: Array<any> = [];
     public adjuntosIncendio: Array<any> = []
+    public obserZonaIncendio: any;
 
     public oportunity: any;
     public list_necesidades: any;
@@ -74,6 +77,7 @@ export class ProspectoPage {
     public salidaHabitacionCAE: Array<any> = [];
     public cantAccesosHabitacion: any;
     public adjuntosCAE: Array<any> = []
+    public obserZonaCAE: any;
 
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
@@ -261,15 +265,13 @@ export class ProspectoPage {
     }
     public adjuntar_archivo(tipo) {
         this.fileChooser.open().then((uri) => {
-            alert(uri)
             this.file.resolveLocalFilesystemUrl(uri).then((newUrl) => {
-                alert(JSON.stringify(newUrl));
-
                 let dirPath = newUrl.nativeURL;
                 let dirPathSegments = dirPath.split('/');
                 dirPathSegments.pop();
                 dirPath = dirPathSegments.join('/');
-
+                alert(dirPath);
+                alert(newUrl.name);
                 this.file.readAsArrayBuffer(dirPath, newUrl.name).then((buffer) => {
                     alert(dirPath);
                     alert(newUrl.name);
@@ -292,14 +294,16 @@ export class ProspectoPage {
             //         break;
             //     case 'incendio':
             //         this.adjuntosIncendio.push(`data:application/pdf;base64,${uri}`);
-            //         break;
+            //         break; 
 
             //     default:
             //         break;
             // }
 
         }).catch(e => console.log(e));
-        console.log(this.adjuntosCCTV);
+    }
+    public habilitarSensor(camaraZona){
+        console.log(camaraZona)
     }
 
 
