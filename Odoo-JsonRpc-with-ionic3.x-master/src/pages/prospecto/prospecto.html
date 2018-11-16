@@ -143,8 +143,9 @@
         </ion-item>
         <ion-grid>
             <ion-row>
-              <ion-col col-4 *ngFor="let pdfcctv of adjuntosCCTV">
-                <ion-img src="assets/imgs/document.png" alt="{{pdfcctv}}">{{pdfcctv}}</ion-img>
+              <ion-col col-4 *ngFor="let adcctv of adjuntosCCTV">
+                <!-- <img src="assets/imgs/document.png" alt="{{adcctv}}">{{adcctv}} -->
+                <img src="{{adcctv}}" alt="{{adcctv}}">
               </ion-col>
             </ion-row>
           </ion-grid>

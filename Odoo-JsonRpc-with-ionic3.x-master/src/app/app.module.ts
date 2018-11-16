@@ -17,6 +17,9 @@ import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilid
 import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+
 
 
 @NgModule({
@@ -53,8 +56,11 @@ import { FileChooser } from '@ionic-native/file-chooser';
     SplashScreen,
     OdooJsonRpc,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Camera,
-    FileChooser
+    File,
+    FileChooser,
+    FileTransfer,
+    FileTransferObject,
+    Camera
   ]
 })
 export class AppModule {}

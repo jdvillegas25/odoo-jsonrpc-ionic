@@ -4,6 +4,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { File } from '@ionic-native/file';
 
 @Component({
     selector: 'page-prospecto',
@@ -80,7 +81,7 @@ export class ProspectoPage {
     public subTotal: number = 0;
     public total: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File) {
         this.oportunity = navParams.get("id");
         this.get_necesidad_cliente();
     }
@@ -259,24 +260,43 @@ export class ProspectoPage {
 
     }
     public adjuntar_archivo(tipo) {
-        this.fileChooser.open().then(uri => {
-            switch (tipo) {
-                case 'cctv':
-                    this.adjuntosCCTV.push(uri);
-                    break;
-                case 'cae':
-                    this.adjuntosCAE.push(`data:application/pdf;base64,${uri}`);
-                    break;
-                case 'alarma':
-                    this.adjuntosAlarmas.push(`data:application/pdf;base64,${uri}`);
-                    break;
-                case 'incendio':
-                    this.adjuntosIncendio.push(`data:application/pdf;base64,${uri}`);
-                    break;
+        this.fileChooser.open().then((uri) => {
+            alert(uri)
+            this.file.resolveLocalFilesystemUrl(uri).then((newUrl) => {
+                alert(JSON.stringify(newUrl));
 
-                default:
-                    break;
-            }
+                let dirPath = newUrl.nativeURL;
+                let dirPathSegments = dirPath.split('/');
+                dirPathSegments.pop();
+                dirPath = dirPathSegments.join('/');
+
+                this.file.readAsArrayBuffer(dirPath, newUrl.name).then((buffer) => {
+                    alert(dirPath);
+                    alert(newUrl.name);
+                    alert(buffer);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }).catch((error) => {
+                console.log(error)
+            })
+            // switch (tipo) {
+            //     case 'cctv':
+            //         this.adjuntosCCTV.push(uri);
+            //         break;
+            //     case 'cae':
+            //         this.adjuntosCAE.push(`data:application/pdf;base64,${uri}`);
+            //         break;
+            //     case 'alarma':
+            //         this.adjuntosAlarmas.push(`data:application/pdf;base64,${uri}`);
+            //         break;
+            //     case 'incendio':
+            //         this.adjuntosIncendio.push(`data:application/pdf;base64,${uri}`);
+            //         break;
+
+            //     default:
+            //         break;
+            // }
 
         }).catch(e => console.log(e));
         console.log(this.adjuntosCCTV);
