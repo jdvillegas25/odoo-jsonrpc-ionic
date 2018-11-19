@@ -90,8 +90,9 @@
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="the app need the photolibrary" />
     </plugin>
     <plugin name="cordova-plugin-filechooser" spec="1.0.1" />
-    <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
+    <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
     <engine name="android" spec="6.3.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

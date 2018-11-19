@@ -1,10 +1,11 @@
 import { HomePage } from "../home/home";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, NavParams} 
-// import { AlertController, LoadingController, NavController, NavParams} 
-from "ionic-angular";
+import { NavController, NavParams }
+  // import { AlertController, LoadingController, NavController, NavParams} 
+  from "ionic-angular";
 import { Utils } from "../../services/utils";
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @Component({
   selector: "page-login",
@@ -15,12 +16,12 @@ export class LoginPage {
   public perfectUrl: boolean = false;
   public odooUrl;
   public selectedProtocol;
-  private dbList: Array<{dbName: string;}> = [];
+  private dbList: Array<{ dbName: string; }> = [];
   private selectedDatabase;
   private email;
   private password;
 
-  constructor(public navCtrl: NavController,public navParams: NavParams,private odooRpc: OdooJsonRpc,private utils: Utils) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions) {
     this.checkUrl();
   }
 
@@ -32,17 +33,17 @@ export class LoginPage {
       http_auth: "username:password" // optional
     });
     this.odooRpc.getDbList().then((dbList: any) => {
-        this.perfectUrl = true;
-        this.utils.dismissLoading();
-        this.fillData(dbList);
-      }).catch((err: any) => {
-        this.utils.presentAlert("Error", "Usted ha Ingrasado una ruta incorrecta de Odoo", [
-          {
-            text: "Ok"
-          }
-        ]);
-        this.utils.dismissLoading();
-      });
+      this.perfectUrl = true;
+      this.utils.dismissLoading();
+      this.fillData(dbList);
+    }).catch((err: any) => {
+      this.utils.presentAlert("Error", "Usted ha Ingrasado una ruta incorrecta de Odoo", [
+        {
+          text: "Ok"
+        }
+      ]);
+      this.utils.dismissLoading();
+    });
   }
 
   public fillData(res: any) {
@@ -53,7 +54,6 @@ export class LoginPage {
       this.dbList.push({ dbName: json[key] });
     }
   }
-
   private login() {
     this.utils.presentLoading("Por Favor Espere", 0, true);
     this.odooRpc

@@ -5,6 +5,7 @@ import { NavController, NavParams, LoadingController, Platform, ToastController 
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File } from '@ionic-native/file';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @Component({
     selector: 'page-prospecto',
@@ -85,9 +86,15 @@ export class ProspectoPage {
     public subTotal: number = 0;
     public total: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private androidPermissions: AndroidPermissions) {
         this.oportunity = navParams.get("id");
         this.get_necesidad_cliente();
+        // this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
+        //     result => console.log('Has permission?', result.hasPermission),
+        //     err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
+        // );
+        // this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE  , this.androidPermissions.PERMISSION.GET_ACCOUNTS]);
+
     }
     private get_necesidad_cliente() {
         let loading = this.loadingCtrl.create({
@@ -243,9 +250,6 @@ export class ProspectoPage {
             }
         });
     }
-    public sanitize(url) {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    }
     public agregaCarrito(item) {
         this.list_items_carrito.push(item)
         this.cambiaUtilidad();
@@ -302,9 +306,4 @@ export class ProspectoPage {
 
         }).catch(e => console.log(e));
     }
-    public habilitarSensor(camaraZona){
-        console.log(camaraZona)
-    }
-
-
 }

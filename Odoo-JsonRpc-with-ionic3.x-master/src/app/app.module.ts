@@ -19,6 +19,7 @@ import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 
 
@@ -60,7 +61,8 @@ import { File } from '@ionic-native/file';
     FileChooser,
     FileTransfer,
     FileTransferObject,
-    Camera
+    Camera,
+    AndroidPermissions
   ]
 })
 export class AppModule {}
