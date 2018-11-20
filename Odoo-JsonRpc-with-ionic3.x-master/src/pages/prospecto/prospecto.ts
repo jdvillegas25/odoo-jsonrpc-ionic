@@ -5,7 +5,6 @@ import { NavController, NavParams, LoadingController, Platform, ToastController 
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File } from '@ionic-native/file';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @Component({
     selector: 'page-prospecto',
@@ -53,21 +52,21 @@ export class ProspectoPage {
     public altMtsCCTV: Array<any> = [];
     public picturesCCTV: Array<any> = [];
     public adjuntosCCTV: Array<any> = []
-    public obserZonaCCTV: any;
+    public obserZonaCCTV: Array<any> = [];
 
     public alarmasHabitacion: Array<any> = []
     public aproMtsAlarmas: Array<any> = [];
     public altMtsAlarmas: Array<any> = [];
     public picturesAlarmas: Array<any> = [];
     public adjuntosAlarmas: Array<any> = []
-    public obserZonaAlarmas: any;
+    public obserZonaAlarmas: Array<any> = [];
 
     public sensoresIncendio: Array<any> = []
     public aproMtsIncendio: Array<any> = [];
     public altMtsIncendio: Array<any> = [];
     public picturesIncendio: Array<any> = [];
     public adjuntosIncendio: Array<any> = []
-    public obserZonaIncendio: any;
+    public obserZonaIncendio: Array<any> = [];
 
     public oportunity: any;
     public list_necesidades: any;
@@ -78,7 +77,7 @@ export class ProspectoPage {
     public salidaHabitacionCAE: Array<any> = [];
     public cantAccesosHabitacion: any;
     public adjuntosCAE: Array<any> = []
-    public obserZonaCAE: any;
+    public obserZonaCAE: Array<any> = [];
 
     public list_items: Array<any> = [];
     public list_items_carrito: Array<any> = [];
@@ -86,15 +85,9 @@ export class ProspectoPage {
     public subTotal: number = 0;
     public total: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private androidPermissions: AndroidPermissions) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File) {
         this.oportunity = navParams.get("id");
         this.get_necesidad_cliente();
-        // this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
-        //     result => console.log('Has permission?', result.hasPermission),
-        //     err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
-        // );
-        // this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE  , this.androidPermissions.PERMISSION.GET_ACCOUNTS]);
-
     }
     private get_necesidad_cliente() {
         let loading = this.loadingCtrl.create({
@@ -250,6 +243,9 @@ export class ProspectoPage {
             }
         });
     }
+    public sanitize(url) {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    }
     public agregaCarrito(item) {
         this.list_items_carrito.push(item)
         this.cambiaUtilidad();
@@ -306,4 +302,9 @@ export class ProspectoPage {
 
         }).catch(e => console.log(e));
     }
+    public habilitarSensor(camaraZona){
+        console.log(camaraZona)
+    }
+
+
 }

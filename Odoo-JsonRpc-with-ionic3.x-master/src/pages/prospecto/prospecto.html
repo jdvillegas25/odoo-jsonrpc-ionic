@@ -159,7 +159,7 @@
         <h3>Control de Acceso Electronico</h3>
         <ion-list>
           <ion-item>
-            <ion-label>Puntos que Desea Controlar</ion-label>
+            <ion-label stacked>Puntos que Desea Controlar</ion-label>
             <ion-input type="number" min="0" [(ngModel)]="habitacionesCAE" #habitacionCAE (change)="habilitarHabitacionesCAE(habitacionCAE.value)"
               name="zonasControlar"></ion-input>
           </ion-item>
@@ -197,7 +197,7 @@
             </ion-item>
             <ion-item>
               <ion-label floating>Observaciones para la zona.</ion-label>
-              <ion-input type="number" min="0" [(ngModel)]="obserZonaCAE[i.id]" name="obserZonaCAE_{{i.id}}"></ion-input>
+              <ion-input type="number" min="0" [(ngModel)]="obserZonaCAE[l.id]" name="obserZonaCAE_{{l.id}}"></ion-input>
             </ion-item>
           </div>
           <ion-item>
@@ -246,7 +246,7 @@
           </ion-item>
           <ion-item>
             <ion-label floating>Observaciones para la zona.</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="obserZonaAlarmas[i.id]" name="obserZonaAlarmas_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaAlarmas[a.id]" name="obserZonaAlarmas_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('alarma',a.id)">Tomar Fotos para Zona #{{a.id}}</button>
@@ -348,7 +348,7 @@
           </ion-item>
           <ion-item>
             <ion-label floating>Observaciones para la zona.</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="obserZonaIncendio[i.id]" name="obserZonaIncendio_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaIncendio[in.id]" name="obserZonaIncendio_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('incendio',in.id)">Tomar Fotos para Zona #{{in.id}}</button>
