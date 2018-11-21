@@ -3,6 +3,8 @@ import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Utils } from '../../services/utils';
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
+import { AddCustomerPage } from "../add-customer/add-customer";
+import { AlertController } from 'ionic-angular';
 // import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 
 
@@ -43,7 +45,7 @@ export class FormProbabilidadPage {
   private idOportunidad: any = '';
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private utils: Utils) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private utils: Utils, private alertCtrl: AlertController) {
 
     // validamos si es actualizar o crear una oportunidad
     if (navParams.get("tipo") == 'update') {
@@ -134,6 +136,7 @@ export class FormProbabilidadPage {
     let domain = [["active", "=", "t"], ["customer", "=", "t"]];
     this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then((partner: any) => {
       let json = JSON.parse(partner._body);
+      console.log(json)
       if (!json.error) {
         this.listaClientes = json["result"].records;
         loading.dismiss();
@@ -315,6 +318,33 @@ export class FormProbabilidadPage {
     }
   }
   public persistCliente() {
+    if (this.cliente == 'addCustomer') {
+      let alert = this.alertCtrl.create({
+        title: 'Confirmación de crear cliente',
+        message: '¿Esta seguro que quiere crear un cliente nuevo?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Si',
+            handler: () => {
+              this.addCustomer();
+            }
+          }
+        ]
+      });
+      alert.present();
+    } else {
+      this.parseoClientes();
+    }
+
+  }
+  private parseoClientes() {
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
         this.email = (client.email == false) ? '' : client.email;
@@ -325,5 +355,8 @@ export class FormProbabilidadPage {
         this.city = client.state_id;
       }
     }
+  }
+  private addCustomer() {
+    this.navCtrl.push(AddCustomerPage)
   }
 }

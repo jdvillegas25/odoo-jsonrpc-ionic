@@ -44,13 +44,14 @@
         </ion-range>
       </ion-item>
       <ion-item>
-        <ion-label>Cliente</ion-label>
+        <ion-label stacked>Cliente</ion-label>
         <ion-select [(ngModel)]="cliente" #cli id="cli" (ionChange)="persistCliente()">
+          <ion-option value="addCustomer"> <--CREAR CLIENTE NUEVO--> </ion-option>
           <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label>Correo</ion-label>
+        <ion-label stacked>Correo</ion-label>
         <ion-input type="email" [(ngModel)]="email" name="email"></ion-input>
       </ion-item>
       <ion-item>

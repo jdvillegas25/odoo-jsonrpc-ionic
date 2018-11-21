@@ -37,7 +37,7 @@ export class LoginPage {
       this.utils.dismissLoading();
       this.fillData(dbList);
     }).catch((err: any) => {
-      this.utils.presentAlert("Error", "Usted ha Ingrasado una ruta incorrecta de Odoo", [
+      this.utils.presentAlert("Error", "Por favor revice su conexión a internet", [
         {
           text: "Ok"
         }

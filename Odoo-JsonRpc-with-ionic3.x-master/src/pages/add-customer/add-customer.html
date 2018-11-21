@@ -1,9 +1,9 @@
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title>Add Customer</ion-title>
+    <ion-title>Agregar Cliente</ion-title>
     <ion-buttons end>
       <button ion-button clear (click)="saveData()">
-        Save
+        Guardar Cliente
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -14,29 +14,59 @@
 
   <ion-list no-lines>
 
+    <ion-list radio-group [(ngModel)]="company_type">
+      <ion-list-header>
+        Tipo Cliente
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Natural</ion-label>
+        <ion-radio value="person"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Jurdica</ion-label>
+        <ion-radio value="company"></ion-radio>
+      </ion-item>
+    </ion-list>
     <ion-item>
-      <ion-label floating>Name</ion-label>
-      <ion-input type="text" [(ngModel)]="name" name="name"></ion-input>
+      <ion-label floating>Nombre</ion-label>
+      <ion-input type="text" [(ngModel)]="firstname" name="firstname"></ion-input>
     </ion-item>
-
     <ion-item>
-      <ion-label floating>Email</ion-label>
+      <ion-label floating>Apellido</ion-label>
+      <ion-input type="text" [(ngModel)]="lastname" name="lastname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label staced>Tipo Identificación</ion-label>
+      <ion-select [(ngModel)]="vat_type">
+        <ion-option value="13">Cédula Ciudadania</ion-option>
+        <ion-option value="22">Cédula Extranjeria</ion-option>
+        <ion-option value="31">NIT/RUT</ion-option>
+        <ion-option value="41">Pasaporte</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Identificación</ion-label>
+      <ion-input type="text" [(ngModel)]="vat_vd" name="vat_vd"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Dirección</ion-label>
+      <ion-input type="text" [(ngModel)]="street" name="street"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Ciudad</ion-label>
+      <ion-input type="text" [(ngModel)]="state_id" name="state_id"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>telefono</ion-label>
+      <ion-input type="number" [(ngModel)]="phone" name="phone"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Móvil</ion-label>
+      <ion-input type="number" [(ngModel)]="mobile" name="mobile"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Correo</ion-label>
       <ion-input type="email" [(ngModel)]="email" name="email"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Mobile</ion-label>
-      <ion-input type="tel" [(ngModel)]="mobile" name="mobile"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Phone</ion-label>
-      <ion-input type="tel" [(ngModel)]="phone" name="phone"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Website</ion-label>
-      <ion-input type="url" [(ngModel)]="website" name="website"></ion-input>
     </ion-item>
 
   </ion-list>
