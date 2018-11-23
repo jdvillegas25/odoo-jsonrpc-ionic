@@ -55,7 +55,7 @@
     <ion-item>
       <ion-label floating>Ciudad</ion-label>
       <ion-select [(ngModel)]="state_id">
-          <ion-option *ngFor="let city of listCity" value="{{city.id}}">{{city.name}}</ion-option>
+          <ion-option *ngFor="let city of listCity" value="{{city.code}}">{{city.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>

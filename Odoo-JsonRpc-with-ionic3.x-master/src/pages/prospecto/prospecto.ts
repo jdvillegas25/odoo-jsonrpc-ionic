@@ -207,13 +207,13 @@ export class ProspectoPage {
         this.camera.getPicture(options).then((imageData) => {
             switch (carProd) {
                 case 'cctv':
-                    this.picturesCCTV[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    this.picturesCCTV[picturezona].push(imageData);
                     break;
                 case 'alarma':
-                    this.picturesAlarmas[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    this.picturesAlarmas[picturezona].push(imageData);
                     break;
                 case 'incendio':
-                    this.picturesIncendio[picturezona].push(`data:image/jpeg;base64,${imageData}`);
+                    this.picturesIncendio[picturezona].push(imageData);
                     break;
                 default:
                     break;

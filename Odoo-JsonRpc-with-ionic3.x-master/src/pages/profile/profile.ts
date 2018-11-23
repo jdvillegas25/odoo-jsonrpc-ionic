@@ -33,7 +33,7 @@ export class ProfilePage {
     website: any
   }> = []
 
-  constructor(public navCtrl: NavController,public navParams: NavParams,public odooRpc: OdooJsonRpc, public utils: Utils) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils) { }
 
   ionViewDidLoad() {
     let response = localStorage.getItem('token');
@@ -57,13 +57,11 @@ export class ProfilePage {
 
     this.odooRpc.searchRead(resUser, domain, fields, limit, offset, sort).then((res: any) => {
       this.fillData(res)
-      console.log(res);
     })
   }
 
   fillData(data: any) {
     let json = JSON.parse(data._body)["result"].records;
-    console.log(json)
     for (let record in json) {
       this.imageSrc = json[record].image
       this.email = json[record].email

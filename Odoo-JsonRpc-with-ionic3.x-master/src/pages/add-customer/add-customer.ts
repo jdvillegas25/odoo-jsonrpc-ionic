@@ -20,7 +20,7 @@ export class AddCustomerPage {
   private phone
   private mobile
   private email
-  private listCity:any;
+  private listCity: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
     this.getCity()
@@ -50,28 +50,34 @@ export class AddCustomerPage {
     alert.present();
   }
   private saveCustomer(): void {
-    console.log(this.state_id)
+    let city = []
+    for (let i = 0; i < this.listCity.length; i++) {
+      if (this.listCity[i]['code'] == this.state_id) {
+        city = this.listCity[i];
+      }
+
+    }
     let model = "res.partner";
     let params = {
-      name: this.firstname + this.lastname,
+      name: this.firstname + ' ' +this.lastname,
       company_type: this.company_type,
-      phone:this.phone,
-      mobile:this.mobile,
-      email:this.email,
+      phone: this.phone,
+      mobile: this.mobile,
+      email: this.email,
       vat_type: this.vat_type,
       vat_vd: this.vat_vd,
       street: this.street,
-      city: this.state_id,
-      state_id: this.state_id,
+      city: (city['code']) ? city['code'] : '',
+      state_id: (city['code']) ? city['code'] : '',
       country_id: 50,
       customer: true,
       supplier: false,
       write_uid: JSON.parse(localStorage.getItem('token'))['uid'],
       create_uid: JSON.parse(localStorage.getItem('token'))['uid'],
-      type:"contact"
+      type: "contact"
 
     }
-
+    console.log(params)
     this.odooRpc.createRecord(model, params).then((res: any) => {
       this.utils.presentToast("Creacion Exitosa", 1000, false, 'top')
       this.navCtrl.pop()
