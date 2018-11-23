@@ -54,10 +54,12 @@
     </ion-item>
     <ion-item>
       <ion-label floating>Ciudad</ion-label>
-      <ion-input type="text" [(ngModel)]="state_id" name="state_id"></ion-input>
+      <ion-select [(ngModel)]="state_id">
+          <ion-option *ngFor="let city of listCity" value="{{city.id}}">{{city.name}}</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label floating>telefono</ion-label>
+      <ion-label floating>Teléfono</ion-label>
       <ion-input type="number" [(ngModel)]="phone" name="phone"></ion-input>
     </ion-item>
     <ion-item>

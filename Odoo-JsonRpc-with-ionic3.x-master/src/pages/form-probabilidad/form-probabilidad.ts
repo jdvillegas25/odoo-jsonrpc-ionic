@@ -136,7 +136,6 @@ export class FormProbabilidadPage {
     let domain = [["active", "=", "t"], ["customer", "=", "t"]];
     this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then((partner: any) => {
       let json = JSON.parse(partner._body);
-      console.log(json)
       if (!json.error) {
         this.listaClientes = json["result"].records;
         loading.dismiss();
