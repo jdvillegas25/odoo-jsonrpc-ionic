@@ -37,8 +37,8 @@ export class HomePage {
 
   private listaServicios: Array<{
     id: number;
-    probability: number;
-    partner_id: string;
+    priority: number;
+    stage_id: any;
     name: string;
     colorDanger: boolean;
     colorwarning: boolean;
@@ -121,9 +121,9 @@ export class HomePage {
           case 20:
             this.listaServicios.push({
               id: query[i].id,
-              probability: query[i].probability == false ? "N/A" : query[i].probability,
+              priority: query[i].priority == false ? "N/A" : query[i].priority,
               name: query[i].name == false ? "N/A" : query[i].name,
-              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
+              stage_id: query[i].stage_id == false ? "N/A" : query[i].stage_id,
               colorDanger: query[i].probability < 30 ? true : false,
               colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
               colorSuccess: query[i].probability >= 70 ? true : false,

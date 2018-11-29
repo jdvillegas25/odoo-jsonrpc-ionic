@@ -64,17 +64,9 @@
   <ion-list *ngIf="homeMantemimiento" no-lines [virtualScroll]="listaServicios">
     <ion-item-sliding *virtualItem="let item; let i = index">
       <ion-item (click)="view(i)">
-        <h1>{{item.name}}</h1>
-        <p>{{item.partner_id}}</p>
-        <h2 *ngIf="item.colorDanger">
-          <p style="color:#F44336;">{{item.probability}}%</p>
-        </h2>
-        <h2 *ngIf="item.colorwarning">
-          <p style="color: #FF9800;">{{item.probability}}%</p>
-        </h2>
-        <h2 *ngIf="item.colorSuccess">
-          <p style="color:#4CAF50;">{{item.probability}}%</p>
-        </h2>
+        <h1>Descripción: {{item.name}}</h1>
+        <p>Prioridad: {{item.priority}}</p>
+        <p>Estado: {{item.stage_id[1]}}</p>
       </ion-item>
       <ion-item-options>
         <button ion-button color="primary" (click)="FormProbabilidad('update',i)">
