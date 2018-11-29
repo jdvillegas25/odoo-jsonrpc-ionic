@@ -11,6 +11,9 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 })
 export class ProfilePage {
 
+  public homeComercial: boolean = false;
+  public homeMantenimiento: boolean = false;
+
   private name: string
   private partnerId: number
   private imageSrc: string
@@ -33,9 +36,24 @@ export class ProfilePage {
     website: any
   }> = []
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils) {
+
+  }
 
   ionViewDidLoad() {
+    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
+      case 1:
+        this.homeComercial = true;
+        this.homeMantenimiento = false;
+        break;
+      case 20:
+        this.homeMantenimiento = true;
+        this.homeComercial = false;
+        break;
+
+      default:
+        break;
+    }
     let response = localStorage.getItem('token');
     let jsonData = JSON.parse(response);
     this.name = jsonData['name'];

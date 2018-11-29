@@ -1,6 +1,18 @@
 <ion-header>
 
-  <ion-navbar hideBackButton="true" color="secondary">
+  <ion-navbar *ngIf="homeComercial" hideBackButton="true" color="secondary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Profile</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="logout()">
+        <ion-icon name="exit"></ion-icon>
+        <!-- <ion-icon ios="ios-exit" md="ios-exit"></ion-icon> -->
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-navbar *ngIf="homeMantenimiento" hideBackButton="true" color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -17,7 +29,19 @@
 
 <ion-content>
 
-  <div class="profile-background">
+  <div *ngIf="homeComercial" class="profile-background_green">
+
+    <ion-img src="data:image/*;base64,{{imageSrc}}" class="round-image" style="
+      height: 150px !important;
+      width: 150px !important;
+      margin-top: 12%;
+      background: none !important;
+      background-color :none !important;" (click)="presentActionSheet()"></ion-img>
+    <h1 style="color: #fff">{{name}}</h1>
+    <h6 style="color: #fff">{{email}}</h6>
+
+  </div>
+  <div *ngIf="homeMantenimiento" class="profile-background_blue">
 
     <ion-img src="data:image/*;base64,{{imageSrc}}" class="round-image" style="
       height: 150px !important;

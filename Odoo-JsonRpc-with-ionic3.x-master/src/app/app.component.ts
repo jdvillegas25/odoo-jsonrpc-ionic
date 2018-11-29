@@ -15,10 +15,14 @@ import { ProfilePage } from "../pages/profile/profile";
   providers: [OdooJsonRpc, Utils]
 })
 export class MyApp {
+
+  public homeComercial:boolean = false;
+  public homeMantenimiento:boolean = false;
+  
   @ViewChild(Nav) nav: Nav;
   //rootPage: any = ProspectoPage;
   rootPage: any = LoginPage;
-  pages: Array<{title: string, component: any, icon: any}>;
+  pages: Array<{ title: string, component: any, icon: any }>;
   constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network) {
     platform.ready().then(() => {
       splashScreen.hide();
@@ -29,19 +33,38 @@ export class MyApp {
       this.statusBar.backgroundColorByHexString("#3ebffb");
     });
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Oportunidades', component: HomePage, icon: 'stats' },
-      { title: 'Perfil', component: ProfilePage, icon: 'contact' }
-    ];
     if (localStorage.getItem("token")) {
-      let response = window.localStorage.getItem("token");
 
+
+      let response = window.localStorage.getItem("token");
       let jsonData = JSON.parse(response);
       let username = jsonData["username"];
       let pass = jsonData["password"];
-      let url = (jsonData["web.base.url"])?jsonData["web.base.url"]:"https://tudirectorio.com.co";
+      let url = (jsonData["web.base.url"]) ? jsonData["web.base.url"] : "https://tudirectorio.com.co";
       let db = jsonData["db"];
+      switch (jsonData.uid) {
+        case 1:
+          this.homeComercial = true;
+          this.homeMantenimiento = false;
+          // used for an example of ngFor and navigation
+          this.pages = [
+            { title: 'Oportunidades', component: HomePage, icon: 'stats' },
+            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
+          ];
+          break;
+        case 20:
+          // used for an example of ngFor and navigation
+          this.pages = [
+            { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
+            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
+          ];
+          this.homeMantenimiento = true;
+          this.homeComercial = false;
+          break;
+        default:
+          break;
+      }
+
 
       this.odooRpc.init({
         odoo_server: url,
@@ -64,5 +87,5 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
-  
+
 }

@@ -1,6 +1,9 @@
 <ion-menu [content]="content" persistent="true">
   <ion-header>
-    <ion-toolbar color="secondary">
+    <ion-toolbar *ngIf="homeComercial" color="secondary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="homeMantenimiento" color="primary">
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -9,7 +12,9 @@
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         <ion-label stacked icon-start>
-          <h2><ion-icon [name]="p.icon" item-left></ion-icon>{{p.title}}</h2>
+          <h2>
+            <ion-icon [name]="p.icon" item-left></ion-icon>{{p.title}}
+          </h2>
         </ion-label>
       </button>
     </ion-list>

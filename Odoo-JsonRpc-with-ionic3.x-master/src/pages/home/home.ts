@@ -66,7 +66,6 @@ export class HomePage {
 
   private display(): void {
 
-    console.log(JSON.parse(localStorage.getItem('token')))
     let table = '';
     let domain = [];
     let filter = [];
@@ -80,7 +79,7 @@ export class HomePage {
       case 20:
         domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
         table = this.tableServicios;
-        filter = ['name'];
+        filter = [];
         this.homeComercial = false;
         this.homeMantemimiento = true;
         break;
