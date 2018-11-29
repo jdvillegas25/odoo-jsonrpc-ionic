@@ -15,7 +15,7 @@ import { ProfilePage } from "../profile/profile";
 export class HomePage {
   // splash = true;
 
-  private partnerArray: Array<{
+  private listaOportunidades: Array<{
     id: number;
     probability: number;
     partner_id: string;
@@ -25,7 +25,7 @@ export class HomePage {
     colorSuccess: boolean;
   }> = [];
 
-  private items: Array<{
+  private oportunidades: Array<{
     id: number;
     probability: number;
     partner_id: string;
@@ -35,7 +35,30 @@ export class HomePage {
     colorSuccess: boolean;
   }> = [];
 
-  private partner = "crm.lead";
+  private listaServicios: Array<{
+    id: number;
+    probability: number;
+    partner_id: string;
+    name: string;
+    colorDanger: boolean;
+    colorwarning: boolean;
+    colorSuccess: boolean;
+  }> = [];
+  private servicios: Array<{
+    id: number;
+    probability: number;
+    partner_id: string;
+    name: string;
+    colorDanger: boolean;
+    colorwarning: boolean;
+    colorSuccess: boolean;
+  }> = [];
+
+  private tableOportunidades = "crm.lead";
+  private tableServicios = "hr.equipment.request";
+  // private tableServicios = "mantenimientos";
+  public homeComercial: boolean = false;
+  public homeMantemimiento: boolean = false;
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
@@ -43,46 +66,90 @@ export class HomePage {
 
   private display(): void {
 
-    let domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+    console.log(JSON.parse(localStorage.getItem('token')))
+    let table = '';
+    let domain = [];
+    let filter = [];
+    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
+      case 1:
+        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+        table = this.tableOportunidades;
+        this.homeComercial = true;
+        this.homeMantemimiento = false;
+        break;
+      case 20:
+        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+        table = this.tableServicios;
+        filter = ['name'];
+        this.homeComercial = false;
+        this.homeMantemimiento = true;
+        break;
+
+      default:
+        break;
+    }
     this.odooRpc
-      .searchRead(this.partner, domain, [], 0, 0, "")
-      .then((partner: any) => {
-        this.fillParners(partner);
+      .searchRead(table, domain, filter, 0, 0, "")
+      .then((query: any) => {
+        this.fillParners(query);
       });
   }
 
-  private fillParners(partners: any): void {
+  private fillParners(data: any): void {
+
     let loading = this.loadingCtrl.create({
       content: "Estamos preparando todo..."
     });
     loading.present();
-    let json = JSON.parse(partners._body);
+    let json = JSON.parse(data._body);
     if (!json.error) {
+      console.log(json)
       let query = json["result"].records;
       for (let i in query) {
-        this.partnerArray.push({
-          id: query[i].id,
-          probability: query[i].probability == false ? "N/A" : query[i].probability,
-          name: query[i].name == false ? "N/A" : query[i].name,
-          partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
-          colorDanger: query[i].probability < 30 ? true : false,
-          colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
-          colorSuccess: query[i].probability >= 70 ? true : false,
-        });
+
+        switch (JSON.parse(localStorage.getItem('token'))['uid']) {
+          case 1:
+            this.listaOportunidades.push({
+              id: query[i].id,
+              probability: query[i].probability == false ? "N/A" : query[i].probability,
+              name: query[i].name == false ? "N/A" : query[i].name,
+              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
+              colorDanger: query[i].probability < 30 ? true : false,
+              colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
+              colorSuccess: query[i].probability >= 70 ? true : false,
+            });
+            break;
+          case 20:
+            this.listaServicios.push({
+              id: query[i].id,
+              probability: query[i].probability == false ? "N/A" : query[i].probability,
+              name: query[i].name == false ? "N/A" : query[i].name,
+              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
+              colorDanger: query[i].probability < 30 ? true : false,
+              colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
+              colorSuccess: query[i].probability >= 70 ? true : false,
+            });
+            break;
+
+          default:
+            break;
+        }
+
       }
+
     }
     loading.dismiss();
   }
 
   private view(idx: number): void {
     let params = {
-      id: this.partnerArray[idx].id
+      id: this.listaOportunidades[idx].id
     };
     this.navCtrl.push(ViewPage, params);
   }
 
   initializeItems(): void {
-    this.partnerArray = this.items;
+    this.listaOportunidades = this.oportunidades;
   }
 
   getItems(searchbar) {
@@ -97,7 +164,8 @@ export class HomePage {
       return;
     }
 
-    this.partnerArray = this.partnerArray.filter(v => {
+
+    this.listaOportunidades = this.listaOportunidades.filter(v => {
       if (v.name && q) {
         if (v.name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
           return true;
@@ -121,14 +189,14 @@ export class HomePage {
         {
           text: 'Confirmar',
           handler: () => {
-            this.odooRpc.updateRecord(this.partner, this.partnerArray[idx].id, { active: false });
+            this.odooRpc.updateRecord(this.tableOportunidades, this.listaOportunidades[idx].id, { active: false });
             this.utils.presentToast(
-              this.partnerArray[idx].name + " se Elimino con Exito",
+              this.listaOportunidades[idx].name + " se Elimino con Exito",
               5000,
               true,
               "top"
             );
-            this.partnerArray.splice(idx, 1);
+            this.listaOportunidades.splice(idx, 1);
           }
         }
       ]
@@ -140,15 +208,15 @@ export class HomePage {
     this.navCtrl.push(ProfilePage);
   }
 
-  FormProbabilidad(tipo:any, idx:any = ""): void {
+  FormProbabilidad(tipo: any, idx: any = ""): void {
     let params = {
       tipo: tipo
     }
-    if(idx !== ""){
-      params['id'] = this.partnerArray[idx].id;
-    }else{
+    if (idx !== "") {
+      params['id'] = this.listaOportunidades[idx].id;
+    } else {
       params['id'] = "";
     }
-    this.navCtrl.push(FormProbabilidadPage,params);
+    this.navCtrl.push(FormProbabilidadPage, params);
   }
 }
