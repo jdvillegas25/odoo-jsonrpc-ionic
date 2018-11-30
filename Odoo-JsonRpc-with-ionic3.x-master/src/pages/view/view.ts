@@ -48,6 +48,7 @@ export class ViewPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils) {
     this.oportunity = navParams.get("id");
     this.display();
+    alert('entro al constructor ')
   }
 
   private display(): void {

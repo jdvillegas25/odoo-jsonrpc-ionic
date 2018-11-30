@@ -37,12 +37,20 @@ export class HomePage {
 
   private listaServicios: Array<{
     id: number;
-    priority: number;
-    stage_id: any;
     name: string;
-    colorDanger: boolean;
-    colorwarning: boolean;
-    colorSuccess: boolean;
+    categs_ids: any;
+    request_type: any;
+    city_id: boolean;
+    request_source: any;
+    branch_office_id: any;
+    partner_id: any;
+    location_id: any;
+    contact_id: any;
+    user_id: any;
+    date_start: any;
+    date_finish: any;
+    description: any;
+    priority:number;
   }> = [];
   private servicios: Array<{
     id: number;
@@ -55,7 +63,7 @@ export class HomePage {
   }> = [];
 
   private tableOportunidades = "crm.lead";
-  private tableServicios = "hr.equipment.request";
+  private tableServicios = "project.issue";
   // private tableServicios = "mantenimientos";
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -102,8 +110,8 @@ export class HomePage {
     loading.present();
     let json = JSON.parse(data._body);
     if (!json.error) {
-      console.log(json)
       let query = json["result"].records;
+      console.log(query)
       for (let i in query) {
 
         switch (JSON.parse(localStorage.getItem('token'))['uid']) {
@@ -121,12 +129,20 @@ export class HomePage {
           case 20:
             this.listaServicios.push({
               id: query[i].id,
-              priority: query[i].priority == false ? "N/A" : query[i].priority,
               name: query[i].name == false ? "N/A" : query[i].name,
-              stage_id: query[i].stage_id == false ? "N/A" : query[i].stage_id,
-              colorDanger: query[i].probability < 30 ? true : false,
-              colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
-              colorSuccess: query[i].probability >= 70 ? true : false,
+              categs_ids: query[i].categs_ids == false ? "N/A" : query[i].categs_ids,
+              request_type: query[i].request_type == false ? "N/A" : query[i].request_type,
+              city_id: query[i].city_id == false ? "N/A" : query[i].city_id,
+              request_source: query[i].request_source == false ? "N/A" : query[i].request_source,
+              branch_office_id: query[i].branch_office_id == false ? "N/A" : query[i].branch_office_id,
+              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
+              location_id: query[i].location_id == false ? "N/A" : query[i].location_id,
+              contact_id: query[i].contact_id == false ? "N/A" : query[i].contact_id,
+              user_id: query[i].user_id == false ? "N/A" : query[i].user_id,
+              date_start: query[i].date_start == false ? "N/A" : query[i].date_start,
+              date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
+              description: query[i].description == false ? "N/A" : query[i].description,
+              priority: query[i].priority == false ? "N/A" : query[i].priority
             });
             break;
 
@@ -140,7 +156,7 @@ export class HomePage {
     loading.dismiss();
   }
 
-  private view(idx: number): void {
+  public view(idx: number): void {
     let params = {
       id: this.listaOportunidades[idx].id
     };
