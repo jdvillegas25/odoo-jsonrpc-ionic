@@ -51,6 +51,7 @@ export class HomePage {
     date_finish: any;
     description: any;
     priority:number;
+    sec:string;
   }> = [];
   private servicios: Array<{
     id: number;
@@ -142,7 +143,8 @@ export class HomePage {
               date_start: query[i].date_start == false ? "N/A" : query[i].date_start,
               date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
               description: query[i].description == false ? "N/A" : query[i].description,
-              priority: query[i].priority == false ? "N/A" : query[i].priority
+              priority: query[i].priority == false ? "N/A" : query[i].priority,
+              sec: query[i].sec == false ? "N/A" : query[i].sec
             });
             break;
 
