@@ -50,8 +50,8 @@ export class HomePage {
     date_start: any;
     date_finish: any;
     description: any;
-    priority:number;
-    sec:string;
+    priority: number;
+    sec: string;
   }> = [];
   private servicios: Array<{
     id: number;
@@ -71,6 +71,7 @@ export class HomePage {
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
+    console.log(JSON.parse(localStorage.getItem('token')))
   }
 
   private display(): void {
@@ -112,7 +113,6 @@ export class HomePage {
     let json = JSON.parse(data._body);
     if (!json.error) {
       let query = json["result"].records;
-      console.log(query)
       for (let i in query) {
 
         switch (JSON.parse(localStorage.getItem('token'))['uid']) {
@@ -159,9 +159,19 @@ export class HomePage {
   }
 
   public view(idx: number): void {
-    let params = {
-      id: this.listaOportunidades[idx].id
-    };
+    let params = {}
+
+    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
+      case 1:
+        params['id'] = this.listaOportunidades[idx].id
+        break;
+      case 20:
+        params['id'] = this.listaServicios[idx].id
+        break;
+
+      default:
+        break;
+    }
     this.navCtrl.push(ViewPage, params);
   }
 

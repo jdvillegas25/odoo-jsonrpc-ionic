@@ -1,6 +1,9 @@
 <ion-header>
 
-  <ion-navbar color="secondary">
+  <ion-navbar *ngIf="homeComercial" color="secondary">
+    <ion-title>Detalle {{name}}</ion-title>
+  </ion-navbar>
+  <ion-navbar *ngIf="homeMantemimiento" color="primary">
     <ion-title>Detalle {{name}}</ion-title>
   </ion-navbar>
 
@@ -8,11 +11,8 @@
 
 
 <ion-content>
-
-
-
   <div class="main-cnt">
-    <ion-list>
+    <ion-list *ngIf="homeComercial">
       <div *ngFor="let item of data">
         <ion-card>
           <ion-card-content>
@@ -101,6 +101,18 @@
                 </button>
               </ion-col>
             </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-list>
+    <ion-list *ngIf="homeMantemimiento">
+      <div *ngFor="let i of dataMantenimiento">
+        <ion-card>
+          <ion-card-header>
+            {{i.name}}
+          </ion-card-header>
+          <ion-card-content>
+              <strong>Categorias: </strong><p *ngFor="let a of i.categs_ids">{{a}}</p>
           </ion-card-content>
         </ion-card>
       </div>
