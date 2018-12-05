@@ -15,6 +15,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { ViewPage } from '../pages/view/view';
 import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
 import { ProspectoPage } from "../pages/prospecto/prospecto";
+import { ServicioPage } from "../pages/servicio/servicio"
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
@@ -33,7 +34,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     ParallaxDirective,
     AddCustomerPage,
     FormProbabilidadPage,
-    ProspectoPage
+    ProspectoPage,
+    ServicioPage
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     ProfilePage,
     AddCustomerPage,
     FormProbabilidadPage,
-    ProspectoPage
+    ProspectoPage,
+    ServicioPage
   ],
   providers: [
     Network,

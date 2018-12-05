@@ -42,7 +42,7 @@ export class HomePage {
     request_type: any;
     city_id: boolean;
     request_source: any;
-    branch_office_id: any;
+    branch_type: String;
     partner_id: any;
     location_id: any;
     contact_id: any;
@@ -71,7 +71,6 @@ export class HomePage {
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
-    console.log(JSON.parse(localStorage.getItem('token')))
   }
 
   private display(): void {
@@ -128,6 +127,7 @@ export class HomePage {
             });
             break;
           case 20:
+          console.log(query)
             this.listaServicios.push({
               id: query[i].id,
               name: query[i].name == false ? "N/A" : query[i].name,
@@ -135,7 +135,7 @@ export class HomePage {
               request_type: query[i].request_type == false ? "N/A" : query[i].request_type,
               city_id: query[i].city_id == false ? "N/A" : query[i].city_id,
               request_source: query[i].request_source == false ? "N/A" : query[i].request_source,
-              branch_office_id: query[i].branch_office_id == false ? "N/A" : query[i].branch_office_id,
+              branch_type: query[i].branch_type == false ? "N/A" : query[i].branch_type,
               partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
               location_id: query[i].location_id == false ? "N/A" : query[i].location_id,
               contact_id: query[i].contact_id == false ? "N/A" : query[i].contact_id,
@@ -153,7 +153,6 @@ export class HomePage {
         }
 
       }
-
     }
     loading.dismiss();
   }
