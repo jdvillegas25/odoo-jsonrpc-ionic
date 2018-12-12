@@ -31,7 +31,7 @@
     </ion-item>
   </ion-list>
   <div [ngSwitch]="pestanias">
-    <ion-list no-list *ngSwitchCase="mantenimiento">
+    <ion-list no-list *ngSwitchCase="'mantenimiento'">
       <ion-list *ngIf="div_cctv">
         <h3>CCTV</h3><br>
         <ion-item>
@@ -632,10 +632,10 @@
         </ion-list>
       </ion-list>
     </ion-list>
-    <ion-list no-list *ngSwitchCase="elementos_necesarios">
+    <ion-list no-list *ngSwitchCase="'elementos_necesarios'">
 
     </ion-list>
-    <ion-list no-list *ngSwitchCase="acta_digital">
+    <ion-list no-list *ngSwitchCase="'acta_digital'">
 
     </ion-list>
   </div>
