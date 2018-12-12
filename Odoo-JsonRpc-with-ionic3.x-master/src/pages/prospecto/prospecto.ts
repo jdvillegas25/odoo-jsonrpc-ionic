@@ -150,6 +150,7 @@ export class ProspectoPage {
         this.toolbar = false;
         this.div_alarmas = false;
         this.div_incendios = false;
+        this.div_cae = false;
         for (let nec of necesidad) {
             switch (nec) {
                 //cctv

@@ -187,7 +187,6 @@ export class ViewPage {
       .searchRead(partner, domain, fields, limit, offset, sort)
       .then((res: any) => {
         let data = JSON.parse(res._body)["result"].records;
-        console.log(data);
         for (let record in data) {
           this.dataMantenimiento.push({
             id: data[record].id == false ? "N/A" : data[record].id,
@@ -213,69 +212,5 @@ export class ViewPage {
       id: this.oportunity
     };
     this.navCtrl.push(ServicioPage, params);
-  }
-  private cancelarServicio() {
-    // const prompt = this.alertCtrl.create({
-    //   title: 'Cancelacion de ervicio',
-    //   message: "Por favor ingrese el ",
-    //   inputs: [
-    //     {
-    //       name: 'title',
-    //       placeholder: 'Title'
-    //     },
-    //   ],
-    //   buttons: [
-    //     {
-    //       text: 'Cancel',
-    //       handler: data => {
-    //         console.log('Cancel clicked');
-    //       }
-    //     },
-    //     {
-    //       text: 'Save',
-    //       handler: data => {
-    //         console.log('Saved clicked');
-    //       }
-    //     }
-    //   ]
-    // });
-    // prompt.present();
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Lightsaber color');
-
-    alert.addInput({
-      type: 'radio',
-      label: 'Blue',
-      value: 'blue',
-      checked: false
-    });
-    alert.addInput({
-      type: 'radio',
-      label: 'Grenn',
-      value: 'grenn',
-      checked: false
-    });
-    alert.addInput({
-      type: 'radio',
-      label: 'Red',
-      value: 'red',
-      checked: false
-    });
-    alert.addInput({
-      type: 'radio',
-      label: 'Gray',
-      value: 'gray',
-      checked: false
-    });
-
-    alert.addButton('Cancel');
-    alert.addButton({
-      text: 'OK',
-      handler: data => {
-        this.testRadioOpen = false;
-        this.testRadioResult = data;
-      }
-    });
-    alert.present();
   }
 }

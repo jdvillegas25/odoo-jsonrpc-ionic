@@ -69,8 +69,16 @@ export class HomePage {
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
 
+  private list_cause: any;
+  private list_description: any;
+
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
+
+    //Validacion para cargar causas de rol mantenimiento
+    if (JSON.parse(localStorage.getItem('token'))['uid'] == 20) {
+      this.get_causas();
+    }
   }
 
   private display(): void {
@@ -78,6 +86,8 @@ export class HomePage {
     let table = '';
     let domain = [];
     let filter = [];
+
+    //Validacion para cargar causas de rol mantenimiento
     switch (JSON.parse(localStorage.getItem('token'))['uid']) {
       case 1:
         domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
@@ -86,7 +96,7 @@ export class HomePage {
         this.homeMantemimiento = false;
         break;
       case 20:
-        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],["assignment_status","=",null],["assignment_status","=", null]];
         table = this.tableServicios;
         filter = [];
         this.homeComercial = false;
@@ -96,11 +106,9 @@ export class HomePage {
       default:
         break;
     }
-    this.odooRpc
-      .searchRead(table, domain, filter, 0, 0, "")
-      .then((query: any) => {
-        this.fillParners(query);
-      });
+    this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
+      this.fillParners(query);
+    });
   }
 
   private fillParners(data: any): void {
@@ -114,6 +122,7 @@ export class HomePage {
       let query = json["result"].records;
       for (let i in query) {
 
+        //Validacion para cargar causas de rol mantenimiento
         switch (JSON.parse(localStorage.getItem('token'))['uid']) {
           case 1:
             this.listaOportunidades.push({
@@ -127,7 +136,6 @@ export class HomePage {
             });
             break;
           case 20:
-          console.log(query)
             this.listaServicios.push({
               id: query[i].id,
               name: query[i].name == false ? "N/A" : query[i].name,
@@ -160,6 +168,7 @@ export class HomePage {
   public view(idx: number): void {
     let params = {}
 
+    //Validacion para cargar causas de rol mantenimiento3
     switch (JSON.parse(localStorage.getItem('token'))['uid']) {
       case 1:
         params['id'] = this.listaOportunidades[idx].id
@@ -245,4 +254,143 @@ export class HomePage {
     }
     this.navCtrl.push(FormProbabilidadPage, params);
   }
+  public cancelarCita(servicio) {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Motivos de Cita Cancelada');
+
+    for (let cause of this.list_cause) {
+
+      if (cause.assignment_status == 'cancel') {
+
+        alert.addInput({
+          type: 'radio',
+          label: cause.name,
+          value: cause.id,
+          checked: false
+        });
+      }
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        this.get_description(data);
+        let alerta = this.alertCtrl.create();
+        alerta.setTitle('Descripción de Cita Cancelada');
+
+        for (let desc of this.list_description) {
+          alerta.addInput({
+            type: 'radio',
+            label: desc.name,
+            value: desc.id,
+            checked: false
+          });
+        }
+
+        alerta.addButton('Cancel');
+        alerta.addButton({
+          text: 'OK',
+          handler: dataDesc => {
+            this.update_mantenimiento('cancel', data, dataDesc, servicio);
+          }
+        });
+        alerta.present();
+      }
+    });
+    alert.present();
+  }
+
+
+  public citaFallida(servicio) {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Motivos de Cita Fallida');
+
+    for (let cause of this.list_cause) {
+
+      if (cause.assignment_status == 'fail') {
+
+        alert.addInput({
+          type: 'radio',
+          label: cause.name,
+          value: cause.id,
+          checked: false
+        });
+      }
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        this.get_description(data);
+        let alerta = this.alertCtrl.create();
+        alerta.setTitle('Descripción de Cita Cancelada');
+
+        for (let desc of this.list_description) {
+          alerta.addInput({
+            type: 'radio',
+            label: desc.name,
+            value: desc.id,
+            checked: false
+          });
+        }
+
+        alerta.addButton('Cancel');
+        alerta.addButton({
+          text: 'OK',
+          handler: dataDesc => {
+            this.update_mantenimiento('fail', data, dataDesc, servicio);
+          }
+        });
+        alerta.present();
+      }
+    });
+    alert.present();
+  }
+
+
+  private get_causas() {
+
+    let table = 'project.task.fail.cause'
+    let domain = []
+    let filter = []
+    this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
+      let json = JSON.parse(query._body);
+      if (!json.error) {
+        this.list_cause = json["result"].records;
+      }
+    });
+
+  }
+  private get_description(cause) {
+    let table = 'project.task.fail.description'
+    let domain = [['fail_cause_id', '=', cause]]
+    let filter = []
+    this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
+      let json = JSON.parse(query._body);
+      if (!json.error) {
+        this.list_description = json["result"].records;
+      }
+    });
+
+  }
+
+  private update_mantenimiento(motivo, cause, desc, servicio) {
+    let data = {
+      fail_cause_id:cause,
+      assignment_status: motivo,
+      fail_description_id: desc
+    }
+    this.odooRpc.updateRecord(this.tableServicios, this.listaServicios[servicio].id, data);
+    this.utils.presentToast(
+      this.listaServicios[servicio].name + " se Elimino con Exito",
+      5000,
+      true,
+      "top"
+    );
+    this.listaServicios.splice(servicio, 1);
+
+  }
+
 }

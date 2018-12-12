@@ -71,11 +71,11 @@
         <p style="color:grey"><strong>{{item.city_id[1]}}<br>{{item.location_id[1]}}|{{item.branch_type}}</strong></p>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="primary" (click)="FormProbabilidad('update',i)">
-          Actualizar
+        <button ion-button color="danger" (click)="citaFallida(i)">
+          Cita Fallida
         </button>
-        <button ion-button color="danger" (click)="delete(i)">
-          Eliminar
+        <button ion-button color="danger" (click)="cancelarCita(i)">
+          Cita Cancelada
         </button>
       </ion-item-options>
     </ion-item-sliding>
