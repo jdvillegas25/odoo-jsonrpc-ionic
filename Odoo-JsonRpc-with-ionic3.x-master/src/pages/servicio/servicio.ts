@@ -27,6 +27,18 @@ export class ServicioPage {
   public div_cae: boolean;
   public pestanias: string = "mantenimiento";
 
+  public habitacionesCCTV:any;
+  public listaHabitacionesCCTV:any;
+  public picturesCCTV:any;
+  public habitacionesCAE:any;
+  public listaHabitacionesCAE:any;
+  public habitacionesAlarmas:any;
+  public listaHabitacionesAlarmas:any;
+  public picturesAlarmas:any;
+  public habitacionesIncendios:any;
+  public listaHabitacionesIncendios:any;
+  public picturesIncendio:any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private loadingCtrl: LoadingController, ) {
     this.oportunity = navParams.get("id");
     this.get_necesidad_cliente();
@@ -149,5 +161,44 @@ export class ServicioPage {
       }
     });
   }
+  public habilitarHabitacionesCCTV(zonas) {
+    this.habitacionesCCTV = zonas;
+    this.listaHabitacionesCCTV = [];
+    let arrayName: any;
+    for (let i = 1; i <= this.habitacionesCCTV; i++) {
+        arrayName = { id: i };
+        this.picturesCCTV[i] = []
+        this.listaHabitacionesCCTV.push(arrayName);
+    }
+}
+public habilitarHabitacionesCAE(zonas) {
+    this.habitacionesCAE = zonas;
+    this.listaHabitacionesCAE = [];
+    let arrayName: any;
+    for (let i = 1; i <= this.habitacionesCAE; i++) {
+        arrayName = { id: i };
+        this.listaHabitacionesCAE.push(arrayName);
+    }
+}
+public habilitarHabitacionesAlarmas(zonas) {
+    this.habitacionesAlarmas = zonas;
+    this.listaHabitacionesAlarmas = [];
+    let arrayName: any;
+    for (let i = 1; i <= this.habitacionesAlarmas; i++) {
+        arrayName = { id: i };
+        this.picturesAlarmas[i] = []
+        this.listaHabitacionesAlarmas.push(arrayName);
+    }
+}
+public habilitarHabitacionesIncendios(zonas) {
+    this.habitacionesIncendios = zonas;
+    this.listaHabitacionesIncendios = [];
+    let arrayName: any;
+    for (let i = 1; i <= this.habitacionesIncendios; i++) {
+        arrayName = { id: i };
+        this.picturesIncendio[i] = []
+        this.listaHabitacionesIncendios.push(arrayName);
+    }
+}
 
 }
