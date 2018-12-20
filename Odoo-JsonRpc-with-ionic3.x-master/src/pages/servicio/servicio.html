@@ -24,11 +24,23 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-label stacked>Servicio a Realizar</ion-label>
+      <ion-label stacked>Servicio a Realizar: </ion-label>
       <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="habilita_formulario(necesidad.value)">
         <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
       </ion-select>
     </ion-item>
+    <!-- <ion-item>
+      <ion-label stacked>Trabajo Sobre: </ion-label>
+      <ion-select [(ngModel)]="trabajoSobre" cancelText="Cancelar" #trabajoSobre (ngModelChange)="habilitaAgregarElemento(trabajoSobre.value)">
+        <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Elementos Trabajados: </ion-label>
+      <ion-select [(ngModel)]="elementoTrabajado" cancelText="Cancelar" #elementoTrabajado (ngModelChange)="agregarElemento(elementoTrabajado.value)">
+        <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
+      </ion-select>
+    </ion-item> -->
   </ion-list>
   <div [ngSwitch]="pestanias">
     <ion-list no-list *ngSwitchCase="'mantenimiento'">
@@ -633,10 +645,56 @@
       </ion-list>
     </ion-list>
     <ion-list no-list *ngSwitchCase="'elementos_necesarios'">
-
+      <h1>Elementos Necesarios</h1>
+      <ion-card *ngFor="let item of list_items">
+        <img [src]="sanitize('data:image/jpeg;base64,'+item.image_medium)" alt="{{item.name}}">
+        <ion-card-content>
+          <ion-item>
+            <ion-label floating>Nombre: </ion-label>
+            <ion-badge color="danger" item-end>{{item.name}}</ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="checkmark" color="danger" item-start></ion-icon>
+            <ion-label floating>Cantidad: </ion-label>
+            <ion-input [(ngModel)]="nombreHabitacionCCTV[i.id]" name="nombreHabitacionCCTV_{{i.id}}"></ion-input>
+          </ion-item>
+          <button ion-button color="danger" (click)="agregaCarrito(item)">
+            <ion-icon name="cart"></ion-icon>
+          </button>
+        </ion-card-content>
+      </ion-card>
     </ion-list>
     <ion-list no-list *ngSwitchCase="'acta_digital'">
+      <h1>Acta Digitál</h1>
+      <div #fixedContainer ion-fixed>
+        <ion-row>
+          <ion-col *ngFor="let color of colors" [style.background]="color" class="color-block" tappable (click)="selectColor(color)"></ion-col>
+        </ion-row>
 
+        <ion-row radio-group [(ngModel)]="selectedColor">
+          <ion-col *ngFor="let color of colors" text-center>
+            <ion-radio [value]="color"></ion-radio>
+          </ion-col>
+        </ion-row>
+
+        <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)"></canvas>
+
+        <button ion-button full (click)="saveCanvasImage()">Save Image</button>
+      </div>
+
+      <ion-list *ngIf="storedImages.length > 0">
+        <ion-list-header>Previous Drawings</ion-list-header>
+        <ion-card *ngFor="let obj of storedImages; let i = index">
+          <ion-card-content>
+            <img [src]="getImagePath(obj.img)">
+          </ion-card-content>
+          <ion-row>
+            <button ion-button full icon-only color="danger" (click)="removeImageAtIndex(i)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </ion-row>
+        </ion-card>
+      </ion-list>
     </ion-list>
   </div>
 </ion-content>

@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
+import { Component, ViewChild, Renderer, ElementRef } from '@angular/core';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content } from 'ionic-angular';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { File, IWriteOptions } from '@ionic-native/file';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the ServicioPage page.
@@ -8,12 +13,31 @@ import { OdooJsonRpc } from '../../services/odoojsonrpc';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-
+const STORAGE_KEY = 'IMAGE_LIST'
 @Component({
   selector: 'page-servicio',
   templateUrl: 'servicio.html',
 })
 export class ServicioPage {
+
+  @ViewChild('imageCanvas') canvas: any;
+
+  public canvasElement: any;
+  public saveX: number;
+  public saveY: number;
+
+  public storedImages = [];
+
+  //make canvas sticky at the top stuff
+  // @ViewChild(Content) content: Content;
+  // @ViewChild('fixedContainer') fixedContainer: any;
+  @ViewChild(Content) content: Content;
+  @ViewChild('fixedContentContainer') fixedContentContainer: ElementRef;
+
+  //Color Stuff
+  selectedColor = '#9e2956';
+
+  colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3'];
 
   public oportunity: any;
   public list_necesidades: any;
@@ -27,22 +51,183 @@ export class ServicioPage {
   public div_cae: boolean;
   public pestanias: string = "mantenimiento";
 
-  public habitacionesCCTV:any;
-  public listaHabitacionesCCTV:any;
-  public picturesCCTV:any;
-  public habitacionesCAE:any;
-  public listaHabitacionesCAE:any;
-  public habitacionesAlarmas:any;
-  public listaHabitacionesAlarmas:any;
-  public picturesAlarmas:any;
-  public habitacionesIncendios:any;
-  public listaHabitacionesIncendios:any;
-  public picturesIncendio:any;
+  public habitacionesCCTV: any;
+  public picturesCCTV: Array<any> = [];
+  public listaHabitacionesCCTV: any;
+  public nombreHabitacionCCTV: Array<any> = [];
+  public tipoParedHabitacionCCTV: Array<any> = [];
+  public camarasCCTV: Array<any> = [];
+  public aproMtsCCTV: Array<any> = [];
+  public altMtsCCTV: Array<any> = [];
+  public obserZonaCCTV: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private loadingCtrl: LoadingController, ) {
+  public habitacionesCAE: any;
+  public listaHabitacionesCAE: any;
+  public picturesCAE: Array<any> = [];
+  public nombreHabitacionCAE: Array<any> = [];
+  public tipoPuertaHabitacionCAE: Array<any> = [];
+
+  public habitacionesAlarmas: any;
+  public listaHabitacionesAlarmas: any;
+  public picturesAlarmas: Array<any> = [];
+  public nombreHabitacionAlarmas: Array<any> = [];
+  public tipoPuertaHabitacionAlarma: Array<any> = [];
+  public tipoParedHabitacionAlarma: Array<any> = [];
+  public alarmasHabitacion: Array<any> = []
+  public aproMtsAlarmas: Array<any> = [];
+  public altMtsAlarmas: Array<any> = [];
+  public obserZonaAlarmas: Array<any> = [];
+
+  public habitacionesIncendios: any;
+  public listaHabitacionesIncendios: any;
+  public picturesIncendio: Array<any> = [];
+  public nombreHabitacionIncendios: Array<any> = [];
+  public tipoParedHabitacionIncendio: Array<any> = [];
+  public sensoresIncendio: Array<any> = []
+  public aproMtsIncendio: Array<any> = [];
+  public altMtsIncendio: Array<any> = [];
+  public obserZonaIncendio: Array<any> = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
     this.oportunity = navParams.get("id");
     this.get_necesidad_cliente();
+
+    // Load all stored images when tha app is ready
+    this.storage.ready().then(() => {
+      this.storage.get(STORAGE_KEY).then(data => {
+        if (data != undefined) {
+          this.storedImages = data;
+        }
+      });
+    });
+
   }
+
+  ionViewDidEnter() {
+    // https://github.com/ionic-team/ionic/issues/9071#issuecomment-362920591
+    // Get the height of the fixed item
+    let fixedContainer = this.fixedContentContainer.nativeElement;
+
+    // Get the height of the fixed item
+    let itemHeight = fixedContainer.offsetHeight;
+    let scroll = this.content.getScrollElement();
+
+    //add preexisting scroll margin to fixed container size
+    itemHeight = Number.parseFloat(scroll.style.marginTop.replace("px", "")) + itemHeight;
+    scroll.style.marginTop = itemHeight + 'px';
+  }
+
+  ionViewDidLoad() {
+    // Set the Canvas Element and its size
+    this.canvasElement = this.canvas.nativeElement;
+    this.canvasElement.width = this.plt.width() + '';
+    this.canvasElement.height = 200;
+  }
+  selectColor(color) {
+    this.selectedColor = color;
+  }
+
+  startDrawing(ev) {
+    var canvasPosition = this.canvasElement.getBoundingClientRect();
+
+    this.saveX = ev.touches[0].pageX - canvasPosition.x;
+    this.saveY = ev.touches[0].pageY - canvasPosition.y;
+  }
+
+  moved(ev) {
+    var canvasPosition = this.canvasElement.getBoundingClientRect();
+
+    let ctx = this.canvasElement.getContext('2d');
+    let currentX = ev.touches[0].pageX - canvasPosition.x;
+    let currentY = ev.touches[0].pageY - canvasPosition.y;
+
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = this.selectedColor;
+    ctx.lineWidth = 5;
+
+    ctx.beginPath();
+    ctx.moveTo(this.saveX, this.saveY);
+    ctx.lineTo(currentX, currentY);
+    ctx.closePath();
+
+    ctx.stroke();
+
+    this.saveX = currentX;
+    this.saveY = currentY;
+  }
+
+  saveCanvasImage() {
+    var dataUrl = this.canvasElement.toDataURL();
+
+    let ctx = this.canvasElement.getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
+
+    let name = new Date().getTime() + '.png';
+    let path = this.file.dataDirectory;
+    let options: IWriteOptions = { replace: true };
+
+    var data = dataUrl.split(',')[1];
+    let blob = this.b64toBlob(data, 'image/png');
+
+    this.file.writeFile(path, name, blob, options).then(res => {
+      this.storeImage(name);
+    }, err => {
+      console.log('error: ', err);
+    });
+  }
+
+  // https://forum.ionicframework.com/t/save-base64-encoded-image-to-specific-filepath/96180/3
+  b64toBlob(b64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 512;
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+
+  storeImage(imageName) {
+    let saveObj = { img: imageName };
+    this.storedImages.push(saveObj);
+    this.storage.set(STORAGE_KEY, this.storedImages).then(() => {
+      setTimeout(() => {
+        this.content.scrollToBottom();
+      }, 500);
+    });
+  }
+
+  removeImageAtIndex(index) {
+    let removed = this.storedImages.splice(index, 1);
+    this.file.removeFile(this.file.dataDirectory, removed[0].img).then(res => {
+    }, err => {
+      console.log('remove err; ', err);
+    });
+    this.storage.set(STORAGE_KEY, this.storedImages);
+  }
+
+  getImagePath(imageName) {
+    let path = this.file.dataDirectory + imageName;
+    // https://ionicframework.com/docs/wkwebview/#my-local-resources-do-not-load
+    path = normalizeURL(path);
+    return path;
+  }
+
+
+
   private get_necesidad_cliente() {
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
@@ -57,6 +242,9 @@ export class ServicioPage {
       }
     });
   }
+  public sanitize(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
   public habilita_formulario(necesidad) {
     this.toolbar = true;
     this.div_els = false;
@@ -69,14 +257,14 @@ export class ServicioPage {
     switch (necesidad) {
       //cctv
       case "6":
-      this.div_cctv = true;
-      this.div_els = false;
-      this.div_eps = false;
-      this.toolbar = false;
-      this.div_alarmas = false;
-      this.div_incendios = false;
-      this.div_cae = false;
-      this.get_productos(necesidad);
+        this.div_cctv = true;
+        this.div_els = false;
+        this.div_eps = false;
+        this.toolbar = false;
+        this.div_alarmas = false;
+        this.div_incendios = false;
+        this.div_cae = false;
+        this.get_productos(necesidad);
         break;
       //eps
       case "8":
@@ -134,12 +322,6 @@ export class ServicioPage {
         this.get_productos(necesidad);
         break;
       default:
-        // this.div_els = false;
-        // this.div_cctv = false;
-        // this.div_eps = false;
-        // this.toolbar = false;
-        // this.div_alarmas = false;
-        // this.div_incendios = false;
         break;
     }
   }
@@ -160,45 +342,46 @@ export class ServicioPage {
         loading.dismiss();
       }
     });
+    console.log(this.list_items)
   }
   public habilitarHabitacionesCCTV(zonas) {
     this.habitacionesCCTV = zonas;
     this.listaHabitacionesCCTV = [];
     let arrayName: any;
     for (let i = 1; i <= this.habitacionesCCTV; i++) {
-        arrayName = { id: i };
-        this.picturesCCTV[i] = []
-        this.listaHabitacionesCCTV.push(arrayName);
+      arrayName = { id: i };
+      this.picturesCCTV[i] = []
+      this.listaHabitacionesCCTV.push(arrayName);
     }
-}
-public habilitarHabitacionesCAE(zonas) {
+  }
+  public habilitarHabitacionesCAE(zonas) {
     this.habitacionesCAE = zonas;
     this.listaHabitacionesCAE = [];
     let arrayName: any;
     for (let i = 1; i <= this.habitacionesCAE; i++) {
-        arrayName = { id: i };
-        this.listaHabitacionesCAE.push(arrayName);
+      arrayName = { id: i };
+      this.listaHabitacionesCAE.push(arrayName);
     }
-}
-public habilitarHabitacionesAlarmas(zonas) {
+  }
+  public habilitarHabitacionesAlarmas(zonas) {
     this.habitacionesAlarmas = zonas;
     this.listaHabitacionesAlarmas = [];
     let arrayName: any;
     for (let i = 1; i <= this.habitacionesAlarmas; i++) {
-        arrayName = { id: i };
-        this.picturesAlarmas[i] = []
-        this.listaHabitacionesAlarmas.push(arrayName);
+      arrayName = { id: i };
+      this.picturesAlarmas[i] = []
+      this.listaHabitacionesAlarmas.push(arrayName);
     }
-}
-public habilitarHabitacionesIncendios(zonas) {
+  }
+  public habilitarHabitacionesIncendios(zonas) {
     this.habitacionesIncendios = zonas;
     this.listaHabitacionesIncendios = [];
     let arrayName: any;
     for (let i = 1; i <= this.habitacionesIncendios; i++) {
-        arrayName = { id: i };
-        this.picturesIncendio[i] = []
-        this.listaHabitacionesIncendios.push(arrayName);
+      arrayName = { id: i };
+      this.picturesIncendio[i] = []
+      this.listaHabitacionesIncendios.push(arrayName);
     }
-}
+  }
 
 }

@@ -23,7 +23,7 @@
     "@ionic-native/android-permissions": "^4.17.0",
     "@ionic-native/camera": "^4.15.0",
     "@ionic-native/core": "4.3.2",
-    "@ionic-native/file": "^4.17.0",
+    "@ionic-native/file": "^4.18.0",
     "@ionic-native/file-chooser": "^4.17.0",
     "@ionic-native/file-opener": "^4.17.0",
     "@ionic-native/file-path": "^4.17.0",
@@ -46,7 +46,7 @@
     "cordova-plugin-splashscreen": "^4.1.0",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-sqlite-storage": "^2.4.0",
+    "cordova-sqlite-storage": "2.6.0",
     "firebase": "^5.5.8",
     "install": "^0.12.1",
     "ionic-angular": "^3.9.2",
@@ -70,7 +70,6 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-network-information": {},
-      "cordova-sqlite-storage": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-camera": {
         "CAMERA_USAGE_DESCRIPTION": "the app need the camera",
@@ -79,7 +78,8 @@
       "cordova-plugin-filechooser": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
       "android",
