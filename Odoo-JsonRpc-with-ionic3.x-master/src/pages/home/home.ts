@@ -96,7 +96,7 @@ export class HomePage {
         this.homeMantemimiento = false;
         break;
       case 20:
-        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],["assignment_status","=",null],["assignment_status","=", null]];
+        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],["assignment_status","=",null]];
         table = this.tableServicios;
         filter = [];
         this.homeComercial = false;

@@ -21,18 +21,21 @@ const STORAGE_KEY = 'IMAGE_LIST'
 export class ServicioPage {
 
   @ViewChild('imageCanvas') canvas: any;
+  canvasElement: any;
 
-  public canvasElement: any;
-  public saveX: number;
-  public saveY: number;
+  saveX: number;
+  saveY: number;
 
-  public storedImages = [];
+  storedImages = [];
+
+  @ViewChild(Content) content: Content;
+  @ViewChild('fixedContainer') fixedContainer: any;
+
+
 
   //make canvas sticky at the top stuff
   // @ViewChild(Content) content: Content;
   // @ViewChild('fixedContainer') fixedContainer: any;
-  @ViewChild(Content) content: Content;
-  @ViewChild('fixedContentContainer') fixedContentContainer: ElementRef;
 
   //Color Stuff
   selectedColor = '#9e2956';
@@ -89,39 +92,42 @@ export class ServicioPage {
   public obserZonaIncendio: Array<any> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
-    this.oportunity = navParams.get("id");
-    this.get_necesidad_cliente();
-
     // Load all stored images when tha app is ready
     this.storage.ready().then(() => {
       this.storage.get(STORAGE_KEY).then(data => {
-        if (data != undefined) {
+        if (data != null) {
           this.storedImages = data;
         }
       });
     });
+    this.oportunity = navParams.get("id");
+    this.get_necesidad_cliente();
+
 
   }
 
   ionViewDidEnter() {
-    // https://github.com/ionic-team/ionic/issues/9071#issuecomment-362920591
-    // Get the height of the fixed item
-    let fixedContainer = this.fixedContentContainer.nativeElement;
 
-    // Get the height of the fixed item
-    let itemHeight = fixedContainer.offsetHeight;
-    let scroll = this.content.getScrollElement();
+    setTimeout(() => {
+      let itemHeight = this.fixedContainer.nativeElement.offsetHeight;
+      let scroll = this.content.getScrollElement();
 
-    //add preexisting scroll margin to fixed container size
-    itemHeight = Number.parseFloat(scroll.style.marginTop.replace("px", "")) + itemHeight;
-    scroll.style.marginTop = itemHeight + 'px';
+      itemHeight = Number.parseFloat(scroll.style.marginTop.replace("px", "")) + itemHeight;
+      scroll.style.marginTop = itemHeight + 'px';
+    }, 3000)
   }
 
-  ionViewDidLoad() {
-    // Set the Canvas Element and its size
-    this.canvasElement = this.canvas.nativeElement;
-    this.canvasElement.width = this.plt.width() + '';
-    this.canvasElement.height = 200;
+  // ionViewDidLoad() {
+  //   this.canvasElement = this.canvas.nativeElement;
+  //   this.canvasElement.width = this.plt.width() + '';
+  //   this.canvasElement.height = 200;
+  // }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.canvasElement = this.canvas.nativeElement;
+      this.canvasElement.width = this.plt.width() + '';
+      this.canvasElement.height = 200;
+    }, 1000)
   }
   selectColor(color) {
     this.selectedColor = color;
@@ -238,9 +244,9 @@ export class ServicioPage {
       let json = JSON.parse(tags._body);
       if (!json.error) {
         this.list_necesidades = json["result"].records;
-        loading.dismiss();
       }
     });
+    loading.dismiss();
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);

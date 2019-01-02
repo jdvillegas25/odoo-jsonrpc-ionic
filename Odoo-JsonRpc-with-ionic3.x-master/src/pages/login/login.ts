@@ -1,4 +1,5 @@
 import { HomePage } from "../home/home";
+import { ServicioPage } from "../servicio/servicio";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
 import { NavController, NavParams }
@@ -62,7 +63,8 @@ export class LoginPage {
         let logiData: any = JSON.parse(res._body)["result"];
         logiData.password = this.password;
         localStorage.setItem("token", JSON.stringify(logiData));
-        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(ServicioPage);
+        // this.navCtrl.setRoot(HomePage);
       })
       .catch(err => {
         this.utils.dismissLoading();
