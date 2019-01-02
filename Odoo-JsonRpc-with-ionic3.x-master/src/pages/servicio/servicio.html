@@ -22,7 +22,7 @@
 </ion-header>
 
 <ion-content padding no-bounce>
-  <div #fixedContainer ion-fixed>
+  <!-- <div #fixedContainer ion-fixed>
     <ion-row>
       <ion-col *ngFor="let color of colors" [style.background]="color" class="color-block" tappable (click)="selectColor(color)"></ion-col>
     </ion-row>
@@ -32,11 +32,9 @@
         <ion-radio [value]="color"></ion-radio>
       </ion-col>
     </ion-row>
-
     <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)"></canvas>
-
     <button ion-button full (click)="saveCanvasImage()">Save Image</button>
-  </div>
+  </div> -->
   <ion-list>
     <ion-item>
       <ion-label stacked>Servicio a Realizar: </ion-label>
@@ -697,7 +695,7 @@
         <button ion-button full (click)="saveCanvasImage()">Save Image</button>
       </div> -->
 
-      <ion-list *ngIf="storedImages.length > 0">
+      <!-- <ion-list *ngIf="storedImages.length > 0">
         <ion-list-header>Previous Drawings</ion-list-header>
         <ion-card *ngFor="let obj of storedImages; let i = index">
           <ion-card-content>
@@ -709,7 +707,7 @@
             </button>
           </ion-row>
         </ion-card>
-      </ion-list>
+      </ion-list> -->
     </ion-list>
   </div>
 </ion-content>

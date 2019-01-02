@@ -22,6 +22,7 @@ import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { IonicStorageModule } from '@ionic/storage';
+import {ActaDigitalPage} from '../pages/acta-digital/acta-digital'
 
 
 
@@ -36,7 +37,8 @@ import { IonicStorageModule } from '@ionic/storage';
     AddCustomerPage,
     FormProbabilidadPage,
     ProspectoPage,
-    ServicioPage
+    ServicioPage,
+    ActaDigitalPage,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,8 @@ import { IonicStorageModule } from '@ionic/storage';
     AddCustomerPage,
     FormProbabilidadPage,
     ProspectoPage,
-    ServicioPage
+    ServicioPage,
+    ActaDigitalPage
   ],
   providers: [
     Network,

@@ -13,34 +13,34 @@ import { Storage } from '@ionic/storage';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-const STORAGE_KEY = 'IMAGE_LIST'
+/* const STORAGE_KEY = 'IMAGE_LIST' */
 @Component({
   selector: 'page-servicio',
   templateUrl: 'servicio.html',
 })
 export class ServicioPage {
 
-  @ViewChild('imageCanvas') canvas: any;
-  canvasElement: any;
-
-  saveX: number;
-  saveY: number;
-
-  storedImages = [];
-
-  @ViewChild(Content) content: Content;
-  @ViewChild('fixedContainer') fixedContainer: any;
-
-
-
-  //make canvas sticky at the top stuff
-  // @ViewChild(Content) content: Content;
-  // @ViewChild('fixedContainer') fixedContainer: any;
-
-  //Color Stuff
-  selectedColor = '#9e2956';
-
-  colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3'];
+  /*@ViewChild('imageCanvas') canvas: any;
+   canvasElement: any;
+ 
+   saveX: number;
+   saveY: number;
+ 
+   storedImages = [];
+ 
+   @ViewChild(Content) content: Content;
+   @ViewChild('fixedContainer') fixedContainer: any;
+ 
+ 
+ 
+   //make canvas sticky at the top stuff
+   // @ViewChild(Content) content: Content;
+   // @ViewChild('fixedContainer') fixedContainer: any;
+ 
+   //Color Stuff
+   selectedColor = '#9e2956';
+ 
+   colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3'];*/
 
   public oportunity: any;
   public list_necesidades: any;
@@ -92,22 +92,25 @@ export class ServicioPage {
   public obserZonaIncendio: Array<any> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
-    // Load all stored images when tha app is ready
+    /*// Load all stored images when tha app is ready
     this.storage.ready().then(() => {
       this.storage.get(STORAGE_KEY).then(data => {
         if (data != null) {
           this.storedImages = data;
         }
       });
-    });
+    });*/
     this.oportunity = navParams.get("id");
     this.get_necesidad_cliente();
 
 
   }
-
+  /*ionViewDidLoad() {
+    this.canvasElement = this.canvas.nativeElement;
+    this.canvasElement.width = this.plt.width() + '';
+    this.canvasElement.height = 200;
+  }
   ionViewDidEnter() {
-
     setTimeout(() => {
       let itemHeight = this.fixedContainer.nativeElement.offsetHeight;
       let scroll = this.content.getScrollElement();
@@ -122,13 +125,6 @@ export class ServicioPage {
   //   this.canvasElement.width = this.plt.width() + '';
   //   this.canvasElement.height = 200;
   // }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.canvasElement = this.canvas.nativeElement;
-      this.canvasElement.width = this.plt.width() + '';
-      this.canvasElement.height = 200;
-    }, 1000)
-  }
   selectColor(color) {
     this.selectedColor = color;
   }
@@ -230,7 +226,7 @@ export class ServicioPage {
     // https://ionicframework.com/docs/wkwebview/#my-local-resources-do-not-load
     path = normalizeURL(path);
     return path;
-  }
+  }*/
 
 
 

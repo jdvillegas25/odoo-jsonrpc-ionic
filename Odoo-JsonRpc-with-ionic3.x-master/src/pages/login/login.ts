@@ -63,8 +63,7 @@ export class LoginPage {
         let logiData: any = JSON.parse(res._body)["result"];
         logiData.password = this.password;
         localStorage.setItem("token", JSON.stringify(logiData));
-        this.navCtrl.setRoot(ServicioPage);
-        // this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(HomePage);
       })
       .catch(err => {
         this.utils.dismissLoading();

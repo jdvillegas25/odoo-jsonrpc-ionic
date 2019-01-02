@@ -9,6 +9,7 @@ import { Network } from "@ionic-native/network";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Utils } from "../services/utils";
 import { ProfilePage } from "../pages/profile/profile";
+import { ActaDigitalPage } from "../pages/acta-digital/acta-digital"
 
 @Component({
   templateUrl: "app.html",
@@ -56,7 +57,8 @@ export class MyApp {
           // used for an example of ngFor and navigation
           this.pages = [
             { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
-            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
+            { title: 'Perfil', component: ProfilePage, icon: 'contact' },
+            { title: 'Acta Digital', component: ActaDigitalPage, icon: 'document' }
           ];
           this.homeMantenimiento = true;
           this.homeComercial = false;
