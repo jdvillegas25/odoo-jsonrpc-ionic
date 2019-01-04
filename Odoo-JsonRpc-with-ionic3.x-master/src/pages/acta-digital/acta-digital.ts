@@ -32,8 +32,8 @@ export class ActaDigitalPage {
   storedImages = [];
   @ViewChild(Content) content: Content;
   @ViewChild('fixedContainer') fixedContainer: any;
-  selectedColor = '#9e2956';
-  colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3','#000000'];
+  selectedColor = '#000000';
+  colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3', '#000000'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
     /*********************************** 
@@ -52,25 +52,16 @@ export class ActaDigitalPage {
   ionViewDidLoad() {
     this.canvasElement = this.canvas.nativeElement;
     this.canvasElement.width = this.plt.width() + '';
-    this.canvasElement.height = 200;
+    this.canvasElement.height = 300;
   }
 
   ionViewDidEnter() {
-    setTimeout(() => {
-      let itemHeight = this.fixedContainer.nativeElement.offsetHeight;
-      let scroll = this.content.getScrollElement();
+    let itemHeight = this.fixedContainer.nativeElement.offsetHeight;
+    let scroll = this.content.getScrollElement();
 
-      itemHeight = Number.parseFloat(scroll.style.marginTop.replace("px", "")) + itemHeight;
-      scroll.style.marginTop = itemHeight + 'px';
-    }, 3000)
+    itemHeight = Number.parseFloat(scroll.style.marginTop.replace("px", "")) + itemHeight;
+    scroll.style.margin = 'auto';
   }
-
-
-  // ionViewDidLoad() {
-  //   this.canvasElement = this.canvas.nativeElement;
-  //   this.canvasElement.width = this.plt.width() + '';
-  //   this.canvasElement.height = 200;
-  // }
   selectColor(color) {
     this.selectedColor = color;
   }
@@ -107,8 +98,9 @@ export class ActaDigitalPage {
   saveCanvasImage() {
     var dataUrl = this.canvasElement.toDataURL();
 
-    let ctx = this.canvasElement.getContext('2d');
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
+    // let ctx = this.canvasElement.getContext('2d');
+    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
+    this.clearCanvasImage();
 
     let name = new Date().getTime() + '.png';
     let path = this.file.dataDirectory;
@@ -122,6 +114,10 @@ export class ActaDigitalPage {
     }, err => {
       console.log('error: ', err);
     });
+  }
+  clearCanvasImage() {
+    let ctx = this.canvasElement.getContext('2d');
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
   }
 
   // https://forum.ionicframework.com/t/save-base64-encoded-image-to-specific-filepath/96180/3

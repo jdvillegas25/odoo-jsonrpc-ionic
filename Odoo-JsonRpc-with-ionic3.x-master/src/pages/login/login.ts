@@ -21,6 +21,8 @@ export class LoginPage {
   private selectedDatabase;
   private email;
   private password;
+  private arregloPermisos:any;
+  private logiData:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions) {
     this.checkUrl();
@@ -57,12 +59,12 @@ export class LoginPage {
   }
   private login() {
     this.utils.presentLoading("Por Favor Espere", 0, true);
-    this.odooRpc
-      .login(this.selectedDatabase, this.email, this.password)
-      .then((res: any) => {
-        let logiData: any = JSON.parse(res._body)["result"];
-        logiData.password = this.password;
-        localStorage.setItem("token", JSON.stringify(logiData));
+    this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
+        this.logiData = JSON.parse(res._body)["result"];
+        this.logiData.password = this.password;
+        //this.permisos()
+        //console.log(this.arregloPermisos)
+        localStorage.setItem("token", JSON.stringify(this.logiData));
         this.navCtrl.setRoot(HomePage);
       })
       .catch(err => {
@@ -77,5 +79,17 @@ export class LoginPage {
           ]
         );
       });
+  }
+  private permisos() {
+    let domain = [['id', '=', this.logiData["partner_id"]]]
+    let table = "res.partners"
+    this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+      let json = JSON.parse(items._body);
+      if (!json.error && json["result"].records != []) {
+        for (let i of json["result"].records) {
+          this.arregloPermisos = i;
+        }
+      }
+    });
   }
 }

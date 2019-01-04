@@ -96,9 +96,9 @@ export class HomePage {
         this.homeMantemimiento = false;
         break;
       case 20:
-        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],["assignment_status","=",null]];
+        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
         table = this.tableServicios;
-        filter = [];
+        filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
         this.homeComercial = false;
         this.homeMantemimiento = true;
         break;
@@ -155,11 +155,9 @@ export class HomePage {
               sec: query[i].sec == false ? "N/A" : query[i].sec
             });
             break;
-
           default:
             break;
         }
-
       }
     }
     loading.dismiss();
@@ -378,7 +376,7 @@ export class HomePage {
 
   private update_mantenimiento(motivo, cause, desc, servicio) {
     let data = {
-      fail_cause_id:cause,
+      fail_cause_id: cause,
       assignment_status: motivo,
       fail_description_id: desc
     }

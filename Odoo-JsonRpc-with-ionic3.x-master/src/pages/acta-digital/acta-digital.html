@@ -12,21 +12,122 @@
 
 </ion-header>
 <ion-content padding no-bounce>
-  <div #fixedContainer ion-fixed>
+  <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let color of colors" [style.background]="color" class="color-block" tappable (click)="selectColor(color)"></ion-col>
-    </ion-row>
-
-    <ion-row radio-group [(ngModel)]="selectedColor">
-      <ion-col *ngFor="let color of colors" text-center>
-        <ion-radio [value]="color"></ion-radio>
+      <ion-col>
+        <h1 align="center">Acta Digital</h1>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col><strong>Número Aviso:</strong></ion-col>
+      <ion-col>123456789</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Cliente:</strong></ion-col>
+      <ion-col>Bancolombia</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Ciudad del Aviso:</strong></ion-col>
+      <ion-col>Cota</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Código Oficina:</strong></ion-col>
+      <ion-col>827</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Nombre Oficina:</strong></ion-col>
+      <ion-col>Cota Principal</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Falla Reportada:</strong></ion-col>
+      <ion-col>Falla en boveda cofre aux bov H.E daño en bisagras</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Trabajo Realizado:</strong></ion-col>
+      <ion-col>Revision de puecta cofre BOV horario extendido(1),Desmonte(1), reparacion y arreglo</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Repuestos suministros nuevos:</strong></ion-col>
+      <ion-col>
+        <ion-row>
+          <ion-col>
+            Bisagras
+          </ion-col>
+          <ion-col>
+            <ion-select>
+              <ion-option value="0">Cantidad</ion-option>
+              <ion-option value="1">1</ion-option>
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+              <ion-option value="5">5</ion-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Espigo de Bisagras
+          </ion-col>
+          <ion-col>
+            <ion-select>
+              <ion-option value="0">Cantidad</ion-option>
+              <ion-option value="1">1</ion-option>
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+              <ion-option value="5">5</ion-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Repuestos Usados Reutilizados:</strong></ion-col>
+      <ion-col>
+        <ion-row>
+          <ion-col>
+            Mecanismos de Puertas
+          </ion-col>
+          <ion-col>
+            <ion-select>
+              <ion-option value="0">Cantidad</ion-option>
+              <ion-option value="1">1</ion-option>
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+              <ion-option value="5">5</ion-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Volante de Apertura
+          </ion-col>
+          <ion-col>
+            <ion-select>
+              <ion-option value="0">Cantidad</ion-option>
+              <ion-option value="1">1</ion-option>
+              <ion-option value="2">2</ion-option>
+              <ion-option value="3">3</ion-option>
+              <ion-option value="4">4</ion-option>
+              <ion-option value="5">5</ion-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Observaciones del Tecnico:</strong></ion-col>
+      <ion-col>
+        <ion-input type="text" value=""></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Nombre del Funcionario:</strong></ion-col>
+      <ion-col>Pepito Perez</ion-col>
+    </ion-row>
+  </ion-grid>
 
-    <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)"></canvas>
-
-    <button ion-button full (click)="saveCanvasImage()">Save Image</button>
-  </div>
   <ion-list *ngIf="storedImages.length > 0">
     <ion-list-header>Previous Drawings</ion-list-header>
     <ion-card *ngFor="let obj of storedImages; let i = index">
@@ -40,4 +141,19 @@
       </ion-row>
     </ion-card>
   </ion-list>
+  <div #fixedContainer style="width:100% !important;">
+    <!-- <div #fixedContainer ion-fixed> -->
+    <!-- <ion-row>
+          <ion-col *ngFor="let color of colors" [style.background]="color" class="color-block" tappable (click)="selectColor(color)"></ion-col>
+        </ion-row>
+    
+        <ion-row radio-group [(ngModel)]="selectedColor">
+          <ion-col *ngFor="let color of colors" text-center>
+            <ion-radio [value]="color"></ion-radio>
+          </ion-col>
+        </ion-row> -->
+    <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)"></canvas>
+    <button ion-button color="primary" style="width: 48%;float: left;" (click)="saveCanvasImage()">Guardar Firma</button>
+    <button ion-button color="danger" style="width: 48%;float: right;" (click)="clearCanvasImage()">Limpiar Firma</button>
+  </div>
 </ion-content>
