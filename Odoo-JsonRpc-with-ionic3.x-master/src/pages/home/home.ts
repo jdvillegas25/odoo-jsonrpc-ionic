@@ -71,14 +71,38 @@ export class HomePage {
 
   private list_cause: any;
   private list_description: any;
+  private logiData: any;
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
     this.display();
+    this.logiData = JSON.parse(localStorage.getItem('token'));
+
+    //Consultamos los permisos o interfase para el usuario logeado
+    this.permisos();
 
     //Validacion para cargar causas de rol mantenimiento
-    if (JSON.parse(localStorage.getItem('token'))['uid'] == 20) {
+    if (JSON.parse(localStorage.getItem('token'))['technician']) {
       this.get_causas();
     }
+  }
+
+  //Funcion que me permite validar el rol de la persona loguada
+  private permisos() {
+    let domain = [['partner_id', '=', this.logiData["partner_id"]]]
+    let table = "res.users"
+    this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+      let json = JSON.parse(items._body);
+      if (!json.error && json["result"].records != []) {
+        for (let i of json["result"].records) {
+
+          //en la variable sesion creamos dos variables nuevas, salesman y technician
+          this.logiData.technician = i.technician;
+          this.logiData.salesman = i.salesman;
+          //reasignamos la variable sesion con las nuevas variables
+          localStorage.setItem("token", JSON.stringify(this.logiData));
+        }
+      }
+    });
   }
 
   private display(): void {
@@ -88,23 +112,19 @@ export class HomePage {
     let filter = [];
 
     //Validacion para cargar causas de rol mantenimiento
-    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-      case 1:
-        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
-        table = this.tableOportunidades;
-        this.homeComercial = true;
-        this.homeMantemimiento = false;
-        break;
-      case 20:
-        domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
-        table = this.tableServicios;
-        filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
-        this.homeComercial = false;
-        this.homeMantemimiento = true;
-        break;
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
 
-      default:
-        break;
+      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+      table = this.tableOportunidades;
+      this.homeComercial = true;
+      this.homeMantemimiento = false;
+    } else {
+
+      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+      table = this.tableServicios;
+      filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
+      this.homeComercial = false;
+      this.homeMantemimiento = true;
     }
     this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
       this.fillParners(query);
@@ -123,40 +143,37 @@ export class HomePage {
       for (let i in query) {
 
         //Validacion para cargar causas de rol mantenimiento
-        switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-          case 1:
-            this.listaOportunidades.push({
-              id: query[i].id,
-              probability: query[i].probability == false ? "N/A" : query[i].probability,
-              name: query[i].name == false ? "N/A" : query[i].name,
-              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
-              colorDanger: query[i].probability < 30 ? true : false,
-              colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
-              colorSuccess: query[i].probability >= 70 ? true : false,
-            });
-            break;
-          case 20:
-            this.listaServicios.push({
-              id: query[i].id,
-              name: query[i].name == false ? "N/A" : query[i].name,
-              categs_ids: query[i].categs_ids == false ? "N/A" : query[i].categs_ids,
-              request_type: query[i].request_type == false ? "N/A" : query[i].request_type,
-              city_id: query[i].city_id == false ? "N/A" : query[i].city_id,
-              request_source: query[i].request_source == false ? "N/A" : query[i].request_source,
-              branch_type: query[i].branch_type == false ? "N/A" : query[i].branch_type,
-              partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
-              location_id: query[i].location_id == false ? "N/A" : query[i].location_id,
-              contact_id: query[i].contact_id == false ? "N/A" : query[i].contact_id,
-              user_id: query[i].user_id == false ? "N/A" : query[i].user_id,
-              date_start: query[i].date_start == false ? "N/A" : query[i].date_start,
-              date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
-              description: query[i].description == false ? "N/A" : query[i].description,
-              priority: query[i].priority == false ? "N/A" : query[i].priority,
-              sec: query[i].sec == false ? "N/A" : query[i].sec
-            });
-            break;
-          default:
-            break;
+        if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+
+          this.listaOportunidades.push({
+            id: query[i].id,
+            probability: query[i].probability == false ? "N/A" : query[i].probability,
+            name: query[i].name == false ? "N/A" : query[i].name,
+            partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_name,
+            colorDanger: query[i].probability < 30 ? true : false,
+            colorwarning: query[i].probability >= 30 && query[i].probability < 70 ? true : false,
+            colorSuccess: query[i].probability >= 70 ? true : false,
+          });
+        } else {
+
+          this.listaServicios.push({
+            id: query[i].id,
+            name: query[i].name == false ? "N/A" : query[i].name,
+            categs_ids: query[i].categs_ids == false ? "N/A" : query[i].categs_ids,
+            request_type: query[i].request_type == false ? "N/A" : query[i].request_type,
+            city_id: query[i].city_id == false ? "N/A" : query[i].city_id,
+            request_source: query[i].request_source == false ? "N/A" : query[i].request_source,
+            branch_type: query[i].branch_type == false ? "N/A" : query[i].branch_type,
+            partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
+            location_id: query[i].location_id == false ? "N/A" : query[i].location_id,
+            contact_id: query[i].contact_id == false ? "N/A" : query[i].contact_id,
+            user_id: query[i].user_id == false ? "N/A" : query[i].user_id,
+            date_start: query[i].date_start == false ? "N/A" : query[i].date_start,
+            date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
+            description: query[i].description == false ? "N/A" : query[i].description,
+            priority: query[i].priority == false ? "N/A" : query[i].priority,
+            sec: query[i].sec == false ? "N/A" : query[i].sec
+          });
         }
       }
     }
@@ -167,16 +184,10 @@ export class HomePage {
     let params = {}
 
     //Validacion para cargar causas de rol mantenimiento3
-    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-      case 1:
-        params['id'] = this.listaOportunidades[idx].id
-        break;
-      case 20:
-        params['id'] = this.listaServicios[idx].id
-        break;
-
-      default:
-        break;
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+      params['id'] = this.listaOportunidades[idx].id
+    } else {
+      params['id'] = this.listaServicios[idx].id
     }
     this.navCtrl.push(ViewPage, params);
   }

@@ -41,18 +41,12 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
-    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-      case 1:
-        this.homeComercial = true;
-        this.homeMantenimiento = false;
-        break;
-      case 20:
-        this.homeMantenimiento = true;
-        this.homeComercial = false;
-        break;
-
-      default:
-        break;
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+      this.homeComercial = true;
+      this.homeMantenimiento = false;
+    } else {
+      this.homeMantenimiento = true;
+      this.homeComercial = false;
     }
     let response = localStorage.getItem('token');
     let jsonData = JSON.parse(response);

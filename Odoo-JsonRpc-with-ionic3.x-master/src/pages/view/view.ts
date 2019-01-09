@@ -68,35 +68,24 @@ export class ViewPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils, public alertCtrl: AlertController) {
     this.oportunity = navParams.get("id");
-    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-      case 1:
-        this.homeComercial = true;
-        this.homeMantemimiento = false;
-        break;
-      case 20:
-        this.homeMantemimiento = true;
-        this.homeComercial = false;
-        break;
 
-      default:
-        break;
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+      this.homeComercial = true;
+      this.homeMantemimiento = false;
+
+    } else {
+      this.homeMantemimiento = true;
+      this.homeComercial = false;
     }
     this.display();
   }
 
   private display(): void {
 
-
-    switch (JSON.parse(localStorage.getItem('token'))['uid']) {
-      case 1:
-        this.getOportunidad();
-        break;
-      case 20:
-        this.getMantenimiento();
-        break;
-
-      default:
-        break;
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+      this.getOportunidad();
+    } else {
+      this.getMantenimiento();
     }
   }
   private addProspecto() {
