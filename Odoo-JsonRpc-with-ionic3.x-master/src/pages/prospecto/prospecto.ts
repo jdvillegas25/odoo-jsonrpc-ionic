@@ -303,7 +303,7 @@ export class ProspectoPage {
 
         }).catch(e => console.log(e));
     }
-    public habilitarSensor(camaraZona){
+    public habilitarSensor(camaraZona) {
         console.log(camaraZona)
     }
 

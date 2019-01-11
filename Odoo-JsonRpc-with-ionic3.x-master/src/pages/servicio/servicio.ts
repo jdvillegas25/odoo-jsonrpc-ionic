@@ -14,10 +14,20 @@ import { Storage } from '@ionic/storage';
 export class ServicioPage {
 
   public oportunity: any;
-  public list_necesidades: Array<any>;
-  public list_items: Array<any>;
-  public list_service_category: Array<any>;
+  public list_necesidades: Array<any> = [];
+  public list_items: Array<any> = [];
+  public list_service_category: Array<any> = [];
   private dataServicio: any
+  private listProducts: Array<{
+    id: number;
+    name: String;
+    display_name: String;
+    image: Array<any>;
+    pictures: Array<any>;
+    // 1= Reparacion, 2= Cambio
+    accion: number;
+    cantidad: Number;
+  }> = [];
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
@@ -53,24 +63,21 @@ export class ServicioPage {
       let json = JSON.parse(tags._body);
       if (!json.error) {
         this.list_necesidades = json["result"].records;
+        loading.dismiss();
       }
     });
-    loading.dismiss();
   }
   private getServiceCategory(category) {
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
-    // let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
-    let domain = (category != "") ? [['product_category_id', '=', +category]] : []
+    let domain = [['product_category_id', '=', +category]];
     let table = "product.service.category"
     this.odooRpc.searchRead(table, domain, ["id", "name"], 0, 0, "").then((items: any) => {
       let json = JSON.parse(items._body);
-      if (!json.error && json["result"].records != []) {
-        for (let i of json["result"].records) {
-          this.list_service_category.push(i);
-        }
+      if (!json.error && json["result"].records.length > 0) {
+        this.list_service_category = json["result"].records;
         loading.dismiss();
       }
     });
@@ -80,21 +87,61 @@ export class ServicioPage {
       content: "Por Favor Espere..."
     });
     loading.present();
-    // let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
-    let domain = (nec != "") ? [['categ_id', '=', +nec]] : []
-    let table = "product.template"
-    this.odooRpc.searchRead(table, domain, ["id", "name"], 0, 0, "").then((items: any) => {
-      let json = JSON.parse(items._body);
-      if (!json.error && json["result"].records != []) {
-        for (let i of json["result"].records) {
-          this.list_items.push(i);
+    for (let index = 0; index < nec.length; index++) {
+      let domain = [['categ_id', '=', +nec[index]]]
+      let table = "product.template"
+      this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+        let json = JSON.parse(items._body);
+        if (!json.error && json["result"].records.length > 0) {
+          json["result"].records.forEach(element => {
+            this.list_items.push(element);
+          });
         }
-        loading.dismiss();
-      }
-    });
+      });
+    }
+    loading.dismiss();
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+  public addProduct(items) {
+    this.listProducts = [];
+    this.list_items.forEach(a => {
+      items.forEach(b => {
+        if (a.id == b) {
+          this.listProducts.push({
+            id: a.id,
+            name: a.name,
+            display_name: a.display_name,
+            image: a.image_medium,
+            pictures: [],
+            accion: 0,
+            cantidad: 0
+          })
+        }
+      });
+    });
+  }
+  private take_pictures(i) {
+    const options: CameraOptions = {
+      // quality: 70,
+      // destinationType: this.camera.DestinationType.FILE_URI,
+      // encodingType: this.camera.EncodingType.JPEG,
+      // mediaType: this.camera.MediaType.PICTURE
+      destinationType: this.camera.DestinationType.DATA_URL,
+      targetWidth: 1000,
+      targetHeight: 1000,
+      quality: 100
+    }
+    this.camera.getPicture(options).then((imageData) => {
+      this.listProducts[i].pictures.push(imageData);
+    }, (err) => {
+      console.error(err);
+    });
+    console.log(this.listProducts)
+  }
+  private change_accion(value,position){
+    this.listProducts[position].accion = value;
   }
 
 }

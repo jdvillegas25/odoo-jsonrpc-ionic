@@ -47,19 +47,19 @@ export class ViewPage {
   }> = [];
   public dataMantenimiento: Array<{
     id: Number;
+    issue_id: Array<any>;
     name: string;
     categs_ids: Array<any>;
-    request_type: String;
     city_id: Array<any>;
     request_source: String;
     branch_type: String;
     partner_id: Array<any>;
     location_id: Array<any>;
-    contact_id: Array<any>;
     user_id: Array<any>;
     date_start: String;
     date_finish: String;
     description: String;
+    sec: String;
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -139,7 +139,7 @@ export class ViewPage {
     });
   }
   private getMantenimiento() {
-    let partner = "project.issue";
+    let partner = "project.task";
     let fields = [];
     let domain = [["id", "=", this.oportunity]];
     let sort = "";
@@ -150,19 +150,19 @@ export class ViewPage {
       for (let record in data) {
         this.dataMantenimiento.push({
           id: data[record].id == false ? "N/A" : data[record].id,
+          issue_id: data[record].issue_id == false ? "N/A" : data[record].issue_id,
           name: data[record].name == false ? "N/A" : data[record].name,
           categs_ids: data[record].categs_ids == false ? [] : data[record].categs_ids,
-          request_type: data[record].request_type == false ? "N/A" : data[record].request_type,
           city_id: data[record].city_id == false ? [] : data[record].city_id,
           request_source: data[record].request_source == false ? "N/A" : data[record].request_source,
-          branch_type: data[record].branch_type == false ? "N/A" : data[record].branch_type,
+          branch_type: data[record].location_type_id == false ? "N/A" : data[record].location_type_id,
           partner_id: data[record].partner_id == false ? [] : data[record].partner_id,
           location_id: data[record].location_id == false ? [] : data[record].location_id,
-          contact_id: data[record].contact_id == false ? [] : data[record].contact_id,
           user_id: data[record].user_id == false ? [] : data[record].user_id,
           date_start: data[record].date_start == false ? "N/A" : data[record].date_start,
           date_finish: data[record].date_finish == false ? "N/A" : data[record].date_finish,
-          description: data[record].description == false ? "N/A" : data[record].description
+          description: data[record].issue_description == false ? "N/A" : data[record].issue_description,
+          sec: data[record].issue_sec == false ? "N/A" : data[record].issue_sec
         });
       }
     });

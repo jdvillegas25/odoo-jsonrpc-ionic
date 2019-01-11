@@ -37,6 +37,7 @@ export class HomePage {
 
   private listaServicios: Array<{
     id: number;
+    issue_id: any;
     name: string;
     categs_ids: any;
     request_type: any;
@@ -64,7 +65,8 @@ export class HomePage {
   }> = [];
 
   private tableOportunidades = "crm.lead";
-  private tableServicios = "project.issue";
+  // private tableServicios = "project.issue";
+  private tableServicios = "project.task";
   // private tableServicios = "mantenimientos";
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -122,7 +124,8 @@ export class HomePage {
 
       domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
       table = this.tableServicios;
-      filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
+      filter = [];
+      // filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
       this.homeComercial = false;
       this.homeMantemimiento = true;
     }
@@ -155,24 +158,24 @@ export class HomePage {
             colorSuccess: query[i].probability >= 70 ? true : false,
           });
         } else {
-
           this.listaServicios.push({
             id: query[i].id,
+            issue_id: query[i].issue_id,
             name: query[i].name == false ? "N/A" : query[i].name,
             categs_ids: query[i].categs_ids == false ? "N/A" : query[i].categs_ids,
             request_type: query[i].request_type == false ? "N/A" : query[i].request_type,
             city_id: query[i].city_id == false ? "N/A" : query[i].city_id,
             request_source: query[i].request_source == false ? "N/A" : query[i].request_source,
-            branch_type: query[i].branch_type == false ? "N/A" : query[i].branch_type,
+            branch_type: query[i].location_type_id == false ? "N/A" : query[i].location_type_id,
             partner_id: query[i].partner_id == false ? "N/A" : query[i].partner_id,
             location_id: query[i].location_id == false ? "N/A" : query[i].location_id,
             contact_id: query[i].contact_id == false ? "N/A" : query[i].contact_id,
             user_id: query[i].user_id == false ? "N/A" : query[i].user_id,
             date_start: query[i].date_start == false ? "N/A" : query[i].date_start,
             date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
-            description: query[i].description == false ? "N/A" : query[i].description,
+            description: query[i].issue_description == false ? "N/A" : query[i].issue_description,
             priority: query[i].priority == false ? "N/A" : query[i].priority,
-            sec: query[i].sec == false ? "N/A" : query[i].sec
+            sec: query[i].issue_sec == false ? "N/A" : query[i].issue_sec
           });
         }
       }

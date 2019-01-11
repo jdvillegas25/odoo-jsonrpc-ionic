@@ -113,16 +113,12 @@
           </ion-card-header>
           <ion-card-content>
             <p><strong>Categorias: </strong><label *ngFor="let a of i.categs_ids">| {{a}} |</label></p>
-            <p><strong>Tipo de Solicitud: </strong>{{i.request_type}}</p>
-            <p><strong>Ciudad: </strong>{{i.city_id[1]}}</p>
-            <p><strong>Fuente de Solicitud: </strong>{{i.request_source[1]}}</p>
+            <p><strong>Ciudad: </strong>{{i.city_id}}</p>
             <p><strong>Tipo de Establecimiento: </strong>{{i.branch_type}}</p>
             <p><strong>Cliente: </strong>{{i.partner_id[1]}}</p>
-            <p><strong>Locación: </strong>{{i.location_id[1]}}</p>
-            <p><strong>Contacto: </strong>{{i.contact_id[1]}}</p>
+            <p><strong>Locación: </strong>{{i.location_id}}</p>
             <p><strong>Usuario: </strong>{{i.user_id[1]}}</p>
             <p><strong>Fecha Inicial: </strong>{{i.date_start}}</p>
-            <p><strong>Fecha Final: </strong>{{i.date_finish}}</p>
             <p><strong>Descripción: </strong>{{i.description}}</p>
           </ion-card-content>
           <ion-row no-padding>

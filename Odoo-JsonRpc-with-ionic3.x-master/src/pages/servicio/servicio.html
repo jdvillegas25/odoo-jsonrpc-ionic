@@ -3,7 +3,7 @@
     <ion-title>Servicio</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding class="cards-bg">
   <ion-list>
     <ion-item>
       <ion-label stacked>Categoria de Servicio a Realizar: </ion-label>
@@ -11,18 +11,59 @@
         <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="list_service_category">
+    <ion-item *ngIf="list_service_category?.length > 0">
       <ion-label stacked>Servicio a Realizar: </ion-label>
-      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego  (ngModelChange)="get_productos(servicioCatego.value)">
+      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)"
+        multiple="true">
         <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
-        <ion-option value="1">Hola Mundo</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="list_items">
+    <ion-item *ngIf="list_items.length > 0">
       <ion-label stacked>Productos: </ion-label>
-      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="addProduct(product.value)">
+      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="addProduct(product.value)"
+        multiple="true">
         <ion-option *ngFor="let item of list_items" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
+  <hr>
+  <!--Tarjetas de los productos usados-->
+  <ion-card *ngFor="let item of listProducts; let i = index">
+    <img [src]="sanitize('data:image/jpeg;base64,'+item.image)" alt="{{item.name}}" />
+    <ion-card-content>
+      <ion-card-title>
+        {{item.name}}
+      </ion-card-title>
+      <p>
+        {{item.display_name}}
+      </p>
+      <ion-list radio-group #accion (change)="change_accion(accion.value,i)">
+        <ion-list-header>
+          Acción
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Reparación</ion-label>
+          <ion-radio value="1"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cambio</ion-label>
+          <ion-radio value="2"></ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-row no-padding>
+      <ion-col col-12>
+        <button ion-button clear full color="danger" icon-start (click)="take_pictures(i)">
+          <ion-icon name='camera'></ion-icon>
+          Tomar Fotos
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4 *ngFor="let image of item.pictures">
+        <img src="data:image/jpeg;base64,{{image}}">
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <button *ngIf="listProducts?.length > 0" ion-button full color="secundary">Continuar Proceso <ion-icon name="arrow-round-forward"></ion-icon></button>
 </ion-content>
