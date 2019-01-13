@@ -168,7 +168,21 @@ export class ViewPage {
     });
   }
   private continuarServicio() {
-    let params = this.dataMantenimiento
+    let params = {}
+    params["id"] = this.dataMantenimiento[0].id;
+    params["issue_id"] = this.dataMantenimiento[0].issue_id;
+    params["name"] = this.dataMantenimiento[0].name;
+    params["categs_ids"] = this.dataMantenimiento[0].categs_ids;
+    params["city_id"] = this.dataMantenimiento[0].city_id;
+    params["request_source"] = this.dataMantenimiento[0].request_source;
+    params["branch_type"] = this.dataMantenimiento[0].branch_type;
+    params["partner_id"] = this.dataMantenimiento[0].partner_id;
+    params["location_id"] = this.dataMantenimiento[0].location_id;
+    params["user_id"] = this.dataMantenimiento[0].user_id;
+    params["date_start"] = this.dataMantenimiento[0].date_start;
+    params["date_finish"] = this.dataMantenimiento[0].date_finish;
+    params["description"] = this.dataMantenimiento[0].description;
+    params["sec"] = this.dataMantenimiento[0].sec;
     this.navCtrl.push(ServicioPage, params);
   }
 }

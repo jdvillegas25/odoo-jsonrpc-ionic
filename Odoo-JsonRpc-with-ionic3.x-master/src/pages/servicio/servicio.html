@@ -37,7 +37,7 @@
       <p>
         {{item.display_name}}
       </p>
-      <ion-list radio-group #accion (change)="change_accion(accion.value,i)">
+      <ion-list radio-group #accion (change)="change_action(accion.value,i)">
         <ion-list-header>
           Acción
         </ion-list-header>
@@ -48,6 +48,12 @@
         <ion-item>
           <ion-label>Cambio</ion-label>
           <ion-radio value="2"></ion-radio>
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <ion-item>
+          <ion-label>Cantidad</ion-label>
+          <ion-input type="number" #cantidad (change)="change_cant(cantidad.value,i)"></ion-input>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -65,5 +71,6 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <button *ngIf="listProducts?.length > 0" ion-button full color="secundary">Continuar Proceso <ion-icon name="arrow-round-forward"></ion-icon></button>
+  <button *ngIf="listProducts?.length > 0" ion-button full color="secundary" (click)="continue_process()">Continuar
+    Proceso <ion-icon name='share-alt'></ion-icon></button>
 </ion-content>

@@ -6,6 +6,7 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
+import { ActaDigitalPage } from '../acta-digital/acta-digital';
 
 @Component({
   selector: 'page-servicio',
@@ -13,11 +14,13 @@ import { Storage } from '@ionic/storage';
 })
 export class ServicioPage {
 
-  public oportunity: any;
+  private oportunity: any;
+  private necCliente: any;
+  private idServicio: any;
   public list_necesidades: Array<any> = [];
   public list_items: Array<any> = [];
   public list_service_category: Array<any> = [];
-  private dataServicio: any
+  private dataServicio: any;
   private listProducts: Array<{
     id: number;
     name: String;
@@ -31,27 +34,24 @@ export class ServicioPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
-    this.oportunity = navParams.get("id");
     this.dataServicio = {
-      id: navParams.get('id'),
-      name: navParams.get('name'),
-      categs_ids: navParams.get('categs_id'),
-      request_type: navParams.get('request_type'),
-      city_id: navParams.get('city_i'),
-      request_source: navParams.get('request_source'),
-      branch_type: navParams.get('branch_type'),
-      partner_id: navParams.get('partner_i'),
-      location_id: navParams.get('location_i'),
-      contact_id: navParams.get('contact_i'),
-      user_id: navParams.get('user_i'),
-      date_start: navParams.get('date_start'),
-      date_finish: navParams.get('date_finish'),
-      description: navParams.get('description')
-
+      id: navParams.get("id"),
+      issue_id: navParams.get("issue_id"),
+      name: navParams.get("name"),
+      categs_ids: navParams.get("categs_id"),
+      city_id: navParams.get("city_id"),
+      request_type: navParams.get("request_type"),
+      request_source: navParams.get("request_source"),
+      branch_type: navParams.get("branch_type"),
+      partner_id: navParams.get("partner_id"),
+      location_id: navParams.get("location_id"),
+      user_id: navParams.get("user_id"),
+      date_start: navParams.get("date_start"),
+      date_finish: navParams.get("date_finish"),
+      description: navParams.get("description"),
+      sec: navParams.get("sec")
     };
     this.get_necesidad_cliente();
-
-
   }
   private get_necesidad_cliente() {
     let loading = this.loadingCtrl.create({
@@ -138,10 +138,21 @@ export class ServicioPage {
     }, (err) => {
       console.error(err);
     });
-    console.log(this.listProducts)
   }
-  private change_accion(value,position){
+  private change_action(value, position) {
+    console.log(value)
     this.listProducts[position].accion = value;
+  }
+  private change_cant(value, position) {
+    this.listProducts[position].cantidad = value;
+  }
+  private continue_process() {
+    let params = {};
+    params["dataMantenimiento"] = this.dataServicio;
+    params["necesidad"] = this.necCliente;
+    params["servicios"] = this.idServicio;
+    params["productos"] = this.listProducts;
+    this.navCtrl.push(ActaDigitalPage, params);
   }
 
 }

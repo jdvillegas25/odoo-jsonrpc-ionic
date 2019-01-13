@@ -35,6 +35,15 @@ export class ActaDigitalPage {
   selectedColor = '#000000';
   colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3', '#000000'];
 
+  /***********************************************************************
+   * Autor: Brayan Gonzalez
+   * Descripcion: Variables necesarios para el proceso de acta digital
+   **********************************************************************/
+  private dataMantenimiento : any;
+  private necesidad : any;
+  private servicios : any;
+  private productos : any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
     /*********************************** 
      * Autor: Brian Gonzalez
@@ -47,6 +56,14 @@ export class ActaDigitalPage {
         }
       });
     });
+    /**********************************************************************
+     * Autor: Brayan Gonzalez
+     * Descripcion:Asignaremos las variables que llegan desde ServicioPage
+    ***********************************************************************/
+    this.dataMantenimiento = navParams.get("dataMantenimiento");
+    this.necesidad = navParams.get("necesidad");
+    this.servicios = navParams.get("servicios");
+    this.productos = navParams.get("productos");
   }
 
   ionViewDidLoad() {
