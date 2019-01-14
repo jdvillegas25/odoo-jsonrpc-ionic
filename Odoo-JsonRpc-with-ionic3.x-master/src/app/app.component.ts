@@ -57,8 +57,7 @@ export class MyApp {
           // used for an example of ngFor and navigation
           this.pages = [
             { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
-            { title: 'Perfil', component: ProfilePage, icon: 'contact' },
-            { title: 'Acta Digital', component: ActaDigitalPage, icon: 'document' }
+            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
           ];
           this.homeMantenimiento = true;
           this.homeComercial = false;

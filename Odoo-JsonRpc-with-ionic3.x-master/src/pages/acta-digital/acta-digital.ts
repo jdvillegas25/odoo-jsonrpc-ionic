@@ -1,11 +1,12 @@
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Component, ViewChild, Renderer, ElementRef } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content, AlertController } from 'ionic-angular';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the ActaDigitalPage page.
@@ -39,12 +40,15 @@ export class ActaDigitalPage {
    * Autor: Brayan Gonzalez
    * Descripcion: Variables necesarios para el proceso de acta digital
    **********************************************************************/
-  private dataMantenimiento : any;
-  private necesidad : any;
-  private servicios : any;
-  private productos : any;
+  private dataMantenimiento: any;
+  private necesidad: any;
+  private servicios: any;
+  private productos: any;
+  private firma: String;
+  private observation_user: any;
+  private username: any = JSON.parse(localStorage.getItem('token'))['username'];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, public alertCtrl: AlertController) {
     /*********************************** 
      * Autor: Brian Gonzalez
      * Descripcion: Se instancia el sqlite
@@ -59,11 +63,12 @@ export class ActaDigitalPage {
     /**********************************************************************
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
-    ***********************************************************************/
+     ***********************************************************************/
     this.dataMantenimiento = navParams.get("dataMantenimiento");
     this.necesidad = navParams.get("necesidad");
     this.servicios = navParams.get("servicios");
     this.productos = navParams.get("productos");
+    this.firma = "";
   }
 
   ionViewDidLoad() {
@@ -113,24 +118,25 @@ export class ActaDigitalPage {
   }
 
   saveCanvasImage() {
-    var dataUrl = this.canvasElement.toDataURL();
+    this.firma = this.canvasElement.toDataURL();
+    // var dataUrl = this.canvasElement.toDataURL();
 
     // let ctx = this.canvasElement.getContext('2d');
     // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
     this.clearCanvasImage();
 
-    let name = new Date().getTime() + '.png';
-    let path = this.file.dataDirectory;
-    let options: IWriteOptions = { replace: true };
+    // let name = new Date().getTime() + '.png';
+    // let path = this.file.dataDirectory;
+    // let options: IWriteOptions = { replace: true };
 
-    var data = dataUrl.split(',')[1];
-    let blob = this.b64toBlob(data, 'image/png');
+    // var data = this.firma.split(',')[1];
+    // let blob = this.b64toBlob(data, 'image/png');
 
-    this.file.writeFile(path, name, blob, options).then(res => {
-      this.storeImage(name);
-    }, err => {
-      console.log('error: ', err);
-    });
+    // this.file.writeFile(path, name, blob, options).then(res => {
+    //   this.storeImage(name);
+    // }, err => {
+    //   console.log('error: ', err);
+    // });
   }
   clearCanvasImage() {
     let ctx = this.canvasElement.getContext('2d');
@@ -179,12 +185,87 @@ export class ActaDigitalPage {
     });
     this.storage.set(STORAGE_KEY, this.storedImages);
   }
+  limpiarFimar() {
+    this.firma = "";
+  }
 
   getImagePath(imageName) {
     let path = this.file.dataDirectory + imageName;
     // https://ionicframework.com/docs/wkwebview/#my-local-resources-do-not-load
     path = normalizeURL(path);
     return path;
+  }
+  private save_acta() {
+    if (this.firma !== "") {
+      if (this.update_task()) {
+        if (this.insert_services_task()) {
+          this.navCtrl.push(HomePage);
+        } else {
+          const alert = this.alertCtrl.create({
+            title: 'ERROR',
+            subTitle: 'Se han presentado fallas para generar los productos en el acta digital',
+            buttons: ['OK']
+          });
+          alert.present();
+        }
+      } else {
+        const alert = this.alertCtrl.create({
+          title: 'ERROR',
+          subTitle: 'Se han presentado fallas para generar la firma digital',
+          buttons: ['OK']
+        });
+        alert.present();
+      }
+    } else {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor agregue la firma del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
+  }
+  private update_task() {
+    if (this.firma != "") {
+
+      let table = "project.task"
+      let data = {
+        notes: this.observation_user,
+        customer_sign_image: this.firma
+      }
+      if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+
+  }
+  private insert_services_task() {
+    let contador = 0;
+    let table = 'project.customer.asset';
+
+    this.productos.forEach(pro => {
+      let data = {
+        task_id: this.dataMantenimiento.id,
+        product_category_id: this.necesidad['id'],
+        product_service_cat_id: pro.service[0],
+        product_id: pro.id,
+        quantity: pro.cantidad,
+        replaced: (pro.accion == 1) ? true : false
+      }
+      this.odooRpc.createRecord(table, data).then((res: any) => {
+        if (res.ok === true) {
+          contador++;
+          if (contador == this.productos.length) {
+            return true;
+          }
+        }
+      }).catch((err: any) => {
+        return false;
+      })
+    });
+    return true
   }
 
 }

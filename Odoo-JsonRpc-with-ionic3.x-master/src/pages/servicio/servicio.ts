@@ -30,6 +30,7 @@ export class ServicioPage {
     // 1= Reparacion, 2= Cambio
     accion: number;
     cantidad: Number;
+    service: number;
   }> = [];
 
 
@@ -88,7 +89,8 @@ export class ServicioPage {
     });
     loading.present();
     for (let index = 0; index < nec.length; index++) {
-      let domain = [['categ_id', '=', +nec[index]]]
+      let domain = [['service_cat_id', '=', +nec[index]]]
+      // let domain = [['categ_id', '=', +nec[index]]]
       let table = "product.template"
       this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
         let json = JSON.parse(items._body);
@@ -116,7 +118,8 @@ export class ServicioPage {
             image: a.image_medium,
             pictures: [],
             accion: 0,
-            cantidad: 0
+            cantidad: 0,
+            service: a.service_cat_id
           })
         }
       });
@@ -140,7 +143,6 @@ export class ServicioPage {
     });
   }
   private change_action(value, position) {
-    console.log(value)
     this.listProducts[position].accion = value;
   }
   private change_cant(value, position) {
@@ -148,10 +150,29 @@ export class ServicioPage {
   }
   private continue_process() {
     let params = {};
+    params["necesidad"] = []
+    params["servicios"] = []
     params["dataMantenimiento"] = this.dataServicio;
-    params["necesidad"] = this.necCliente;
-    params["servicios"] = this.idServicio;
     params["productos"] = this.listProducts;
+
+    /************ Necesidad del cliente **********/
+    this.list_necesidades.forEach(nec => {
+      if (nec.id == this.necCliente) {
+        params["necesidad"] = nec;
+
+      }
+    });
+
+    /************ servicios del cliente **********/
+    this.list_service_category.forEach(ser => {
+      this.idServicio.forEach(idser => {
+        if (ser.id == idser) {
+          params["servicios"].push(ser);
+        }
+      });
+
+
+    });
     this.navCtrl.push(ActaDigitalPage, params);
   }
 

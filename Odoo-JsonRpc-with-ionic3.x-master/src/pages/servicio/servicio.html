@@ -29,7 +29,7 @@
   <hr>
   <!--Tarjetas de los productos usados-->
   <ion-card *ngFor="let item of listProducts; let i = index">
-    <img [src]="sanitize('data:image/jpeg;base64,'+item.image)" alt="{{item.name}}" />
+    <img *ngIf="item.image" [src]="sanitize('data:image/jpeg;base64,'+item.image)" alt="{{item.name}}" />
     <ion-card-content>
       <ion-card-title>
         {{item.name}}
@@ -37,17 +37,17 @@
       <p>
         {{item.display_name}}
       </p>
-      <ion-list radio-group #accion (change)="change_action(accion.value,i)">
+      <ion-list radio-group>
         <ion-list-header>
           Acción
         </ion-list-header>
         <ion-item>
           <ion-label>Reparación</ion-label>
-          <ion-radio value="1"></ion-radio>
+          <ion-radio value="1" (click)="change_action(1,i)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Cambio</ion-label>
-          <ion-radio value="2"></ion-radio>
+          <ion-radio value="2" (click)="change_action(2,i)"></ion-radio>
         </ion-item>
       </ion-list>
       <ion-list>

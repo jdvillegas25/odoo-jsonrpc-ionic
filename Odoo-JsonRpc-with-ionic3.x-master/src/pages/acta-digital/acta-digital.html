@@ -19,16 +19,20 @@
       </ion-col>
     </ion-row>
     <ion-row>
+      <ion-col><strong>Nombre Aviso:</strong></ion-col>
+      <ion-col>{{dataMantenimiento.name}}</ion-col>
+    </ion-row>
+    <ion-row>
       <ion-col><strong>Número Aviso:</strong></ion-col>
-      <ion-col>123456789</ion-col>
+      <ion-col>{{dataMantenimiento.sec}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Cliente:</strong></ion-col>
-      <ion-col>Bancolombia</ion-col>
+      <ion-col>{{dataMantenimiento.partner_id[1]}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Ciudad del Aviso:</strong></ion-col>
-      <ion-col>Cota</ion-col>
+      <ion-col>{{dataMantenimiento.city_id}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Código Oficina:</strong></ion-col>
@@ -36,99 +40,55 @@
     </ion-row>
     <ion-row>
       <ion-col><strong>Nombre Oficina:</strong></ion-col>
-      <ion-col>Cota Principal</ion-col>
+      <ion-col>{{dataMantenimiento.branch_type}} {{dataMantenimiento.location_id}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Falla Reportada:</strong></ion-col>
-      <ion-col>Falla en boveda cofre aux bov H.E daño en bisagras</ion-col>
+      <ion-col>{{dataMantenimiento.description}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>Trabajo Realizado sobre:</strong></ion-col>
+      <ion-col>{{necesidad.name}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Trabajo Realizado:</strong></ion-col>
-      <ion-col>Revision de puecta cofre BOV horario extendido(1),Desmonte(1), reparacion y arreglo</ion-col>
+      <ion-col>
+        <p *ngFor="let ser of servicios">{{ser.name}}</p>
+      </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col><strong>Repuestos suministros nuevos:</strong></ion-col>
+      <ion-col><strong>Repuestos y/o suministros Reparados:</strong></ion-col>
       <ion-col>
-        <ion-row>
-          <ion-col>
-            Bisagras
-          </ion-col>
-          <ion-col>
-            <ion-select>
-              <ion-option value="0">Cantidad</ion-option>
-              <ion-option value="1">1</ion-option>
-              <ion-option value="2">2</ion-option>
-              <ion-option value="3">3</ion-option>
-              <ion-option value="4">4</ion-option>
-              <ion-option value="5">5</ion-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Espigo de Bisagras
-          </ion-col>
-          <ion-col>
-            <ion-select>
-              <ion-option value="0">Cantidad</ion-option>
-              <ion-option value="1">1</ion-option>
-              <ion-option value="2">2</ion-option>
-              <ion-option value="3">3</ion-option>
-              <ion-option value="4">4</ion-option>
-              <ion-option value="5">5</ion-option>
-            </ion-select>
-          </ion-col>
+        <ion-row *ngFor="let prod of productos">
+          <ion-col *ngIf="prod.accion == 1"><strong>Producto: </strong>{{prod.name}}</ion-col>
+          <ion-col *ngIf="prod.accion == 1"><strong>Cantidad: </strong>{{prod.cantidad}}</ion-col>
         </ion-row>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col><strong>Repuestos Usados Reutilizados:</strong></ion-col>
+      <ion-col><strong>Repuestos y/o suministros nuevos:</strong></ion-col>
       <ion-col>
-        <ion-row>
-          <ion-col>
-            Mecanismos de Puertas
-          </ion-col>
-          <ion-col>
-            <ion-select>
-              <ion-option value="0">Cantidad</ion-option>
-              <ion-option value="1">1</ion-option>
-              <ion-option value="2">2</ion-option>
-              <ion-option value="3">3</ion-option>
-              <ion-option value="4">4</ion-option>
-              <ion-option value="5">5</ion-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Volante de Apertura
-          </ion-col>
-          <ion-col>
-            <ion-select>
-              <ion-option value="0">Cantidad</ion-option>
-              <ion-option value="1">1</ion-option>
-              <ion-option value="2">2</ion-option>
-              <ion-option value="3">3</ion-option>
-              <ion-option value="4">4</ion-option>
-              <ion-option value="5">5</ion-option>
-            </ion-select>
-          </ion-col>
+        <ion-row *ngFor="let pro of productos">
+          <ion-col *ngIf="pro.accion == 2"><strong>Producto: </strong>{{pro.name}}</ion-col>
+          <ion-col *ngIf="pro.accion == 2"><strong>Cantidad: </strong>{{pro.cantidad}}</ion-col>
         </ion-row>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col><strong>Observaciones del Tecnico:</strong></ion-col>
+      <ion-col><strong>Observaciones del Técnico: </strong></ion-col>
       <ion-col>
-        <ion-input type="text" value=""></ion-input>
+        <ion-item>
+          <ion-input type="text" value="" [(ngModel)]="observation_user"></ion-input>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col><strong>Nombre del Funcionario:</strong></ion-col>
-      <ion-col>Pepito Perez</ion-col>
+      <ion-col>{{username}}</ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-list *ngIf="storedImages.length > 0">
+  <!-- <ion-list *ngIf="storedImages.length > 0">
     <ion-list-header>Previous Drawings</ion-list-header>
     <ion-card *ngFor="let obj of storedImages; let i = index">
       <ion-card-content>
@@ -140,7 +100,20 @@
         </button>
       </ion-row>
     </ion-card>
-  </ion-list>
+  </ion-list> -->
+  <ion-list *ngIf="firma">
+      <ion-list-header>Firma del Responsable</ion-list-header>
+      <ion-card>
+        <ion-card-content>
+          <img src="{{firma}}">
+        </ion-card-content>
+        <ion-row>
+          <button ion-button full icon-only color="danger" (click)="limpiarFimar()">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-row>
+      </ion-card>
+    </ion-list>
   <div #fixedContainer style="width:100% !important;">
     <!-- <div #fixedContainer ion-fixed> -->
     <!-- <ion-row>
@@ -156,4 +129,5 @@
     <button ion-button color="primary" style="width: 48%;float: left;" (click)="saveCanvasImage()">Guardar Firma</button>
     <button ion-button color="danger" style="width: 48%;float: right;" (click)="clearCanvasImage()">Limpiar Firma</button>
   </div>
+  <button ion-button color="secondary" full (click)="save_acta()">Finalizar Proceso</button>
 </ion-content>

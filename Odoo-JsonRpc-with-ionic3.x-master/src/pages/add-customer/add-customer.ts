@@ -77,7 +77,6 @@ export class AddCustomerPage {
       type: "contact"
 
     }
-    console.log(params)
     this.odooRpc.createRecord(model, params).then((res: any) => {
       this.utils.presentToast("Creacion Exitosa", 1000, false, 'top')
       this.navCtrl.pop()
