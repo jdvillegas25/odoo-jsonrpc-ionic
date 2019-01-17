@@ -31,6 +31,7 @@ export class ServicioPage {
     accion: number;
     cantidad: Number;
     service: number;
+    ubication: String;
   }> = [];
 
 
@@ -119,7 +120,8 @@ export class ServicioPage {
             pictures: [],
             accion: 0,
             cantidad: 0,
-            service: a.service_cat_id
+            service: a.service_cat_id,
+            ubication: ""
           })
         }
       });
@@ -147,6 +149,9 @@ export class ServicioPage {
   }
   private change_cant(value, position) {
     this.listProducts[position].cantidad = value;
+  }
+  private change_ubication(value, position) {
+    this.listProducts[position].ubication = value;
   }
   private continue_process() {
     let params = {};

@@ -231,7 +231,11 @@ export class ActaDigitalPage {
       let table = "project.task"
       let data = {
         notes: this.observation_user,
-        customer_sign_image: this.firma
+        customer_sign_image: this.firma,
+        finished: true,
+        kanban_state:'done'
+
+
       }
       if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
         return true;

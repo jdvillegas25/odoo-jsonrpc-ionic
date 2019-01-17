@@ -17,21 +17,31 @@ import { ActaDigitalPage } from "../pages/acta-digital/acta-digital"
 })
 export class MyApp {
 
-  public homeComercial:boolean = false;
-  public homeMantenimiento:boolean = false;
-  
+  public homeComercial: boolean = false;
+  public homeMantenimiento: boolean = false;
+
   @ViewChild(Nav) nav: Nav;
   //rootPage: any = ProspectoPage;
   rootPage: any = LoginPage;
   pages: Array<{ title: string, component: any, icon: any }>;
   constructor(platform: Platform, private statusBar: StatusBar, splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network) {
     platform.ready().then(() => {
+      statusBar.styleDefault();
       splashScreen.hide();
       // let status bar overlay webview
       this.statusBar.overlaysWebView(false);
 
       // set status bar to white
-      this.statusBar.backgroundColorByHexString("#3ebffb");
+      this.statusBar.backgroundColorByHexString("#00FFFFFF");
+
+      // var notificationOpenedCallback = function (jsonData) {
+      //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+      // };
+
+      // window["plugins"].OneSignal
+      //   .startInit("24193be6-3c15-4975-8f5c-102ea593a5a3")
+      //   .handleNotificationOpened(notificationOpenedCallback)
+      //   .endInit();
     });
 
     if (localStorage.getItem("token")) {
