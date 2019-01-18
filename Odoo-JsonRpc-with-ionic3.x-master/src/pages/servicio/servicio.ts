@@ -26,11 +26,13 @@ export class ServicioPage {
     name: String;
     display_name: String;
     image: Array<any>;
-    pictures: Array<any>;
+    pictures: String;
+    // pictures: Array<any>;
     // 1= Reparacion, 2= Cambio
     accion: number;
     cantidad: Number;
     service: number;
+    ubication: String;
   }> = [];
 
 
@@ -116,10 +118,12 @@ export class ServicioPage {
             name: a.name,
             display_name: a.display_name,
             image: a.image_medium,
-            pictures: [],
+            pictures: '',
+            // pictures: [],
             accion: 0,
             cantidad: 0,
-            service: a.service_cat_id
+            service: a.service_cat_id,
+            ubication: ''
           })
         }
       });
@@ -137,7 +141,8 @@ export class ServicioPage {
       quality: 100
     }
     this.camera.getPicture(options).then((imageData) => {
-      this.listProducts[i].pictures.push(imageData);
+      this.listProducts[i].pictures = imageData;
+      // this.listProducts[i].pictures.push(imageData);
     }, (err) => {
       console.error(err);
     });
@@ -147,6 +152,9 @@ export class ServicioPage {
   }
   private change_cant(value, position) {
     this.listProducts[position].cantidad = value;
+  }
+  private change_ubication(value, position) {
+    this.listProducts[position].ubication = value;
   }
   private continue_process() {
     let params = {};

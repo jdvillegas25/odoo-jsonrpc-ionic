@@ -231,7 +231,9 @@ export class ActaDigitalPage {
       let table = "project.task"
       let data = {
         notes: this.observation_user,
-        customer_sign_image: this.firma
+        customer_sign_image: this.firma,
+        finished: true,
+        kanban_state:'done'
       }
       if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
         return true;
@@ -244,7 +246,6 @@ export class ActaDigitalPage {
   private insert_services_task() {
     let contador = 0;
     let table = 'project.customer.asset';
-
     this.productos.forEach(pro => {
       let data = {
         task_id: this.dataMantenimiento.id,
@@ -252,7 +253,9 @@ export class ActaDigitalPage {
         product_service_cat_id: pro.service[0],
         product_id: pro.id,
         quantity: pro.cantidad,
-        replaced: (pro.accion == 1) ? true : false
+        replaced: (pro.accion == 1) ? true : false,
+        asset_location: pro.ubication,
+        asset_image: pro.pictures
       }
       this.odooRpc.createRecord(table, data).then((res: any) => {
         if (res.ok === true) {

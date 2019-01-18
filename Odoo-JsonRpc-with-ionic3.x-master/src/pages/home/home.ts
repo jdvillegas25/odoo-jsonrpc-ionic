@@ -122,6 +122,7 @@ export class HomePage {
       this.homeMantemimiento = false;
     } else {
 
+      // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],['finished','!=','true']];
       domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
       table = this.tableServicios;
       filter = [];

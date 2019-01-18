@@ -52,8 +52,12 @@
       </ion-list>
       <ion-list>
         <ion-item>
-          <ion-label>Cantidad</ion-label>
+          <ion-label floating>Cantidad: </ion-label>
           <ion-input type="number" #cantidad (change)="change_cant(cantidad.value,i)"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Ubicación: </ion-label>
+          <ion-input type="text" #ubication (change)="change_ubication(ubication.value,i)"></ion-input>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -66,8 +70,11 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col col-4 *ngFor="let image of item.pictures">
+      <!-- <ion-col col-4 *ngFor="let image of item.pictures">
         <img src="data:image/jpeg;base64,{{image}}">
+      </ion-col> -->
+      <ion-col col-4>
+        <img *ngIf="item.pictures.length" src="data:image/jpeg;base64,{{item.pictures}}">
       </ion-col>
     </ion-row>
   </ion-card>
