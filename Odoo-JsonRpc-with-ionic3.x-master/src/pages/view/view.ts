@@ -166,6 +166,7 @@ export class ViewPage {
         });
       }
     });
+    console.log(this.dataMantenimiento)
   }
   private continuarServicio() {
     let params = {}

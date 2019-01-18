@@ -123,7 +123,7 @@ export class ServicioPage {
             accion: 0,
             cantidad: 0,
             service: a.service_cat_id,
-            ubication: ''
+            ubication: ""
           })
         }
       });

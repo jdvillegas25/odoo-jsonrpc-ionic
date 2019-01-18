@@ -122,8 +122,7 @@ export class HomePage {
       this.homeMantemimiento = false;
     } else {
 
-      // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],['finished','!=','true']];
-      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
+      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],['finished','!=','true']];
       table = this.tableServicios;
       filter = [];
       // filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];

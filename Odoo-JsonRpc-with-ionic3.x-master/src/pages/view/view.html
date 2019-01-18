@@ -109,10 +109,11 @@
       <div *ngFor="let i of dataMantenimiento">
         <ion-card>
           <ion-card-header>
-            {{i.name}}
+            <h2>{{ i.issue_id[1] }}</h2>
           </ion-card-header>
           <ion-card-content>
-            <p><strong>Categorias: </strong><label *ngFor="let a of i.categs_ids">| {{a}} |</label></p>
+            <p><strong>Nombre: </strong>{{i.city_id}}</p>
+            <p><strong>Identificación: </strong>{{i.sec}}</p>
             <p><strong>Ciudad: </strong>{{i.city_id}}</p>
             <p><strong>Tipo de Establecimiento: </strong>{{i.branch_type}}</p>
             <p><strong>Cliente: </strong>{{i.partner_id[1]}}</p>
