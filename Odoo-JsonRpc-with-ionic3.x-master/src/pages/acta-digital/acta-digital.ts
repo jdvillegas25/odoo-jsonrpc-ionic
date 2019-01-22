@@ -1,5 +1,5 @@
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
-import { Component, ViewChild, Renderer, ElementRef } from '@angular/core';
+import { Component, ViewChild, Renderer, ElementRef, Renderer2 } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { IonicPage, NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content, AlertController } from 'ionic-angular';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -40,15 +40,16 @@ export class ActaDigitalPage {
    * Autor: Brayan Gonzalez
    * Descripcion: Variables necesarios para el proceso de acta digital
    **********************************************************************/
-  private dataMantenimiento: any;
-  private necesidad: any;
-  private servicios: any;
-  private productos: any;
+  private dataMantenimiento: any = [];
+  private necesidad: Array<any> = [];
+  private servicios: Array<any> = [];
+  private productos: Array<any> = [];
   private firma: String;
   private observation_user: any;
   private username: any = JSON.parse(localStorage.getItem('token'))['username'];
+  public showCanvas: Boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, public alertCtrl: AlertController, private rendere: Renderer2) {
     /*********************************** 
      * Autor: Brian Gonzalez
      * Descripcion: Se instancia el sqlite
@@ -64,10 +65,10 @@ export class ActaDigitalPage {
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
      ***********************************************************************/
-    this.dataMantenimiento = navParams.get("dataMantenimiento");
-    this.necesidad = navParams.get("necesidad");
-    this.servicios = navParams.get("servicios");
-    this.productos = navParams.get("productos");
+    this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : {};
+    this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : {};
+    this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
+    this.productos = (navParams.get("productos")) ? navParams.get("productos") : {};
     this.firma = "";
   }
 
@@ -119,24 +120,8 @@ export class ActaDigitalPage {
 
   saveCanvasImage() {
     this.firma = this.canvasElement.toDataURL();
-    // var dataUrl = this.canvasElement.toDataURL();
-
-    // let ctx = this.canvasElement.getContext('2d');
-    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
+    this.showCanvas = false;
     this.clearCanvasImage();
-
-    // let name = new Date().getTime() + '.png';
-    // let path = this.file.dataDirectory;
-    // let options: IWriteOptions = { replace: true };
-
-    // var data = this.firma.split(',')[1];
-    // let blob = this.b64toBlob(data, 'image/png');
-
-    // this.file.writeFile(path, name, blob, options).then(res => {
-    //   this.storeImage(name);
-    // }, err => {
-    //   console.log('error: ', err);
-    // });
   }
   clearCanvasImage() {
     let ctx = this.canvasElement.getContext('2d');
@@ -233,7 +218,7 @@ export class ActaDigitalPage {
         notes: this.observation_user,
         customer_sign_image: this.firma,
         finished: true,
-        kanban_state:'done'
+        kanban_state: 'done'
       }
       if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
         return true;

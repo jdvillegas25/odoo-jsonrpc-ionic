@@ -51,32 +51,27 @@ export class MyApp {
       let jsonData = JSON.parse(response);
       let username = jsonData["username"];
       let pass = jsonData["password"];
-      let url = (jsonData["web.base.url"]) ? jsonData["web.base.url"] : "https://tudirectorio.com.co";
+      let url = (jsonData["web.base.url"]) ? jsonData["web.base.url"] : "https://erp.allser.com.co";
       let db = jsonData["db"];
-      switch (jsonData.uid) {
-        case 1:
-          this.homeComercial = true;
-          this.homeMantenimiento = false;
-          // used for an example of ngFor and navigation
-          this.pages = [
-            { title: 'Oportunidades', component: HomePage, icon: 'stats' },
-            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
-          ];
-          break;
-        case 20:
-          // used for an example of ngFor and navigation
-          this.pages = [
-            { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
-            { title: 'Perfil', component: ProfilePage, icon: 'contact' }
-          ];
-          this.homeMantenimiento = true;
-          this.homeComercial = false;
-          break;
-        default:
-          break;
+
+      if (jsonData.salesman) {
+        this.homeComercial = true;
+        this.homeMantenimiento = false;
+        // used for an example of ngFor and navigation
+        this.pages = [
+          { title: 'Oportunidades', component: HomePage, icon: 'stats' },
+          { title: 'Perfil', component: ProfilePage, icon: 'contact' }
+        ];
+      } else {
+        this.pages = [
+          { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
+          { title: 'Perfil', component: ProfilePage, icon: 'contact' },
+          { title: 'Acta Digital', component: ActaDigitalPage, icon: 'contact' }
+        ];
+        this.homeMantenimiento = true;
+        this.homeComercial = false;
       }
-
-
+      
       this.odooRpc.init({
         odoo_server: url,
         http_auth: "username:password"

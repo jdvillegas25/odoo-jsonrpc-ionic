@@ -24,12 +24,12 @@
                 </ion-item>
                 <div class="spacer" style="height: 10px;"></div>
                 <div class="spacer" style="height: 10px;"></div>
-                <ion-item>
+                <!-- <ion-item>
                   <ion-label style="color: #818181">Seleccion Base de Datos</ion-label>
                   <ion-select [(ngModel)]="selectedDatabase" name="selectDatabase" style="color: #818181" required>
                     <ion-option *ngFor="let item of dbList" value="{{item.dbName}}">{{item.dbName}}</ion-option>
                   </ion-select>
-                </ion-item>
+                </ion-item> -->
                 <button ion-button block round color="secondary" [disabled]="!registerForm.form.valid" (click)="login()">Ingresar</button>
               </form>
             </div>

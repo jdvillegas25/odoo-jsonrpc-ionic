@@ -93,6 +93,7 @@
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-sqlite-storage" spec="2.6.0" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <engine name="android" spec="6.3.0" />
+    <plugin name="onesignal-cordova-plugin" spec="^2.4.6" />
+    <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

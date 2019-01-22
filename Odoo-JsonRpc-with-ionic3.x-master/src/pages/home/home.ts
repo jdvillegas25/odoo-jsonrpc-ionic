@@ -6,6 +6,7 @@ import { Component } from "@angular/core";
 import { NavController, AlertController, LoadingController } from "ionic-angular";
 import { Network } from "@ionic-native/network";
 import { ProfilePage } from "../profile/profile";
+import { OneSignal } from '@ionic-native/onesignal';
 
 
 @Component({
@@ -75,17 +76,40 @@ export class HomePage {
   private list_description: any;
   private logiData: any;
 
-  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController) {
-    this.display();
-    this.logiData = JSON.parse(localStorage.getItem('token'));
+  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController, private oneSignal: OneSignal) {
+    /*Inicializa las notificaciones*/
+    // this.initOneSignal();
 
+    /*Trae los servicios de mantenimiento o las oportunidades creadas; todo esto segun el rol*/
+    this.logiData = JSON.parse(localStorage.getItem('token'));
+    
     //Consultamos los permisos o interfase para el usuario logeado
     this.permisos();
+    this.display();
 
     //Validacion para cargar causas de rol mantenimiento
     if (JSON.parse(localStorage.getItem('token'))['technician']) {
       this.get_causas();
     }
+  }
+  initOneSignal(){
+
+    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3','AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
+
+    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
+
+
+    this.oneSignal.handleNotificationReceived()
+    .subscribe(()=>{
+      console.log('Notification Recived.')
+    });
+
+    this.oneSignal.handleNotificationOpened()
+    .subscribe(()=>{
+      console.log('Notification Opened.');
+    });
+
+    this.oneSignal.endInit();
   }
 
   //Funcion que me permite validar el rol de la persona loguada
@@ -96,7 +120,6 @@ export class HomePage {
       let json = JSON.parse(items._body);
       if (!json.error && json["result"].records != []) {
         for (let i of json["result"].records) {
-
           //en la variable sesion creamos dos variables nuevas, salesman y technician
           this.logiData.technician = i.technician;
           this.logiData.salesman = i.salesman;

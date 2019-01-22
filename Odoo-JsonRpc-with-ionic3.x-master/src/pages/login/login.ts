@@ -2,11 +2,11 @@ import { HomePage } from "../home/home";
 import { ServicioPage } from "../servicio/servicio";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, NavParams }
-  // import { AlertController, LoadingController, NavController, NavParams} 
-  from "ionic-angular";
+import { NavController, NavParams, LoadingController } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+
+import { OneSignal } from '@ionic-native/onesignal';
 
 @Component({
   selector: "page-login",
@@ -24,14 +24,17 @@ export class LoginPage {
   private arregloPermisos: any;
   public logiData: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController) {
     this.checkUrl();
   }
-
   public checkUrl() {
-    this.utils.presentLoading("Por Favor Espere...");
+    let loading = this.loadingCtrl.create({
+      content: "Estamos preparando todo..."
+    });
+    loading.present();
     this.odooRpc.init({
-      odoo_server: "https://tudirectorio.com.co",
+      odoo_server: " https://erp.allser.com.co",
+      // odoo_server: "https://tudirectorio.com.co",
       // odoo_server: this.selectedProtocol + "://" + this.odooUrl,
       http_auth: "username:password" // optional
     });
@@ -47,6 +50,7 @@ export class LoginPage {
       ]);
       this.utils.dismissLoading();
     });
+    loading.dismiss();
   }
 
   public fillData(res: any) {
@@ -58,14 +62,27 @@ export class LoginPage {
     }
   }
   private login() {
-    this.utils.presentLoading("Por Favor Espere", 0, true);
-    this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
+    let loading = this.loadingCtrl.create({
+      content: "Estamos preparando todo..."
+    });
+    loading.present();
+    this.odooRpc.login("allservice", this.email, this.password).then((res: any) => {
+      // this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
+
+      /**Asigna la variable de sesion */
       this.logiData = JSON.parse(res._body)["result"];
-      this.logiData.password = this.password;
-      localStorage.setItem("token", JSON.stringify(this.logiData));
-      this.navCtrl.setRoot(HomePage);
-    })
-      .catch(err => {
+      if (this.logiData.uid !== false) {
+
+        this.logiData.password = this.password;
+        localStorage.setItem("token", JSON.stringify(this.logiData));
+
+        /**Redirige al HomePage */
+        this.navCtrl.setRoot(HomePage);
+
+        /**Inicializa el plugin de las notificaciones */
+        this.initOneSignal();
+        loading.dismissAll();
+      } else {
         this.utils.dismissLoading();
         this.utils.presentAlert(
           "Error",
@@ -76,6 +93,40 @@ export class LoginPage {
             }
           ]
         );
+        loading.dismissAll();
+      }
+    })
+      .catch(err => {
+        loading.dismissAll();
+        this.utils.presentAlert(
+          "Error",
+          "Usuario o Contraseña Incorrecta",
+          [
+            {
+              text: "Ok"
+            }
+          ]
+        );
       });
+  }
+  initOneSignal() {
+
+    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3', 'AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
+
+    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
+
+
+    this.oneSignal.handleNotificationReceived()
+      .subscribe(() => {
+        console.log('Notification Recived.')
+      });
+
+    this.oneSignal.handleNotificationOpened()
+      .subscribe(() => {
+        console.log('Notification Opened.');
+      });
+    this.oneSignal.getIds
+
+    console.log(this.oneSignal.getIds());
   }
 }

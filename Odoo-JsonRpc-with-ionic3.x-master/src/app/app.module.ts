@@ -23,6 +23,7 @@ import { File } from '@ionic-native/file';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { IonicStorageModule } from '@ionic/storage';
 import {ActaDigitalPage} from '../pages/acta-digital/acta-digital'
+import { OneSignal } from '@ionic-native/onesignal';
 
 
 
@@ -70,7 +71,8 @@ import {ActaDigitalPage} from '../pages/acta-digital/acta-digital'
     FileTransfer,
     FileTransferObject,
     Camera,
-    AndroidPermissions
+    AndroidPermissions,
+    OneSignal
   ]
 })
 export class AppModule {}
