@@ -1,7 +1,7 @@
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Component, ViewChild, Renderer, ElementRef } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform, ToastController, normalizeURL, Content, AlertController } from 'ionic-angular';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions } from '@ionic-native/file';
@@ -36,7 +36,7 @@ export class ServicioPage {
   }> = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController) {
     this.dataServicio = {
       id: navParams.get("id"),
       issue_id: navParams.get("issue_id"),
@@ -108,11 +108,29 @@ export class ServicioPage {
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
-  public addProduct(items) {
-    this.listProducts = [];
-    this.list_items.forEach(a => {
-      items.forEach(b => {
-        if (a.id == b) {
+  setCantidadItem(item) {
+    let alerta = this.alert.create();
+    alerta.setTitle('Cantidad de items');
+
+    alerta.addInput({
+      type: 'number',
+      min: 0,
+      name: 'cantItems'
+    });
+
+    alerta.addButton('Cancelar');
+    alerta.addButton({
+      text: 'Agregar',
+      handler: cantidad => {
+        this.addProduct(item, cantidad);
+      }
+    });
+  }
+  public addProduct(items, cantidad) {
+
+    for (let i = 0; i <= cantidad; i++) {
+      this.list_items.forEach(a => {
+        if (a.id == items) {
           this.listProducts.push({
             id: a.id,
             name: a.name,
@@ -121,13 +139,13 @@ export class ServicioPage {
             pictures: '',
             // pictures: [],
             accion: 0,
-            cantidad: 0,
+            cantidad: 1,
             service: a.service_cat_id,
             ubication: ""
           })
         }
       });
-    });
+    }
   }
   private take_pictures(i) {
     const options: CameraOptions = {

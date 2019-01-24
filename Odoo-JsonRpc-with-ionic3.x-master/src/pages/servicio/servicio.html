@@ -20,8 +20,7 @@
     </ion-item>
     <ion-item *ngIf="list_items.length > 0">
       <ion-label stacked>Productos: </ion-label>
-      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="addProduct(product.value)"
-        multiple="true">
+      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="setCantidadItem(product.value)">
         <ion-option *ngFor="let item of list_items" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -51,10 +50,10 @@
         </ion-item>
       </ion-list>
       <ion-list>
-        <ion-item>
+        <!-- <ion-item>
           <ion-label floating>Cantidad: </ion-label>
           <ion-input type="number" #cantidad (change)="change_cant(cantidad.value,i)"></ion-input>
-        </ion-item>
+        </ion-item> -->
         <ion-item>
           <ion-label floating>Ubicación: </ion-label>
           <ion-input type="text" #ubication (change)="change_ubication(ubication.value,i)"></ion-input>

@@ -66,7 +66,7 @@ export class MyApp {
         this.pages = [
           { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
           { title: 'Perfil', component: ProfilePage, icon: 'contact' },
-          { title: 'Acta Digital', component: ActaDigitalPage, icon: 'contact' }
+          // { title: 'Acta Digital', component: ActaDigitalPage, icon: 'contact' }
         ];
         this.homeMantenimiento = true;
         this.homeComercial = false;

@@ -360,7 +360,7 @@ export class HomePage {
       handler: data => {
         this.get_description(data);
         let alerta = this.alertCtrl.create();
-        alerta.setTitle('Descripción de Cita Cancelada');
+        alerta.setTitle('Descripción de Cita Fallida');
 
         for (let desc of this.list_description) {
           alerta.addInput({

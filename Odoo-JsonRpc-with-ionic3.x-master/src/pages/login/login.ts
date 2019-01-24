@@ -18,14 +18,14 @@ export class LoginPage {
   public odooUrl;
   public selectedProtocol;
   private dbList: Array<{ dbName: string; }> = [];
-  private selectedDatabase;
+  private selectedDatabase: any = "Pruebas_Mantenimiento";
   private email;
   private password;
   private arregloPermisos: any;
   public logiData: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController) {
-    this.checkUrl();
+    //this.checkUrl();
   }
   public checkUrl() {
     let loading = this.loadingCtrl.create({
@@ -66,8 +66,8 @@ export class LoginPage {
       content: "Estamos preparando todo..."
     });
     loading.present();
-    this.odooRpc.login("allservice", this.email, this.password).then((res: any) => {
-      // this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
+    // this.odooRpc.login("allservice", this.email, this.password).then((res: any) => {
+      this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
 
       /**Asigna la variable de sesion */
       this.logiData = JSON.parse(res._body)["result"];
