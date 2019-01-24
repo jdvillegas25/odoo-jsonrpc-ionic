@@ -220,9 +220,17 @@ export class ActaDigitalPage {
         finished: true,
         kanban_state: 'done'
       }
-      if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
-        return true;
-      }
+      this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
+        let json = JSON.parse(query._body)
+        if (!json.error) {
+          return true;
+        }
+      }).catch((err: any) => {
+        return false;
+      });
+      // if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
+      //   return true;
+      // }
     } else {
       return false;
     }

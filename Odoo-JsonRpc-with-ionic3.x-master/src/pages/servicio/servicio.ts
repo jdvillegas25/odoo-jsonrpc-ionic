@@ -108,14 +108,14 @@ export class ServicioPage {
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
-  setCantidadItem(item) {
+  public setCantidadItem(item) {
     let alerta = this.alert.create();
     alerta.setTitle('Cantidad de items');
 
     alerta.addInput({
       type: 'number',
       min: 0,
-      name: 'cantItems'
+      name:'cant'
     });
 
     alerta.addButton('Cancelar');
@@ -125,10 +125,10 @@ export class ServicioPage {
         this.addProduct(item, cantidad);
       }
     });
+    alerta.present();
   }
   public addProduct(items, cantidad) {
-
-    for (let i = 0; i <= cantidad; i++) {
+    for (let i = 1; i <= +cantidad.cant; i++) {
       this.list_items.forEach(a => {
         if (a.id == items) {
           this.listProducts.push({
