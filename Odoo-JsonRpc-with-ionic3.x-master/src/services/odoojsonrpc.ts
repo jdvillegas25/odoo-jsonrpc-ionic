@@ -69,8 +69,7 @@ export class OdooJsonRpc {
             'Content-Type': 'application/json; charset=utf-8',
         });
 
-        let result = this.http.post(this.odoo_server + url, options, { headers: this.headers })
-            .toPromise()
+        let result = this.http.post(this.odoo_server + url, options, { headers: this.headers }).toPromise()
         return result;
     }
 

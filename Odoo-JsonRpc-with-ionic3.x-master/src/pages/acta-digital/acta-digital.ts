@@ -211,6 +211,7 @@ export class ActaDigitalPage {
     }
   }
   private update_task() {
+    let salida = true;
     if (this.firma != "") {
 
       let table = "project.task"
@@ -221,22 +222,20 @@ export class ActaDigitalPage {
         kanban_state: 'done'
       }
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
-        let json = JSON.parse(query._body)
-        if (!json.error) {
-          return true;
+        if (query.ok) {
+          salida = true;
         }
       }).catch((err: any) => {
-        return false;
+        salida = false;
       });
-      // if (this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data)) {
-      //   return true;
-      // }
     } else {
-      return false;
+      salida = false;
     }
+    return salida;
 
   }
   private insert_services_task() {
+    let salida = true;
     let contador = 0;
     let table = 'project.customer.asset';
     this.productos.forEach(pro => {
@@ -254,14 +253,15 @@ export class ActaDigitalPage {
         if (res.ok === true) {
           contador++;
           if (contador == this.productos.length) {
-            return true;
+            salida = true;
           }
         }
       }).catch((err: any) => {
-        return false;
+        salida = false;
       })
     });
-    return true
+    salida = true
+    return salida;
   }
 
 }

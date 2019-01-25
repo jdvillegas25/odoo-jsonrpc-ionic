@@ -25,7 +25,7 @@ export class LoginPage {
   public logiData: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController) {
-    //this.checkUrl();
+    this.checkUrl();
   }
   public checkUrl() {
     let loading = this.loadingCtrl.create({
@@ -33,9 +33,7 @@ export class LoginPage {
     });
     loading.present();
     this.odooRpc.init({
-      odoo_server: " https://erp.allser.com.co",
-      // odoo_server: "https://tudirectorio.com.co",
-      // odoo_server: this.selectedProtocol + "://" + this.odooUrl,
+      odoo_server: "https://erp.allser.com.co",
       http_auth: "username:password" // optional
     });
     this.odooRpc.getDbList().then((dbList: any) => {
@@ -66,8 +64,7 @@ export class LoginPage {
       content: "Estamos preparando todo..."
     });
     loading.present();
-    // this.odooRpc.login("allservice", this.email, this.password).then((res: any) => {
-      this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
+    this.odooRpc.login(this.selectedDatabase, this.email, this.password).then((res: any) => {
 
       /**Asigna la variable de sesion */
       this.logiData = JSON.parse(res._body)["result"];
