@@ -6,20 +6,20 @@
 <ion-content padding class="cards-bg">
   <ion-list>
     <ion-item>
-      <ion-label stacked>Categoria de Servicio a Realizar: </ion-label>
+      <ion-label stacked>Sistema Intervenido: </ion-label>
       <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="getServiceCategory(necesidad.value)">
         <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="list_service_category?.length > 0">
-      <ion-label stacked>Servicio a Realizar: </ion-label>
+      <ion-label stacked>Subsistema Intervenido: </ion-label>
       <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)"
         multiple="true">
         <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="list_items.length > 0">
-      <ion-label stacked>Productos: </ion-label>
+      <ion-label stacked>Equipo Afectado: </ion-label>
       <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="setCantidadItem(product.value)">
         <ion-option *ngFor="let item of list_items" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>

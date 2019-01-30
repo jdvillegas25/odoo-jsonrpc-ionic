@@ -60,6 +60,11 @@ export class ViewPage {
     date_finish: String;
     description: String;
     sec: String;
+    customer_sign_image: any;
+    notes: String;
+    functionary_vat: String;
+    functionary_name: String;
+    functionary_mail: String;
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -162,28 +167,34 @@ export class ViewPage {
           date_start: data[record].date_start == false ? "N/A" : data[record].date_start,
           date_finish: data[record].date_finish == false ? "N/A" : data[record].date_finish,
           description: data[record].issue_description == false ? "N/A" : data[record].issue_description,
-          sec: data[record].issue_sec == false ? "N/A" : data[record].issue_sec
+          sec: data[record].issue_sec == false ? "N/A" : data[record].issue_sec,
+          customer_sign_image: data[record].customer_sign_image,
+          notes: data[record].notes,
+          functionary_vat: data[record].functionary_vat,
+          functionary_name: data[record].functionary_name,
+          functionary_mail: data[record].functionary_mail
         });
+        if (data[record].customer_asset_ids.length > 0) {
+          this.get_detalle_task(data[record].id);
+        }
       }
+    });
+  }
+  private get_detalle_task(idTask) {
+    let partner = "project.customer.asset";
+    let fields = [];
+    let domain = [["task_id", "=", idTask]];
+    let sort = "";
+    let limit = 0;
+    let offset = 0;
+    this.odooRpc.searchRead(partner, domain, fields, limit, offset, sort).then((res: any) => {
+      let data = JSON.parse(res._body)["result"].records;
+      this.dataMantenimiento[0]['customer_asset_ids'] = data;
     });
   }
   private continuarServicio() {
     let params = {}
     params = this.dataMantenimiento[0];
-    // params["id"] = this.dataMantenimiento[0].id;
-    // params["issue_id"] = this.dataMantenimiento[0].issue_id;
-    // params["name"] = this.dataMantenimiento[0].name;
-    // params["categs_ids"] = this.dataMantenimiento[0].categs_ids;
-    // params["city_id"] = this.dataMantenimiento[0].city_id;
-    // params["request_source"] = this.dataMantenimiento[0].request_source;
-    // params["branch_type"] = this.dataMantenimiento[0].branch_type;
-    // params["partner_id"] = this.dataMantenimiento[0].partner_id;
-    // params["location_id"] = this.dataMantenimiento[0].location_id;
-    // params["user_id"] = this.dataMantenimiento[0].user_id;
-    // params["date_start"] = this.dataMantenimiento[0].date_start;
-    // params["date_finish"] = this.dataMantenimiento[0].date_finish;
-    // params["description"] = this.dataMantenimiento[0].description;
-    // params["sec"] = this.dataMantenimiento[0].sec;
     this.navCtrl.push(ServicioPage, params);
   }
 }

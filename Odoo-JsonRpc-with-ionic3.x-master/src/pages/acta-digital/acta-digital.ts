@@ -45,6 +45,7 @@ export class ActaDigitalPage {
   private servicios: Array<any> = [];
   private productos: Array<any> = [];
   private firma: String;
+  private Datafirma: String;
   private observation_user: any;
   private functionary_vat: any;
   private functionary_name: any;
@@ -125,6 +126,14 @@ export class ActaDigitalPage {
     this.firma = this.canvasElement.toDataURL();
     this.showCanvas = false;
     this.clearCanvasImage();
+
+    let name = new Date().getTime() + '.png';
+    let path = this.file.dataDirectory;
+    let options: IWriteOptions = { replace: true };
+
+    var data = this.firma.split(',')[1];
+    let blob = this.b64toBlob(data, 'image/png');
+    this.Datafirma = data;
   }
   clearCanvasImage() {
     let ctx = this.canvasElement.getContext('2d');
@@ -221,7 +230,7 @@ export class ActaDigitalPage {
       let table = "project.task"
       let data = {
         notes: this.observation_user,
-        customer_sign_image: this.firma,
+        customer_sign_image: this.Datafirma,
         finished: true,
         kanban_state: 'done',
         functionary_vat: this.functionary_vat,

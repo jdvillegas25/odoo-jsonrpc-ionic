@@ -89,15 +89,15 @@
   </ion-grid>
   <ion-item>
     <ion-label floating>Identificación del Contacto</ion-label>
-    <ion-input [(ngModel)]="functionary_vat"></ion-input>
+    <ion-input type="number" [(ngModel)]="functionary_vat"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label floating>Nombre del Funcionario</ion-label>
-    <ion-input [(ngModel)]="functionary_name"></ion-input>
+    <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label floating>Email del Contacto</ion-label>
-    <ion-input [(ngModel)]="functionary_email"></ion-input>
+    <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>
   </ion-item>
   <ion-grid #fixedContainer *ngIf="showCanvas">
     <ion-row>
