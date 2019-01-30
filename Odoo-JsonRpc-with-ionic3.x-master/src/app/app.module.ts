@@ -22,7 +22,8 @@ import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { IonicStorageModule } from '@ionic/storage';
-import {ActaDigitalPage} from '../pages/acta-digital/acta-digital'
+import { ActaDigitalPage } from '../pages/acta-digital/acta-digital'
+import { HistorialServiciosPage } from '../pages/historial-servicios/historial-servicios';
 import { OneSignal } from '@ionic-native/onesignal';
 
 
@@ -40,6 +41,7 @@ import { OneSignal } from '@ionic-native/onesignal';
     ProspectoPage,
     ServicioPage,
     ActaDigitalPage,
+    HistorialServiciosPage
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,8 @@ import { OneSignal } from '@ionic-native/onesignal';
     FormProbabilidadPage,
     ProspectoPage,
     ServicioPage,
-    ActaDigitalPage
+    ActaDigitalPage,
+    HistorialServiciosPage
   ],
   providers: [
     Network,

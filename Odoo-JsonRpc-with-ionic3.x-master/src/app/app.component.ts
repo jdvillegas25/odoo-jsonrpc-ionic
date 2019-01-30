@@ -10,6 +10,7 @@ import { SplashScreen } from "@ionic-native/splash-screen";
 import { Utils } from "../services/utils";
 import { ProfilePage } from "../pages/profile/profile";
 import { ActaDigitalPage } from "../pages/acta-digital/acta-digital"
+import { HistorialServiciosPage } from "../pages/historial-servicios/historial-servicios";
 
 @Component({
   templateUrl: "app.html",
@@ -59,14 +60,14 @@ export class MyApp {
         this.homeMantenimiento = false;
         // used for an example of ngFor and navigation
         this.pages = [
-          { title: 'Oportunidades', component: HomePage, icon: 'stats' },
-          { title: 'Perfil', component: ProfilePage, icon: 'contact' }
+          { title: 'Perfil', component: ProfilePage, icon: 'contact' },
+          { title: 'Oportunidades', component: HomePage, icon: 'stats' }
         ];
       } else {
         this.pages = [
-          { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
           { title: 'Perfil', component: ProfilePage, icon: 'contact' },
-          // { title: 'Acta Digital', component: ActaDigitalPage, icon: 'contact' }
+          { title: 'Mantenimientos', component: HomePage, icon: 'stats' },
+          { title: 'Historial de Servicios', component: HistorialServiciosPage, icon: 'time' }
         ];
         this.homeMantenimiento = true;
         this.homeComercial = false;

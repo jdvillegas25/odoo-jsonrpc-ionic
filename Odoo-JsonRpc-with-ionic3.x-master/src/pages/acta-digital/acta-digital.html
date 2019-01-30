@@ -87,6 +87,18 @@
       <ion-col>{{username}}</ion-col>
     </ion-row>
   </ion-grid>
+  <ion-item>
+    <ion-label floating>Identificación del Contacto</ion-label>
+    <ion-input [(ngModel)]="functionary_vat"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Nombre del Funcionario</ion-label>
+    <ion-input [(ngModel)]="functionary_name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Email del Contacto</ion-label>
+    <ion-input [(ngModel)]="functionary_email"></ion-input>
+  </ion-item>
   <ion-grid #fixedContainer *ngIf="showCanvas">
     <ion-row>
       <ion-col>
@@ -96,32 +108,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <!-- <ion-list *ngIf="storedImages.length > 0">
-    <ion-list-header>Previous Drawings</ion-list-header>
-    <ion-card *ngFor="let obj of storedImages; let i = index">
-      <ion-card-content>
-        <img [src]="getImagePath(obj.img)">
-      </ion-card-content>
-      <ion-row>
-        <button ion-button full icon-only color="danger" (click)="removeImageAtIndex(i)">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-      </ion-row>
-    </ion-card>
-  </ion-list> -->
   <ion-list *ngIf="firma">
     <ion-list-header>Firma del Responsable</ion-list-header>
     <ion-card>
       <ion-card-content>
         <img src="{{firma}}">
       </ion-card-content>
-      <!-- <ion-row>
-        <button ion-button full icon-only color="danger" (click)="limpiarFimar()">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-      </ion-row> -->
     </ion-card>
   </ion-list>
-  
   <button ion-button color="secondary" full (click)="save_acta()">Finalizar Proceso</button>
 </ion-content>

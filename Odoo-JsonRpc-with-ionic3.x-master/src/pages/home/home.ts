@@ -145,10 +145,10 @@ export class HomePage {
       this.homeMantemimiento = false;
     } else {
 
+      // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
       domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],['finished','!=','true']];
       table = this.tableServicios;
       filter = [];
-      // filter = ["id", "name", "categs_ids", "request_type", "city_id", "request_source", "branch_type", "partner_id", "location_id", "contact_id", "user_id", "date_start", "date_finish", "description", "priority", "sec"];
       this.homeComercial = false;
       this.homeMantemimiento = true;
     }
@@ -415,7 +415,9 @@ export class HomePage {
     let data = {
       fail_cause_id: cause,
       assignment_status: motivo,
-      fail_description_id: desc
+      fail_description_id: desc,
+      finished:'true',
+      kanban_state:'blocked'
     }
     this.odooRpc.updateRecord(this.tableServicios, this.listaServicios[servicio].id, data);
     this.utils.presentToast(

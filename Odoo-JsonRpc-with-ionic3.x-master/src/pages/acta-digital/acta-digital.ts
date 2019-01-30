@@ -46,6 +46,9 @@ export class ActaDigitalPage {
   private productos: Array<any> = [];
   private firma: String;
   private observation_user: any;
+  private functionary_vat: any;
+  private functionary_name: any;
+  private functionary_email: any;
   private username: any = JSON.parse(localStorage.getItem('token'))['username'];
   public showCanvas: Boolean = true;
 
@@ -184,7 +187,8 @@ export class ActaDigitalPage {
     if (this.firma !== "") {
       if (this.update_task()) {
         if (this.insert_services_task()) {
-          this.navCtrl.push(HomePage);
+          this.navCtrl.setRoot(HomePage);
+          // this.navCtrl.push(HomePage);
         } else {
           const alert = this.alertCtrl.create({
             title: 'ERROR',
@@ -219,7 +223,10 @@ export class ActaDigitalPage {
         notes: this.observation_user,
         customer_sign_image: this.firma,
         finished: true,
-        kanban_state: 'done'
+        kanban_state: 'done',
+        functionary_vat: this.functionary_vat,
+        functionary_name: this.functionary_name,
+        functionary_email: this.functionary_email,
       }
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
         if (query.ok) {
