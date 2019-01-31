@@ -64,7 +64,8 @@ export class ViewPage {
     notes: String;
     functionary_vat: String;
     functionary_name: String;
-    functionary_mail: String;
+    functionary_email: String;
+    finished: boolean;
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -172,13 +173,15 @@ export class ViewPage {
           notes: data[record].notes,
           functionary_vat: data[record].functionary_vat,
           functionary_name: data[record].functionary_name,
-          functionary_mail: data[record].functionary_mail
+          functionary_email: data[record].functionary_email,
+          finished: data[record].finished
         });
         if (data[record].customer_asset_ids.length > 0) {
           this.get_detalle_task(data[record].id);
         }
       }
     });
+    console.log(this.dataMantenimiento);
   }
   private get_detalle_task(idTask) {
     let partner = "project.customer.asset";

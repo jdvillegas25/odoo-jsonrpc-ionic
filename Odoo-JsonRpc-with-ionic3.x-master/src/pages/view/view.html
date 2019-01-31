@@ -109,9 +109,10 @@
       <div *ngFor="let i of dataMantenimiento">
         <ion-card>
           <ion-card-header>
-            <h2><strong>{{ i.name }}</strong></h2>
+            <h1><strong>{{ i.name }}</strong></h1>
           </ion-card-header>
           <ion-card-content>
+            <h1 *ngIf="i.finished"><strong>Información General</strong></h1>
             <p><strong>Resumen: </strong>{{i.issue_id[1]}}</p>
             <p><strong>Identificación: </strong>{{i.sec}}</p>
             <p><strong>Ciudad: </strong>{{i.city_id}}</p>
@@ -121,18 +122,44 @@
             <p><strong>Usuario: </strong>{{i.user_id[1]}}</p>
             <p><strong>Fecha Inicial: </strong>{{i.date_start}}</p>
             <p><strong>Descripción: </strong>{{i.description}}</p>
-            <p *ngIf="i.notes"><strong>Observaciones: </strong>{{i.notes}}</p>
-            <p *ngIf="i.functionary_vat"><strong>Id Funcionario: </strong>{{i.functionary_vat}}</p>
-            <p *ngIf="i.functionary_name"><strong>Funcionario: </strong>{{i.functionary_name}}</p>
-            <p *ngIf="i.functionary_mail"><strong>Email Funcionario: </strong>{{i.functionary_mail}}</p>
-            <p *ngIf="i.customer_sign_image">
+            <br>
+            <h1 *ngIf="i.finished"><strong>Información del Sistema</strong></h1>
+            <p *ngIf="i.customer_asset_ids">
+              <strong>Sistema Afectado</strong>
+              {{i.customer_asset_ids[0].product_category_id[1]}}
+            </p>
+            <hr style="color: #212121 !important">
+            <div *ngFor="let p of i.customer_asset_ids">
+              <p *ngIf="i.finished">
+                <strong>Subsistema Afectado: </strong>
+                {{p.product_service_cat_id[1]}}
+              </p>
+              <p *ngIf="i.finished">
+                <strong>Equipo Afectado Afectado: </strong>
+                {{p.product_id[1]}}
+              </p>
+              <p *ngIf="p.replaced" style="color: #FF9800;">
+                <strong>Equipo Reparado</strong>
+              </p>
+              <p *ngIf="!p.replaced" style="color: #4CAF50;">
+                <strong>Equipo Nuevo</strong>
+              </p>
+              <hr style="color: #212121 !important">
+            </div>
+            <br>
+            <h1 *ngIf="i.finished"><strong>Información Del Funcionario</strong></h1>
+            <p *ngIf="i.finished"><strong>Observaciones: </strong>{{i.notes}}</p>
+            <p *ngIf="i.finished"><strong>Id Funcionario: </strong>{{i.functionary_vat}}</p>
+            <p *ngIf="i.finished"><strong>Funcionario: </strong>{{i.functionary_name}}</p>
+            <p *ngIf="i.finished"><strong>Email Funcionario: </strong>{{i.functionary_email}}</p>
+            <p *ngIf="i.finished">
               <strong>Firma del Responsable: </strong>
               <img src="{{i.customer_sign_image}}">
             </p>
           </ion-card-content>
-          <ion-row no-padding *ngIf="!i.customer_sign_image">
+          <ion-row no-padding>
             <ion-col text-right>
-              <button ion-button clear small color="primary" icon-start (click)="continuarServicio()">
+              <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">
                 <ion-icon name='share-alt'></ion-icon>
                 Continuar Servicio
               </button>
