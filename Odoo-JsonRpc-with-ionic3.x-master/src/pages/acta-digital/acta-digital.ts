@@ -113,6 +113,7 @@ export class ActaDigitalPage {
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
       }
+      console.log(data);
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
         if (query.ok) {
           salida = true;
