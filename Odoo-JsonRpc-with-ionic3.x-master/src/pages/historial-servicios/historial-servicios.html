@@ -20,6 +20,9 @@
         <h2 *ngIf="item.kanban_state == 'done'">
           <p style="color:#4CAF50;"><strong>Estado:</strong> Listo</p>
         </h2>
+        <h2 *ngIf="item.kanban_state == 'normal'">
+            <p style="color: #039BE5;"><strong>Estado:</strong> Normal</p>
+          </h2>
       </ion-item>
     </ion-item-sliding>
   </ion-list>

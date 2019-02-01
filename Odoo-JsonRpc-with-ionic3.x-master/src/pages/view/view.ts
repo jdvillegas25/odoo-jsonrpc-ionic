@@ -4,6 +4,7 @@ import { NavController, NavParams, AlertController } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { ProspectoPage } from "../prospecto/prospecto"
 import { ServicioPage } from "../servicio/servicio"
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: "page-view",
@@ -66,13 +67,14 @@ export class ViewPage {
     functionary_name: String;
     functionary_email: String;
     finished: boolean;
+    number_sap: String;
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
   testRadioOpen: boolean;
   testRadioResult;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils, public alertCtrl: AlertController, private sanitizer: DomSanitizer) {
     this.oportunity = navParams.get("id");
 
     if (JSON.parse(localStorage.getItem('token'))['salesman']) {
@@ -85,7 +87,9 @@ export class ViewPage {
     }
     this.display();
   }
-
+  public sanitize(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
   private display(): void {
 
     if (JSON.parse(localStorage.getItem('token'))['salesman']) {
@@ -174,14 +178,14 @@ export class ViewPage {
           functionary_vat: data[record].functionary_vat,
           functionary_name: data[record].functionary_name,
           functionary_email: data[record].functionary_email,
-          finished: data[record].finished
+          finished: data[record].finished,
+          number_sap:data[record].number_sap
         });
         if (data[record].customer_asset_ids.length > 0) {
           this.get_detalle_task(data[record].id);
         }
       }
     });
-    console.log(this.dataMantenimiento);
   }
   private get_detalle_task(idTask) {
     let partner = "project.customer.asset";

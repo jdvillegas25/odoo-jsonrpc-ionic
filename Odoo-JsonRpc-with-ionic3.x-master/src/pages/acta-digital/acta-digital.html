@@ -75,39 +75,31 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col><strong>Observaciones del Técnico: </strong></ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-input type="text" value="" [(ngModel)]="observation_user"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
       <ion-col><strong>Nombre del Funcionario:</strong></ion-col>
       <ion-col>{{username}}</ion-col>
     </ion-row>
   </ion-grid>
-  <ion-item>
-    <ion-label floating>Identificación del Contacto</ion-label>
-    <ion-input type="number" [(ngModel)]="functionary_vat"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating>Nombre del Funcionario</ion-label>
-    <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating>Email del Contacto</ion-label>
-    <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>
-  </ion-item>
-  <ion-grid #fixedContainer *ngIf="showCanvas">
-    <ion-row>
-      <ion-col>
-        <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)"></canvas>
-        <button ion-button color="primary" style="width: 48%;float: left;" (click)="saveCanvasImage()">Guardar Firma</button>
-        <button ion-button color="danger" style="width: 48%;float: right;" (click)="clearCanvasImage()">Limpiar Firma</button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div align="left">
+    <ion-item>
+      <ion-label stacked>Observaciones del Técnico</ion-label>
+      <ion-input type="text" [(ngModel)]="observation_user"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Identificación del Contacto</ion-label>
+      <ion-input type="number" [(ngModel)]="functionary_vat"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Nombre del Funcionario</ion-label>
+      <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Email del Contacto</ion-label>
+      <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="!finish">
+        <button ion-button color="danger" full (click)="openModal()">Crear Firma</button>
+    </ion-item>
+  </div>
   <ion-list *ngIf="firma">
     <ion-list-header>Firma del Responsable</ion-list-header>
     <ion-card>

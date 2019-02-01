@@ -25,6 +25,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { ActaDigitalPage } from '../pages/acta-digital/acta-digital'
 import { HistorialServiciosPage } from '../pages/historial-servicios/historial-servicios';
 import { OneSignal } from '@ionic-native/onesignal';
+import { ModalPage } from '../pages/modal/modal';
 
 
 
@@ -34,6 +35,7 @@ import { OneSignal } from '@ionic-native/onesignal';
     HomePage,
     LoginPage,
     ViewPage,
+    ModalPage,
     ProfilePage,
     ParallaxDirective,
     AddCustomerPage,
@@ -55,6 +57,7 @@ import { OneSignal } from '@ionic-native/onesignal';
     HomePage,
     LoginPage,
     ViewPage,
+    ModalPage,
     ProfilePage,
     AddCustomerPage,
     FormProbabilidadPage,

@@ -18,7 +18,7 @@ export class LoginPage {
   public odooUrl;
   public selectedProtocol;
   private dbList: Array<{ dbName: string; }> = [];
-  private selectedDatabase: any = "Pruebas_Mantenimiento";
+  private selectedDatabase: any = "Template_Produccion";
   private email;
   private password;
   private arregloPermisos: any;
@@ -41,12 +41,13 @@ export class LoginPage {
       this.utils.dismissLoading();
       this.fillData(dbList);
     }).catch((err: any) => {
-      this.utils.presentAlert("Error", "Por favor revice su conexión a internet", [
-        {
-          text: "Ok"
-        }
-      ]);
-      this.utils.dismissLoading();
+      // this.utils.presentAlert("Error", "Por favor revice su conexión a internet", [
+      //   {
+      //     text: "Ok"
+      //   }
+      // ]);
+      // this.utils.dismissLoading();
+      loading.dismiss();
     });
     loading.dismiss();
   }
@@ -72,15 +73,15 @@ export class LoginPage {
 
         this.logiData.password = this.password;
         localStorage.setItem("token", JSON.stringify(this.logiData));
-
+        loading.dismissAll();
         /**Redirige al HomePage */
+        this.initOneSignal();
         this.navCtrl.setRoot(HomePage);
 
         /**Inicializa el plugin de las notificaciones */
-        this.initOneSignal();
-        loading.dismissAll();
       } else {
-        this.utils.dismissLoading();
+        // this.utils.dismissLoading();
+        loading.dismissAll();
         this.utils.presentAlert(
           "Error",
           "Usuario o Contraseña Incorrecta",
@@ -90,7 +91,6 @@ export class LoginPage {
             }
           ]
         );
-        loading.dismissAll();
       }
     })
       .catch(err => {
