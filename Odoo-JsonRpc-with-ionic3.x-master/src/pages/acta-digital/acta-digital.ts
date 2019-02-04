@@ -69,10 +69,6 @@ export class ActaDigitalPage {
     });
   }
   private save_acta() {
-    console.log(this.Datafirma);
-    console.log(this.functionary_vat );
-    console.log(this.functionary_name);
-    console.log(this.functionary_email);
     if (this.Datafirma == "") {
       const alert = this.alertCtrl.create({
         title: 'ERROR',
