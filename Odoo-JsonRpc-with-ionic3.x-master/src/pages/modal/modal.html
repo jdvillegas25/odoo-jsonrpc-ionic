@@ -1,0 +1,27 @@
+<!--
+  Generated template for the ModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>modalPage</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding no-bounce>
+  <div #fixedContainer ion-fixed>
+    <canvas #imageCanvas (touchstart)="startDrawing($event)" (touchmove)="moved($event)" height="500%"></canvas>
+    <button ion-button color="primary" style="width: 48%;float: left;" (click)="saveCanvasImage()">Guardar Firma</button>
+    <button ion-button color="danger" style="width: 48%;float: right;" (click)="clearCanvasImage()">Limpiar Firma</button>
+  </div>
+</ion-content>
