@@ -39,7 +39,7 @@ export class ActaDigitalPage {
   public finish: Boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, public alertCtrl: AlertController, private rendere: Renderer2, private modal: ModalController) {
-    
+
     /**********************************************************************
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
@@ -50,7 +50,7 @@ export class ActaDigitalPage {
     this.productos = (navParams.get("productos")) ? navParams.get("productos") : {};
     this.firma = "";
   }
-  async openModal (){
+  async openModal() {
     // const myModalData = {
     //   name:'Pedro Perez',
     //   occupation: 'Developer'
@@ -62,14 +62,46 @@ export class ActaDigitalPage {
       this.Datafirma = data.Datafirma;
       this.finish = data.finish;
     });
-    myModal.onWillDismiss((data)=>{
+    myModal.onWillDismiss((data) => {
       this.firma = data.firma;
       this.Datafirma = data.Datafirma;
       this.finish = data.finish;
     });
   }
   private save_acta() {
-    if (this.Datafirma != "") {
+    console.log(this.Datafirma);
+    console.log(this.functionary_vat );
+    console.log(this.functionary_name);
+    console.log(this.functionary_email);
+    if (this.Datafirma == "") {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor agregue la firma del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    } else if (this.functionary_vat === undefined) {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor el documento del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    } else if (this.functionary_name === undefined) {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor agregue el nombre del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    } else if (this.functionary_email === undefined) {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor agregue el email del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    } else {
       if (this.update_task()) {
         if (this.insert_services_task()) {
           this.navCtrl.setRoot(HomePage);
@@ -90,16 +122,9 @@ export class ActaDigitalPage {
         });
         alert.present();
       }
-    } else {
-      const alert = this.alertCtrl.create({
-        title: 'ERROR',
-        subTitle: 'Por favor agregue la firma del encargado',
-        buttons: ['OK']
-      });
-      alert.present();
     }
   }
- async update_task() {
+  async update_task() {
     let salida = true;
     if (this.firma != "") {
 
@@ -113,7 +138,6 @@ export class ActaDigitalPage {
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
       }
-      console.log(data);
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
         if (query.ok) {
           salida = true;
