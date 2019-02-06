@@ -65,6 +65,8 @@ export class ViewPage {
     functionary_vat: String;
     functionary_name: String;
     functionary_mail: String;
+    finished: Boolean;
+
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
@@ -172,7 +174,8 @@ export class ViewPage {
           notes: data[record].notes,
           functionary_vat: data[record].functionary_vat,
           functionary_name: data[record].functionary_name,
-          functionary_mail: data[record].functionary_mail
+          functionary_mail: data[record].functionary_mail,
+          finished: data[record].finished
         });
         if (data[record].customer_asset_ids.length > 0) {
           this.get_detalle_task(data[record].id);
