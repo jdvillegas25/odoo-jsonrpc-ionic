@@ -65,15 +65,9 @@ export class ViewPage {
     notes: String;
     functionary_vat: String;
     functionary_name: String;
-<<<<<<< HEAD
-    functionary_mail: String;
-    finished: Boolean;
-
-=======
     functionary_email: String;
     finished: boolean;
     number_sap: String;
->>>>>>> 00bfd79b28d0769ceff13a79b4abef6a35ddfcb2
   }> = [];
   public homeComercial: boolean = false;
   public homeMantemimiento: boolean = false;
