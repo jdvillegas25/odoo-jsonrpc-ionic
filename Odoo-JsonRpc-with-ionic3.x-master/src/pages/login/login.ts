@@ -2,7 +2,7 @@ import { HomePage } from "../home/home";
 import { ServicioPage } from "../servicio/servicio";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, NavParams, LoadingController } from "ionic-angular";
+import { NavController, NavParams, LoadingController, AlertController } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
@@ -18,13 +18,13 @@ export class LoginPage {
   public odooUrl;
   public selectedProtocol;
   private dbList: Array<{ dbName: string; }> = [];
-  private selectedDatabase: any = "Template_Produccion";
+  private selectedDatabase: any = "allservice";
   private email;
   private password;
   private arregloPermisos: any;
   public logiData: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, ) {
     this.checkUrl();
   }
   public checkUrl() {
@@ -108,7 +108,8 @@ export class LoginPage {
   }
   initOneSignal() {
 
-    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3', 'AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
+    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3');
+    // this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3', 'AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
 
     this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
@@ -122,8 +123,14 @@ export class LoginPage {
       .subscribe(() => {
         console.log('Notification Opened.');
       });
-    this.oneSignal.getIds
-
-    console.log(this.oneSignal.getIds());
+    this.oneSignal.endInit();
+    this.oneSignal.getIds().then((id) => {
+      const uid = JSON.parse(localStorage.getItem('token'))['uid'];
+      const table = "res.users"
+      const data = {
+        player_id: id.userId,
+      }
+      this.odooRpc.updateRecord(table, uid, data);
+    });
   }
 }

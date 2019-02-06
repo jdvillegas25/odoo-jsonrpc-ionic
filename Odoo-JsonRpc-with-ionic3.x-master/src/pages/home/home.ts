@@ -80,9 +80,7 @@ export class HomePage {
 
   }
   ionViewDidLoad() {
-    /*Inicializa las notificaciones*/
-    // this.initOneSignal();
-
+    
     /*Trae los servicios de mantenimiento o las oportunidades creadas; todo esto segun el rol*/
     this.logiData = JSON.parse(localStorage.getItem('token'));
 
@@ -95,26 +93,6 @@ export class HomePage {
       this.get_causas();
     }
   }
-  initOneSignal() {
-
-    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3', 'AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
-
-    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
-
-
-    this.oneSignal.handleNotificationReceived()
-      .subscribe(() => {
-        console.log('Notification Recived.')
-      });
-
-    this.oneSignal.handleNotificationOpened()
-      .subscribe(() => {
-        console.log('Notification Opened.');
-      });
-
-    this.oneSignal.endInit();
-  }
-
   //Funcion que me permite validar el rol de la persona loguada
   private permisos() {
     let domain = [['partner_id', '=', this.logiData["partner_id"]]]
