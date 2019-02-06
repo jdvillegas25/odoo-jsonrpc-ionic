@@ -77,12 +77,13 @@ export class HomePage {
   private logiData: any;
 
   constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController, private oneSignal: OneSignal) {
-    /*Inicializa las notificaciones*/
-    // this.initOneSignal();
 
+  }
+  ionViewDidLoad() {
+    
     /*Trae los servicios de mantenimiento o las oportunidades creadas; todo esto segun el rol*/
     this.logiData = JSON.parse(localStorage.getItem('token'));
-    
+
     //Consultamos los permisos o interfase para el usuario logeado
     this.permisos();
     this.display();
@@ -92,26 +93,6 @@ export class HomePage {
       this.get_causas();
     }
   }
-  initOneSignal(){
-
-    this.oneSignal.startInit('24193be6-3c15-4975-8f5c-102ea593a5a3','AIzaSyBghyYsGpX9d58LuDy9tItjX5Pk4z68n4A');
-
-    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
-
-
-    this.oneSignal.handleNotificationReceived()
-    .subscribe(()=>{
-      console.log('Notification Recived.')
-    });
-
-    this.oneSignal.handleNotificationOpened()
-    .subscribe(()=>{
-      console.log('Notification Opened.');
-    });
-
-    this.oneSignal.endInit();
-  }
-
   //Funcion que me permite validar el rol de la persona loguada
   private permisos() {
     let domain = [['partner_id', '=', this.logiData["partner_id"]]]
@@ -146,7 +127,7 @@ export class HomePage {
     } else {
 
       // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
-      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']],['finished','!=','true']];
+      domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']], ['finished', '!=', 'true']];
       table = this.tableServicios;
       filter = [];
       this.homeComercial = false;
@@ -416,8 +397,8 @@ export class HomePage {
       fail_cause_id: cause,
       assignment_status: motivo,
       fail_description_id: desc,
-      finished:'true',
-      kanban_state:'blocked'
+      finished: 'true',
+      kanban_state: 'blocked'
     }
     this.odooRpc.updateRecord(this.tableServicios, this.listaServicios[servicio].id, data);
     this.utils.presentToast(

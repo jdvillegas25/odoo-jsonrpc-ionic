@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>historial Servicios</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list *ngIf="homeMantemimiento" no-lines [virtualScroll]="list_servicios">
+    <ion-item-sliding *virtualItem="let item; let i = index">
+      <ion-item (click)="view(i)">
+        <h1>{{item.name}}</h1>
+        <p style="color:grey"><strong>Cliente: </strong> {{item.partner_id[1]}}</p>
+        <p style="color:grey"><strong>Identificación: </strong>{{item.sec}}</p>
+        <p style="color:grey"><strong>Ubicación: </strong>{{item.city_id}}<br>{{item.location_id}}|{{item.branch_type}}</p>
+        <h2 *ngIf="item.kanban_state == 'blocked'">
+          <p style="color: #F44336;"><strong>Estado:</strong> Bloqueado</p>
+        </h2>
+        <h2 *ngIf="item.kanban_state == 'done'">
+          <p style="color:#4CAF50;"><strong>Estado:</strong> Listo</p>
+        </h2>
+        <h2 *ngIf="item.kanban_state == 'normal'">
+            <p style="color: #039BE5;"><strong>Estado:</strong> Normal</p>
+          </h2>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
