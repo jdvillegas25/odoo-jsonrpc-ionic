@@ -157,8 +157,11 @@
               <strong>Firma del Responsable: </strong>
               <img [src]="sanitize('data:image/png;base64,'+i.customer_sign_image)">
             </p>
+            <p *ngFor="let p of i.customer_asset_ids">
+              <strong>Sistema Afectado</strong>
+            </p>
           </ion-card-content>
-          <ion-row no-padding>
+          <ion-row no-padding *ngIf="i.finished">
             <ion-col text-right>
               <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">
                 <ion-icon name='share-alt'></ion-icon>
