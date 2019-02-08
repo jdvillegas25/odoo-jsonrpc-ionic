@@ -103,6 +103,7 @@ export class ProfilePage {
       text: "Cerrar Sesión",
       handler: () => {
         localStorage.clear()
+        console.log(localStorage);
         this.odooRpc.destroy()
         this.navCtrl.setRoot(LoginPage);
       }

@@ -3,7 +3,7 @@ import { Utils } from "../../services/utils";
 import { ViewPage } from "../view/view";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, AlertController, LoadingController } from "ionic-angular";
+import { NavController, AlertController, LoadingController, MenuController } from "ionic-angular";
 import { Network } from "@ionic-native/network";
 import { ProfilePage } from "../profile/profile";
 import { OneSignal } from '@ionic-native/onesignal';
@@ -76,7 +76,7 @@ export class HomePage {
   private list_description: any;
   private logiData: any;
 
-  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController, private oneSignal: OneSignal) {
+  constructor(private navCtrl: NavController, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private network: Network, private alert: AlertController, private utils: Utils, public loadingCtrl: LoadingController, private oneSignal: OneSignal, public menu: MenuController) {
 
   }
   ionViewDidLoad() {
@@ -85,7 +85,7 @@ export class HomePage {
     this.logiData = JSON.parse(localStorage.getItem('token'));
 
     //Consultamos los permisos o interfase para el usuario logeado
-    this.permisos();
+    // this.permisos();
     this.display();
 
     //Validacion para cargar causas de rol mantenimiento
@@ -93,24 +93,6 @@ export class HomePage {
       this.get_causas();
     }
   }
-  //Funcion que me permite validar el rol de la persona loguada
-  private permisos() {
-    let domain = [['partner_id', '=', this.logiData["partner_id"]]]
-    let table = "res.users"
-    this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-      let json = JSON.parse(items._body);
-      if (!json.error && json["result"].records != []) {
-        for (let i of json["result"].records) {
-          //en la variable sesion creamos dos variables nuevas, salesman y technician
-          this.logiData.technician = i.technician;
-          this.logiData.salesman = i.salesman;
-          //reasignamos la variable sesion con las nuevas variables
-          localStorage.setItem("token", JSON.stringify(this.logiData));
-        }
-      }
-    });
-  }
-
   private display(): void {
 
     let table = '';
@@ -124,14 +106,16 @@ export class HomePage {
       table = this.tableOportunidades;
       this.homeComercial = true;
       this.homeMantemimiento = false;
+      this.menu.enable(true,'salesman');
     } else {
-
+      
       // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
       domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']], ['finished', '!=', 'true']];
       table = this.tableServicios;
       filter = [];
       this.homeComercial = false;
       this.homeMantemimiento = true;
+      this.menu.enable(true,'technician');
     }
     this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
       this.fillParners(query);
@@ -366,7 +350,7 @@ export class HomePage {
   }
 
 
-  private get_causas() {
+  private get_causas():void {
 
     let table = 'project.task.fail.cause'
     let domain = []
