@@ -81,15 +81,8 @@
   </ion-grid>
   <div align="left">
     <ion-item>
-      <ion-label stacked>Observaciones del Funcionario</ion-label>
+      <ion-label stacked>Observaciones del Técnico</ion-label>
       <ion-input type="text" [(ngModel)]="observation_user"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Cliente</ion-label>
-      <ion-select [(ngModel)]="cliente" #cli id="cli" (ionChange)="persistCliente()">
-        <ion-option value="addCustomer"> <--CREAR CLIENTE NUEVO--> </ion-option>
-        <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
-      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label stacked>Identificación del Contacto</ion-label>
@@ -100,7 +93,7 @@
       <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label stacked>Email del Funcionario</ion-label>
+      <ion-label stacked>Email del Contacto</ion-label>
       <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>
     </ion-item>
     <ion-item *ngIf="!finish">

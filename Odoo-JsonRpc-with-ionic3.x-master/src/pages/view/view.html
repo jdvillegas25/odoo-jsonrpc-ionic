@@ -161,7 +161,7 @@
               <strong>Sistema Afectado</strong>
             </p>
           </ion-card-content>
-          <ion-row no-padding *ngIf="!i.finished">
+          <ion-row no-padding *ngIf="i.finished">
             <ion-col text-right>
               <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">
                 <ion-icon name='share-alt'></ion-icon>

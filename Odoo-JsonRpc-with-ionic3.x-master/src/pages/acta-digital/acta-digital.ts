@@ -8,7 +8,6 @@ import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 import { ModalPage } from '../modal/modal';
-import { AddCustomerPage } from "../add-customer/add-customer";
 
 /**
  * Generated class for the ActaDigitalPage page.
@@ -38,8 +37,6 @@ export class ActaDigitalPage {
   private functionary_email: any;
   private username: any = JSON.parse(localStorage.getItem('token'))['username'];
   public finish: Boolean = false;
-  private listaClientes: any;
-  private cliente: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, public alertCtrl: AlertController, private rendere: Renderer2, private modal: ModalController) {
 
@@ -52,7 +49,6 @@ export class ActaDigitalPage {
     this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
     this.productos = (navParams.get("productos")) ? navParams.get("productos") : {};
     this.firma = "";
-    this.getClientes();
   }
   async openModal() {
     // const myModalData = {
@@ -179,61 +175,6 @@ export class ActaDigitalPage {
     });
     salida = true
     return salida;
-  }
-  private getClientes() {
-    let loading = this.loadingCtrl.create({
-      content: "Por Favor Espere..."
-    });
-    loading.present();
-    let table_cliente = "res.partner"
-    let domain = [["active", "=", "t"], ["parent_id", "=", this.dataMantenimiento.partner_id[0]]];
-    this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then((partner: any) => {
-      let json = JSON.parse(partner._body);
-      if (!json.error) {
-        this.listaClientes = json["result"].records;
-        loading.dismiss();
-      }
-    });
-  } 
-  public persistCliente() {
-    if (this.cliente == 'addCustomer') {
-      let alert = this.alertCtrl.create({
-        title: 'Confirmación de crear cliente',
-        message: '¿Esta seguro que quiere crear un cliente nuevo?',
-        buttons: [
-          {
-            text: 'No',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
-          },
-          {
-            text: 'Si',
-            handler: () => {
-              this.addCustomer();
-            }
-          }
-        ]
-      });
-      alert.present();
-    } else {
-      this.parseoClientes();
-    }
-
-  }
-  private parseoClientes() {
-    console.log(this.listaClientes)
-    for (let client of this.listaClientes) {
-      if (this.cliente == client.id) {
-        this.functionary_vat = client.vat ? client.vat : 'N/A';
-        this.functionary_name = client.name ? client.name : 'N/A';
-        this.functionary_email = client.email ? client.email : 'N/A';
-      }
-    }
-  }
-  private addCustomer() {
-    this.navCtrl.push(AddCustomerPage)
   }
 
 }

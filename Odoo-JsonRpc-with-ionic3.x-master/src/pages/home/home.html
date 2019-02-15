@@ -33,9 +33,6 @@
 
 
 <ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
   <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
   <ion-list *ngIf="homeComercial" no-lines [virtualScroll]="listaOportunidades">
     <ion-item-sliding *virtualItem="let item; let i = index">
@@ -70,7 +67,7 @@
         <h1>{{item.name}}</h1>
         <p>{{item.partner_id[1]}}</p>
         <p style="color:grey"><strong>{{item.sec}}</strong></p>
-        <p style="color:grey"><strong>Número SAP: </strong>{{item.number_sap}}</p>
+        <p>Prioridad: {{item.priority}}</p>
         <p style="color:grey"><strong>{{item.city_id}}<br>{{item.location_id}}|{{item.branch_type}}</strong></p>
       </ion-item>
       <ion-item-options>
