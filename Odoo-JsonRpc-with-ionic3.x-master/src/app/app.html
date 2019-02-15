@@ -1,34 +1,19 @@
-<ion-menu [content]="content" side="start" id="salesman">
+<ion-menu [content]="content" persistent="true">
   <ion-header>
-    <ion-toolbar color="secondary">
+    <ion-toolbar *ngIf="homeComercial" color="secondary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="homeMantenimiento" color="primary">
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
+
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pagesSalesman" (click)="openPage(p)">
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         <ion-label stacked icon-start>
           <h2>
             <ion-icon [name]="p.icon" item-left></ion-icon>{{p.title}}
-          </h2>
-        </ion-label>
-      </button>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<ion-menu [content]="content" side="start" id="technician">
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let q of pagesTechnician" (click)="openPage(q)">
-        <ion-label stacked icon-start>
-          <h2>
-            <ion-icon [name]="q.icon" item-left></ion-icon>{{q.title}}
           </h2>
         </ion-label>
       </button>
