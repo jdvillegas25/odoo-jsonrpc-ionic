@@ -2,7 +2,7 @@ import { HomePage } from "../home/home";
 import { ServicioPage } from "../servicio/servicio";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, NavParams, LoadingController, AlertController, MenuController } from "ionic-angular";
+import { NavController, NavParams, LoadingController, AlertController } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
@@ -24,10 +24,8 @@ export class LoginPage {
   private arregloPermisos: any;
   public logiData: any;
 
-  constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, ) {
     this.checkUrl();
-    this.menu.enable(false,'salesman');
-    this.menu.enable(false,'technician');
   }
   public checkUrl() {
     let loading = this.loadingCtrl.create({
@@ -76,9 +74,13 @@ export class LoginPage {
         this.logiData.password = this.password;
         localStorage.setItem("token", JSON.stringify(this.logiData));
         loading.dismissAll();
+        /**Redirige al HomePage */
         this.initOneSignal();
-        this.permisos();
+        this.navCtrl.setRoot(HomePage);
+
+        /**Inicializa el plugin de las notificaciones */
       } else {
+        // this.utils.dismissLoading();
         loading.dismissAll();
         this.utils.presentAlert(
           "Error",
@@ -90,7 +92,8 @@ export class LoginPage {
           ]
         );
       }
-    }).catch(err => {
+    })
+      .catch(err => {
         loading.dismissAll();
         this.utils.presentAlert(
           "Error",
@@ -102,23 +105,6 @@ export class LoginPage {
           ]
         );
       });
-  }
-  private permisos(): void {
-    let domain = [['partner_id', '=', this.logiData["partner_id"]]]
-    let table = "res.users"
-    this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-      let json = JSON.parse(items._body);
-      if (!json.error && json["result"].records != []) {
-        for (let i of json["result"].records) {
-          //en la variable sesion creamos dos variables nuevas, salesman y technician
-          this.logiData.technician = i.technician;
-          this.logiData.salesman = i.salesman;
-          //reasignamos la variable sesion con las nuevas variables
-          localStorage.setItem("token", JSON.stringify(this.logiData));
-          this.navCtrl.setRoot(HomePage);
-        }
-      }
-    });
   }
   initOneSignal() {
 
