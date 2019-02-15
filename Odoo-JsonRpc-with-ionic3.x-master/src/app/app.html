@@ -1,4 +1,4 @@
-<ion-menu [content]="content" persistent="true">
+<ion-menu [content]="content" side="start" id="salesman">
   <ion-header>
     <ion-toolbar color="secondary">
       <ion-title>Menú</ion-title>
@@ -23,13 +23,12 @@
       <ion-title>Menú</ion-title>
     </ion-toolbar>
   </ion-header>
-
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+      <button menuClose ion-item *ngFor="let q of pagesTechnician" (click)="openPage(q)">
         <ion-label stacked icon-start>
           <h2>
-            <ion-icon [name]="p.icon" item-left></ion-icon>{{p.title}}
+            <ion-icon [name]="q.icon" item-left></ion-icon>{{q.title}}
           </h2>
         </ion-label>
       </button>
