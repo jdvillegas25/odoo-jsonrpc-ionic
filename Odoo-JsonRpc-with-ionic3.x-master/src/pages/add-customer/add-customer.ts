@@ -10,20 +10,31 @@ import { AlertController } from 'ionic-angular';
 })
 export class AddCustomerPage {
 
-  private company_type
-  private firstname
-  private lastname
-  private vat_type
-  private vat_vd
-  private street
-  private state_id
-  private phone
-  private mobile
-  private email
+  private company_type;
+  private firstname;
+  private lastname;
+  private vat_type;
+  private vat_vd;
+  private street;
+  private state_id;
+  private phone;
+  private mobile;
+  private email;
   private listCity: any;
+  private listaClientes: any;
+  private parent_id;
+  public homeComercial: boolean = false;
+  public homeMantenimiento: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
-    this.getCity()
+    this.getCity();
+    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+      this.homeComercial = true;
+      this.homeMantenimiento = false;
+    }else{
+      this.homeComercial = false;
+      this.homeMantenimiento = true;
+    }
   }
 
 
@@ -72,6 +83,7 @@ export class AddCustomerPage {
       country_id: 50,
       customer: true,
       supplier: false,
+      parent_id:this.parent_id,
       write_uid: JSON.parse(localStorage.getItem('token'))['uid'],
       create_uid: JSON.parse(localStorage.getItem('token'))['uid'],
       type: "contact"
@@ -93,4 +105,19 @@ export class AddCustomerPage {
       }
     });
   }
+  private getClientes() {
+    let loading = this.loadingCtrl.create({
+      content: "Por Favor Espere..."
+    });
+    loading.present();
+    let table_cliente = "res.partner"
+    let domain = [["active", "=", "t"], ["parent_id", "=", null]];
+    this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then((partner: any) => {
+      let json = JSON.parse(partner._body);
+      if (!json.error) {
+        this.listaClientes = json["result"].records;
+        loading.dismiss();
+      }
+    });
+  } 
 }

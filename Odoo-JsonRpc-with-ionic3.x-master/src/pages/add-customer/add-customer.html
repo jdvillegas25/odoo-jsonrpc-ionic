@@ -1,5 +1,13 @@
 <ion-header>
-  <ion-navbar color="secondary">
+  <ion-navbar *ngIf="homeComercial" color="secondary">
+    <ion-title>Agregar Cliente</ion-title>
+    <ion-buttons end>
+      <button ion-button clear (click)="saveData()">
+        Guardar Cliente
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-navbar *ngIf="homeMantenimiento" color="primary">
     <ion-title>Agregar Cliente</ion-title>
     <ion-buttons end>
       <button ion-button clear (click)="saveData()">
@@ -25,6 +33,13 @@
       <ion-item>
         <ion-label>Jurdica</ion-label>
         <ion-radio value="company"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Cliente Principal</ion-label>
+        <ion-select [(ngModel)]="parent_id" #cli id="cli">
+          <ion-option value=""></ion-option>
+          <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
+        </ion-select>
       </ion-item>
     </ion-list>
     <ion-item>
@@ -55,7 +70,7 @@
     <ion-item>
       <ion-label floating>Ciudad</ion-label>
       <ion-select [(ngModel)]="state_id">
-          <ion-option *ngFor="let city of listCity" value="{{city.code}}">{{city.name}}</ion-option>
+        <ion-option *ngFor="let city of listCity" value="{{city.code}}">{{city.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>

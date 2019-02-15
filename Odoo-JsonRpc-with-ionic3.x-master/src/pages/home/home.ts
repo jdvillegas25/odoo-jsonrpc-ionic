@@ -15,6 +15,16 @@ import { OneSignal } from '@ionic-native/onesignal';
 })
 export class HomePage {
   // splash = true;
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+
+    setTimeout(() => {
+      this.listaOportunidades = [];
+      this.listaServicios = [];
+      this.display();
+      refresher.complete();
+    }, 2000);
+  }
 
   private listaOportunidades: Array<{
     id: number;
@@ -54,6 +64,7 @@ export class HomePage {
     description: any;
     priority: number;
     sec: string;
+    number_sap: String;
   }> = [];
   private servicios: Array<{
     id: number;
@@ -81,6 +92,12 @@ export class HomePage {
   }
   ionViewDidLoad() {
     
+    let loading = this.loadingCtrl.create({
+      content: "Estamos preparando todo..."
+    });
+    loading.present();
+    this.listaOportunidades = [];
+    this.listaServicios = [];
     /*Trae los servicios de mantenimiento o las oportunidades creadas; todo esto segun el rol*/
     this.logiData = JSON.parse(localStorage.getItem('token'));
 
@@ -92,6 +109,7 @@ export class HomePage {
     if (JSON.parse(localStorage.getItem('token'))['technician']) {
       this.get_causas();
     }
+    loading.dismiss();
   }
   private display(): void {
 
@@ -106,16 +124,16 @@ export class HomePage {
       table = this.tableOportunidades;
       this.homeComercial = true;
       this.homeMantemimiento = false;
-      this.menu.enable(true,'salesman');
+      this.menu.enable(true, 'salesman');
     } else {
-      
+
       // domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']]];
       domain = [["user_id", "=", JSON.parse(localStorage.getItem('token'))['uid']], ['finished', '!=', 'true']];
       table = this.tableServicios;
       filter = [];
       this.homeComercial = false;
       this.homeMantemimiento = true;
-      this.menu.enable(true,'technician');
+      this.menu.enable(true, 'technician');
     }
     this.odooRpc.searchRead(table, domain, filter, 0, 0, "").then((query: any) => {
       this.fillParners(query);
@@ -123,11 +141,6 @@ export class HomePage {
   }
 
   private fillParners(data: any): void {
-
-    let loading = this.loadingCtrl.create({
-      content: "Estamos preparando todo..."
-    });
-    loading.present();
     let json = JSON.parse(data._body);
     if (!json.error) {
       let query = json["result"].records;
@@ -163,12 +176,12 @@ export class HomePage {
             date_finish: query[i].date_finish == false ? "N/A" : query[i].date_finish,
             description: query[i].issue_description == false ? "N/A" : query[i].issue_description,
             priority: query[i].priority == false ? "N/A" : query[i].priority,
-            sec: query[i].issue_sec == false ? "N/A" : query[i].issue_sec
+            sec: query[i].issue_sec == false ? "N/A" : query[i].issue_sec,
+            number_sap: query[i].number_sap == false ? "N/A" : query[i].number_sap
           });
         }
       }
     }
-    loading.dismiss();
   }
 
   public view(idx: number): void {
@@ -350,7 +363,7 @@ export class HomePage {
   }
 
 
-  private get_causas():void {
+  private get_causas(): void {
 
     let table = 'project.task.fail.cause'
     let domain = []
