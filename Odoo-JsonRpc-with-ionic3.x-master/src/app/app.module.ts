@@ -26,6 +26,7 @@ import { ActaDigitalPage } from '../pages/acta-digital/acta-digital'
 import { HistorialServiciosPage } from '../pages/historial-servicios/historial-servicios';
 import { OneSignal } from '@ionic-native/onesignal';
 import { ModalPage } from '../pages/modal/modal';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 
 
@@ -78,7 +79,8 @@ import { ModalPage } from '../pages/modal/modal';
     FileTransferObject,
     Camera,
     AndroidPermissions,
-    OneSignal
+    OneSignal,
+    GoogleMaps
   ]
 })
 export class AppModule {}
