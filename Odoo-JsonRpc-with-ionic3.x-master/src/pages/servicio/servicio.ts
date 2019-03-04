@@ -14,6 +14,7 @@ import { ActaDigitalPage } from '../acta-digital/acta-digital';
 })
 export class ServicioPage {
 
+  public typeMaintenance: any;
   private oportunity: any;
   private necCliente: any;
   private idServicio: any;

@@ -4,6 +4,19 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding class="cards-bg">
+  <ion-list radio-group [(ngModel)]="typeMaintenance">
+    <ion-list-header>
+      Tipo de Mantenimiento
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Electronico</ion-label>
+      <ion-radio value="electronico" checked></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Metal Mecanico</ion-label>
+      <ion-radio value="metalmecanico"></ion-radio>
+    </ion-item>
+  </ion-list>
   <ion-list>
     <ion-item>
       <ion-label stacked>Sistema Intervenido: </ion-label>
