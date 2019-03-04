@@ -5,7 +5,7 @@ import { Utils } from "../../services/utils";
 import { ProspectoPage } from "../prospecto/prospecto"
 import { ServicioPage } from "../servicio/servicio"
 import { DomSanitizer } from '@angular/platform-browser';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, StreetViewCameraPosition, GoogleMapOptions, Environment } from '@ionic-native/google-maps';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, StreetViewCameraPosition, GoogleMapOptions, Environment, LocationService, MyLocation, GoogleMapsMapTypeId } from '@ionic-native/google-maps';
 
 @Component({
   selector: "page-view",
@@ -97,34 +97,31 @@ export class ViewPage {
 
     // This code is necessary for browser
     Environment.setEnv({
-      'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM',
+      // 'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM',
       'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM'
     });
 
-    let mapOptions: GoogleMapOptions = {
-      camera: {
-        target: {
-          lat: 43.0741904,
-          lng: -89.3809802
-        },
-        zoom: 18,
-        tilt: 30
-      }
-    };
+    LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
-    this.map = GoogleMaps.create('map', mapOptions);
+      let mapOptions: GoogleMapOptions = {
+        mapType: GoogleMapsMapTypeId.HYBRID,
+        camera: {
+          target: myLocation.latLng,
+          zoom: 18,
+          tilt: 30
+        }
+      };
+      this.map = GoogleMaps.create('map', mapOptions);
+      let marker: Marker = this.map.addMarkerSync({
+        title: 'Ionic',
+        animation: 'DROP',
+        position: myLocation.latLng
+      });
+      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        alert('clicked');
+      });
+    });
 
-    let marker: Marker = this.map.addMarkerSync({
-      title: 'Ionic',
-      animation: 'DROP',
-      position: {
-        lat: 43.0741904,
-        lng: -89.3809802
-      }
-    });
-    marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-      alert('clicked');
-    });
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
