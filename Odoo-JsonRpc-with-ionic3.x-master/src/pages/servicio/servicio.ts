@@ -8,6 +8,8 @@ import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ActaDigitalPage } from '../acta-digital/acta-digital';
 
+import { ApiProvider } from '../../providers/api/api';
+
 @Component({
   selector: 'page-servicio',
   templateUrl: 'servicio.html',
@@ -38,7 +40,7 @@ export class ServicioPage {
   }> = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController, public api: ApiProvider) {
     this.dataServicio = {
       id: navParams.get("id"),
       issue_id: navParams.get("issue_id"),
@@ -175,7 +177,21 @@ export class ServicioPage {
           });
           break;
         case 'metalmecanico':
-          
+          let parametros = {
+            "fields":["id","name","categ_id"],
+            "product_categ_id": +this.necCliente,
+            "equipment_type_id": +this.idServicio[0],
+            "spare_location_id": +nec[index]
+          }
+          let consulta = this.api.postProductsMetalwork(parametros).subscribe(
+            (data)=>{
+              console.log(data);
+              // this.list_items.push(data);
+            },
+            (error)=> {
+              console.log(error);
+            });
+          console.log(consulta);
           break;
 
         default:
