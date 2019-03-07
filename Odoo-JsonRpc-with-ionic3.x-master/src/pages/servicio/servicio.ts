@@ -14,12 +14,14 @@ import { ActaDigitalPage } from '../acta-digital/acta-digital';
 })
 export class ServicioPage {
 
+  public typeMaintenance: any;
   private oportunity: any;
   private necCliente: any;
   private idServicio: any;
   public list_necesidades: Array<any> = [];
   public list_items: Array<any> = [];
   public list_service_category: Array<any> = [];
+  public list_spare_location: Array<any> = [];
   private dataServicio: any;
   private listProducts: Array<{
     id: number;
@@ -54,29 +56,62 @@ export class ServicioPage {
       description: navParams.get("description"),
       sec: navParams.get("sec")
     };
-    this.get_necesidad_cliente();
+    // this.get_necesidad_cliente();
   }
+
+  /*******Primer Filtro********/
   private get_necesidad_cliente() {
+    this.list_service_category = [];
+    this.list_items = [];
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
+    let where = [];
     let table = "product.category"
-    this.odooRpc.searchRead(table, [], ["id", "name"], 0, 0, "").then((tags: any) => {
-      let json = JSON.parse(tags._body);
-      if (!json.error) {
-        this.list_necesidades = json["result"].records;
-        loading.dismiss();
-      }
-    });
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        where = [['is_electronic', '=', true], ['is_metalworking', '=', false]];
+        break;
+      case 'metalmecanico':
+        where = [['is_metalworking', '=', true], ['is_electronic', '=', false]];
+        break;
+
+      default:
+        break;
+    }
+    if (where != []) {
+      this.odooRpc.searchRead(table, where, ["id", "name"], 0, 0, "").then((tags: any) => {
+        let json = JSON.parse(tags._body);
+        if (!json.error) {
+          this.list_necesidades = json["result"].records;
+          loading.dismiss();
+        }
+      });
+    }
   }
+  /*******Segundo Filtro**************/
   private getServiceCategory(category) {
+    this.list_items = [];
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
-    let domain = [['product_category_id', '=', +category]];
-    let table = "product.service.category"
+    let domain = [];
+    let table = "";
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        domain = [['product_category_id', '=', +category]];
+        table = "product.service.category"
+        break;
+      case 'metalmecanico':
+        domain = [['equipment_category', '=', +category]]
+        table = "project.spare.equipment.type"
+        break;
+
+      default:
+        break;
+    }
     this.odooRpc.searchRead(table, domain, ["id", "name"], 0, 0, "").then((items: any) => {
       let json = JSON.parse(items._body);
       if (!json.error && json["result"].records.length > 0) {
@@ -85,23 +120,68 @@ export class ServicioPage {
       }
     });
   }
+  /*Traemos la locaciones de los productos para equipo metalmecanicos (filtro intermedio entre filtro dos y tres)*/
+  private get_spare_location(nec = "") {
+    let loading = this.loadingCtrl.create({
+      content: "Por Favor Espere..."
+    });
+    loading.present();
+    let table = "";
+    let domain = [];
+    for (let index = 0; index < nec.length; index++) {
+
+      domain = [['equipment_type', '=', +nec[index]]];
+      table = "project.equipment.spare.location";
+
+      this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+        let json = JSON.parse(items._body);
+        if (!json.error && json["result"].records.length > 0) {
+          json["result"].records.forEach(element => {
+            this.list_spare_location.push(element);
+          });
+        }
+      });
+    }
+    loading.dismiss();
+
+
+
+  }
+
+  /************Tercer Filtro*****************/
   private get_productos(nec = "") {
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
+    let table = "";
+    let domain = [];
+    this.list_items = [];
+
+
+
     for (let index = 0; index < nec.length; index++) {
-      let domain = [['service_cat_id', '=', +nec[index]]]
-      // let domain = [['categ_id', '=', +nec[index]]]
-      let table = "product.template"
-      this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-        let json = JSON.parse(items._body);
-        if (!json.error && json["result"].records.length > 0) {
-          json["result"].records.forEach(element => {
-            this.list_items.push(element);
+      switch (this.typeMaintenance) {
+        case 'electronico':
+          domain = [['service_cat_id', '=', +nec[index]]];
+          table = "product.template";
+          this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+            let json = JSON.parse(items._body);
+            if (!json.error && json["result"].records.length > 0) {
+              json["result"].records.forEach(element => {
+                this.list_items.push(element);
+              });
+            }
           });
-        }
-      });
+          break;
+        case 'metalmecanico':
+          
+          break;
+
+        default:
+          break;
+      }
+
     }
     loading.dismiss();
   }
@@ -115,7 +195,7 @@ export class ServicioPage {
     alerta.addInput({
       type: 'number',
       min: 0,
-      name:'cant'
+      name: 'cant'
     });
 
     alerta.addButton('Cancelar');
@@ -137,10 +217,9 @@ export class ServicioPage {
             display_name: a.display_name,
             image: a.image_medium,
             pictures: '',
-            // pictures: [],
             accion: 0,
             cantidad: 1,
-            service: a.service_cat_id,
+            service: a.service_cat_id ? a.service_cat_id : a.equipment_type,
             ubication: ""
           })
         }
@@ -176,9 +255,10 @@ export class ServicioPage {
   }
   private continue_process() {
     let params = {};
-    params["necesidad"] = []
-    params["servicios"] = []
+    params["necesidad"] = [];
+    params["servicios"] = [];
     params["dataMantenimiento"] = this.dataServicio;
+    params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
     params["productos"] = this.listProducts;
 
     /************ Necesidad del cliente **********/

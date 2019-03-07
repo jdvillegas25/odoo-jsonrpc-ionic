@@ -4,20 +4,58 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding class="cards-bg">
-  <ion-list>
+  <ion-list radio-group [(ngModel)]="typeMaintenance" #mantenimiento (ngModelChange)="get_necesidad_cliente()">
+    <ion-label>
+      Tipo De Mantenimiento
+    </ion-label>
     <ion-item>
+      <ion-label>Electronico</ion-label>
+      <ion-radio value="electronico"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Metal Mecanico</ion-label>
+      <ion-radio value="metalmecanico"></ion-radio>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+
+    <!--Sistema Intervenido-->
+    <ion-item *ngIf="list_necesidades?.length > 0">
       <ion-label stacked>Sistema Intervenido: </ion-label>
       <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="getServiceCategory(necesidad.value)">
         <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="list_service_category?.length > 0">
+
+    <!--Subsistema Intervenido-->
+
+    <!--Para metalmecanicos-->
+    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'metalmecanico'">
+      <ion-label stacked>Subsistema Intervenido: </ion-label>
+      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_spare_location(servicioCatego.value)"
+        multiple="true">
+        <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <!--Para electronicos-->
+    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'electronico'">
       <ion-label stacked>Subsistema Intervenido: </ion-label>
       <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)"
         multiple="true">
         <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
       </ion-select>
     </ion-item>
+    
+    <!--Tercer Filtro en caso de ser equipos metalmecanicos-->
+    <ion-item *ngIf="list_spare_location?.length > 0 && typeMaintenance == 'metalmecanico'">
+      <ion-label stacked> Modulo de Subsistema Intervenido: </ion-label>
+      <ion-select [(ngModel)]="spare_location" cancelText="Cancelar" #idspare_location (ngModelChange)="get_productos(idspare_location.value)" multiple="true">
+        <ion-option *ngFor="let sq of list_spare_location" value="{{sq.id}}">{{sq.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <!--Equipo Afectado-->
     <ion-item *ngIf="list_items.length > 0">
       <ion-label stacked>Equipo Afectado: </ion-label>
       <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="setCantidadItem(product.value)">
@@ -72,7 +110,7 @@
       <!-- <ion-col col-4 *ngFor="let image of item.pictures">
         <img src="data:image/jpeg;base64,{{image}}">
       </ion-col> -->
-      <ion-col col-4>
+      <ion-col col-12>
         <img *ngIf="item.pictures.length" src="data:image/jpeg;base64,{{item.pictures}}">
       </ion-col>
     </ion-row>

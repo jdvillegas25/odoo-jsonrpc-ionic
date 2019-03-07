@@ -102,6 +102,9 @@ export class ActaDigitalPage {
       });
       alert.present();
     } else {
+
+
+      /*************Data a almacenar para equipos electronicos***********/
       if (this.update_task()) {
         if (this.insert_services_task()) {
           this.navCtrl.setRoot(HomePage);
@@ -138,6 +141,7 @@ export class ActaDigitalPage {
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
       }
+      console.log(data);
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
         if (query.ok) {
           salida = true;
@@ -166,6 +170,7 @@ export class ActaDigitalPage {
         asset_location: pro.ubication,
         asset_image: pro.pictures
       }
+      console.log(data);
       this.odooRpc.createRecord(table, data).then((res: any) => {
         if (res.ok === true) {
           contador++;
@@ -223,7 +228,6 @@ export class ActaDigitalPage {
 
   }
   private parseoClientes() {
-    console.log(this.listaClientes)
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
         this.functionary_vat = client.vat ? client.vat : 'N/A';
