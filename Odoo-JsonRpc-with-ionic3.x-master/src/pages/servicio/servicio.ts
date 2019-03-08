@@ -159,12 +159,9 @@ export class ServicioPage {
     let table = "";
     let domain = [];
     this.list_items = [];
-
-
-
-    for (let index = 0; index < nec.length; index++) {
-      switch (this.typeMaintenance) {
-        case 'electronico':
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        for (let index = 0; index < nec.length; index++) {
           domain = [['service_cat_id', '=', +nec[index]]];
           table = "product.template";
           this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
@@ -175,30 +172,44 @@ export class ServicioPage {
               });
             }
           });
-          break;
-        case 'metalmecanico':
-          let parametros = {
-            "fields":["id","name","categ_id"],
-            "product_categ_id": +this.necCliente,
-            "equipment_type_id": +this.idServicio[0],
-            "spare_location_id": +nec[index]
-          }
-          let consulta = this.api.postProductsMetalwork(parametros).subscribe(
-            (data)=>{
-              console.log(data);
-              // this.list_items.push(data);
-            },
-            (error)=> {
-              console.log(error);
-            });
-          console.log(consulta);
-          break;
+        }
+        break;
+      case 'metalmecanico':
+        let arregloExtra = [];
+        for (let index = 0; index < nec.length; index++) {
+          domain = [["equipment_type", '=', +this.idServicio[0]], ["spare_location", "=", +nec[index]]];
+          table = "project.spare.category.line";
+          this.odooRpc.searchRead(table, domain, ['product_id'], 0, 0, "").then((items: any) => {
+            let json = JSON.parse(items._body);
+            if (!json.error && json["result"].records.length > 0) {
+              json["result"].records.forEach(element => {
+                arregloExtra.push(element);
+              });
+            }
+          });
+        }
+        arregloExtra.forEach(rel => {
+          console.log(rel);
+          domain = [['id', '=', +rel['product_id'][0]]];
+          table = "product.template";
+          this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+            let json = JSON.parse(items._body);
+            if (!json.error && json["result"].records.length > 0) {
+              console.log(json["result"].records);
+              json["result"].records.forEach(e => {
+                console.log(e);
+                this.list_items.push(e);
+              });
+            }
+          });
+        });
+        console.log(this.list_items);
+        break;
 
-        default:
-          break;
-      }
-
+      default:
+        break;
     }
+
     loading.dismiss();
   }
   public sanitize(url) {
