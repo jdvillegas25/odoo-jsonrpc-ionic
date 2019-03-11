@@ -8,23 +8,23 @@ import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ActaDigitalPage } from '../acta-digital/acta-digital';
 
-import { ApiProvider } from '../../providers/api/api';
-
 @Component({
   selector: 'page-servicio',
   templateUrl: 'servicio.html',
 })
 export class ServicioPage {
 
-  public typeMaintenance: any;
+  typeMaintenance: any;
+  list_necesidades: Array<any> = [];
+  list_items: Array<any> = [];
+  arregloExtra: Array<any> = [];
+  list_service_category: Array<any> = [];
+  list_spare_location: Array<any> = [];
   private oportunity: any;
   private necCliente: any;
   private idServicio: any;
-  public list_necesidades: Array<any> = [];
-  public list_items: Array<any> = [];
-  public list_service_category: Array<any> = [];
-  public list_spare_location: Array<any> = [];
   private dataServicio: any;
+  private spare_location: any;
   private listProducts: Array<{
     id: number;
     name: String;
@@ -40,7 +40,7 @@ export class ServicioPage {
   }> = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController, public api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController) {
     this.dataServicio = {
       id: navParams.get("id"),
       issue_id: navParams.get("issue_id"),
@@ -128,22 +128,21 @@ export class ServicioPage {
       content: "Por Favor Espere..."
     });
     loading.present();
+    this.list_spare_location = [];
     let table = "";
     let domain = [];
-    for (let index = 0; index < nec.length; index++) {
 
-      domain = [['equipment_type', '=', +nec[index]]];
-      table = "project.equipment.spare.location";
+    domain = [['equipment_type', '=', +nec]];
+    table = "project.equipment.spare.location";
 
-      this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-        let json = JSON.parse(items._body);
-        if (!json.error && json["result"].records.length > 0) {
-          json["result"].records.forEach(element => {
-            this.list_spare_location.push(element);
-          });
-        }
-      });
-    }
+    this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+      let json = JSON.parse(items._body);
+      if (!json.error && json["result"].records.length > 0) {
+        json["result"].records.forEach(element => {
+          this.list_spare_location.push(element);
+        });
+      }
+    });
     loading.dismiss();
 
 
@@ -163,8 +162,7 @@ export class ServicioPage {
       case 'electronico':
         for (let index = 0; index < nec.length; index++) {
           domain = [['service_cat_id', '=', +nec[index]]];
-          table = "product.template";
-          this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+          this.odooRpc.searchRead("product.template", domain, [], 0, 0, "").then((items: any) => {
             let json = JSON.parse(items._body);
             if (!json.error && json["result"].records.length > 0) {
               json["result"].records.forEach(element => {
@@ -175,37 +173,25 @@ export class ServicioPage {
         }
         break;
       case 'metalmecanico':
-        let arregloExtra = [];
-        for (let index = 0; index < nec.length; index++) {
-          domain = [["equipment_type", '=', +this.idServicio[0]], ["spare_location", "=", +nec[index]]];
-          table = "project.spare.category.line";
-          this.odooRpc.searchRead(table, domain, ['product_id'], 0, 0, "").then((items: any) => {
-            let json = JSON.parse(items._body);
-            if (!json.error && json["result"].records.length > 0) {
-              json["result"].records.forEach(element => {
-                arregloExtra.push(element);
+        domain = [["equipment_type", '=', +this.idServicio], ["spare_location", "=", +nec]];
+        table = "project.spare.category.line";
+        this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
+          let json = JSON.parse(items._body);
+          if (!json.error && json["result"].records.length > 0) {
+            json["result"].records.forEach(element => {
+              let where = [['id', '=', element.product_id[0]]];
+              this.odooRpc.searchRead("product.template", where, [], 0, 0, "").then((j: any) => {
+                let consulta = JSON.parse(j._body);
+                if (!consulta.error && consulta["result"].records.length > 0) {
+                  consulta["result"].records.forEach(el => {
+                    this.list_items.push(el);
+                  });
+                }
               });
-            }
-          });
-        }
-        arregloExtra.forEach(rel => {
-          console.log(rel);
-          domain = [['id', '=', +rel['product_id'][0]]];
-          table = "product.template";
-          this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-            let json = JSON.parse(items._body);
-            if (!json.error && json["result"].records.length > 0) {
-              console.log(json["result"].records);
-              json["result"].records.forEach(e => {
-                console.log(e);
-                this.list_items.push(e);
-              });
-            }
-          });
+            });
+          }
         });
-        console.log(this.list_items);
         break;
-
       default:
         break;
     }
@@ -284,19 +270,30 @@ export class ServicioPage {
     let params = {};
     params["necesidad"] = [];
     params["servicios"] = [];
+
+
+    /*data basica que ya viene del mantenimiento*/
     params["dataMantenimiento"] = this.dataServicio;
+
+    /*checknox de si es Electronico o metal mecanico*/
     params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
+
+    /*lista de los productos que hace referencia a los equipos afectados*/
     params["productos"] = this.listProducts;
 
-    /************ Necesidad del cliente **********/
+    /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
+    if (this.typeMaintenance == 'metalmecanico') {
+      params["locacion"] = this.spare_location;
+    }
+
+    /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
     this.list_necesidades.forEach(nec => {
       if (nec.id == this.necCliente) {
         params["necesidad"] = nec;
 
       }
     });
-
-    /************ servicios del cliente **********/
+    /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
     this.list_service_category.forEach(ser => {
       this.idServicio.forEach(idser => {
         if (ser.id == idser) {

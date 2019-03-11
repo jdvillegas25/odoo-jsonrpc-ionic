@@ -47,6 +47,12 @@ export class ActaDigitalPage {
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
      ***********************************************************************/
+    console.log(navParams.get("dataMantenimiento"));
+    console.log(navParams.get("necesidad"));
+    console.log(navParams.get("servicios"));
+    console.log(navParams.get("locacion"));
+    console.log(navParams.get("productos"));
+
     this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : {};
     this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : {};
     this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
@@ -55,10 +61,6 @@ export class ActaDigitalPage {
     this.getClientes();
   }
   async openModal() {
-    // const myModalData = {
-    //   name:'Pedro Perez',
-    //   occupation: 'Developer'
-    // };
     const myModal: Modal = this.modal.create(ModalPage);
     myModal.present();
     myModal.onDidDismiss((data) => {

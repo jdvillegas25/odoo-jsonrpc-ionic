@@ -29,28 +29,26 @@
 
     <!--Subsistema Intervenido-->
 
-    <!--Para metalmecanicos-->
-    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'metalmecanico'">
+    <!--Para electronicos-->
+    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'electronico'">
       <ion-label stacked>Subsistema Intervenido: </ion-label>
-      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_spare_location(servicioCatego.value)"
-        multiple="true">
+      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)" multiple="true">
         <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
       </ion-select>
     </ion-item>
 
-    <!--Para electronicos-->
-    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'electronico'">
+    <!--Para metalmecanicos-->
+    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == 'metalmecanico'">
       <ion-label stacked>Subsistema Intervenido: </ion-label>
-      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)"
-        multiple="true">
+      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_spare_location(servicioCatego.value)">
         <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>
       </ion-select>
     </ion-item>
     
     <!--Tercer Filtro en caso de ser equipos metalmecanicos-->
     <ion-item *ngIf="list_spare_location?.length > 0 && typeMaintenance == 'metalmecanico'">
-      <ion-label stacked> Modulo de Subsistema Intervenido: </ion-label>
-      <ion-select [(ngModel)]="spare_location" cancelText="Cancelar" #idspare_location (ngModelChange)="get_productos(idspare_location.value)" multiple="true">
+      <ion-label stacked> Locación del Subsistema Intervenido: </ion-label>
+      <ion-select [(ngModel)]="spare_location" cancelText="Cancelar" #idspare_location (ngModelChange)="get_productos(idspare_location.value)">
         <ion-option *ngFor="let sq of list_spare_location" value="{{sq.id}}">{{sq.name}}</ion-option>
       </ion-select>
     </ion-item>

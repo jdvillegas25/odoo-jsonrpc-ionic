@@ -26,7 +26,6 @@ import { ActaDigitalPage } from '../pages/acta-digital/acta-digital'
 import { HistorialServiciosPage } from '../pages/historial-servicios/historial-servicios';
 import { OneSignal } from '@ionic-native/onesignal';
 import { ModalPage } from '../pages/modal/modal';
-import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -81,8 +80,7 @@ import { HttpClientModule } from '@angular/common/http';
     FileTransferObject,
     Camera,
     AndroidPermissions,
-    OneSignal,
-    ApiProvider
+    OneSignal
   ]
 })
 export class AppModule {}
