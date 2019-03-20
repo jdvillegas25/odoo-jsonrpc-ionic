@@ -82,6 +82,7 @@ import { ApiProvider } from '../providers/api/api';
     Camera,
     AndroidPermissions,
     OneSignal,
+    ApiProvider,
     ApiProvider
   ]
 })
