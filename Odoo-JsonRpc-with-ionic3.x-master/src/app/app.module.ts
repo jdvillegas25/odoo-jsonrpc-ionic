@@ -27,6 +27,8 @@ import { HistorialServiciosPage } from '../pages/historial-servicios/historial-s
 import { OneSignal } from '@ionic-native/onesignal';
 import { ModalPage } from '../pages/modal/modal';
 import { GoogleMaps } from '@ionic-native/google-maps';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiProvider } from '../providers/api/api';
 
 
 
@@ -50,7 +52,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -80,7 +83,8 @@ import { GoogleMaps } from '@ionic-native/google-maps';
     Camera,
     AndroidPermissions,
     OneSignal,
-    GoogleMaps
+    GoogleMaps,
+    ApiProvider
   ]
 })
 export class AppModule {}

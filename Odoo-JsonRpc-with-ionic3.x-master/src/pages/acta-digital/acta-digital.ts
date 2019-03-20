@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 import { ModalPage } from '../modal/modal';
 import { AddCustomerPage } from "../add-customer/add-customer";
+import { SafePropertyRead } from '@angular/compiler';
 
 /**
  * Generated class for the ActaDigitalPage page.
@@ -55,10 +56,6 @@ export class ActaDigitalPage {
     this.getClientes();
   }
   async openModal() {
-    // const myModalData = {
-    //   name:'Pedro Perez',
-    //   occupation: 'Developer'
-    // };
     const myModal: Modal = this.modal.create(ModalPage);
     myModal.present();
     myModal.onDidDismiss((data) => {
@@ -102,6 +99,9 @@ export class ActaDigitalPage {
       });
       alert.present();
     } else {
+
+
+      /*************Data a almacenar para equipos electronicos***********/
       if (this.update_task()) {
         if (this.insert_services_task()) {
           this.navCtrl.setRoot(HomePage);
@@ -158,13 +158,30 @@ export class ActaDigitalPage {
     this.productos.forEach(pro => {
       let data = {
         task_id: this.dataMantenimiento.id,
-        product_category_id: this.necesidad['id'],
-        product_service_cat_id: pro.service[0],
+        product_category_id: null,
+        product_service_cat_id: null,
         product_id: pro.id,
         quantity: pro.cantidad,
         replaced: (pro.accion == 1) ? true : false,
         asset_location: pro.ubication,
-        asset_image: pro.pictures
+        asset_image: pro.pictures,
+        spare_location_id: null,
+        equipment_type_id: null,
+        equipment_id: null
+      };
+      switch (this.dataMantenimiento.typeMaintenance) {
+        case 'electronico':
+          data.product_category_id = this.necesidad['id'];
+          data.product_service_cat_id = pro.service[0];
+          break;
+        case 'metalmecanico':
+          data.product_category_id = pro.categ_id;
+          data.spare_location_id = pro.location_id;
+          data.equipment_type_id = pro.equipment_id;
+          break;
+
+        default:
+          break;
       }
       this.odooRpc.createRecord(table, data).then((res: any) => {
         if (res.ok === true) {
@@ -194,7 +211,7 @@ export class ActaDigitalPage {
         loading.dismiss();
       }
     });
-  } 
+  }
   public persistCliente() {
     if (this.cliente == 'addCustomer') {
       let alert = this.alertCtrl.create({
@@ -223,7 +240,7 @@ export class ActaDigitalPage {
 
   }
   private parseoClientes() {
-    console.log(this.listaClientes)
+    console.log(this.listaClientes);
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
         this.functionary_vat = client.vat ? client.vat : 'N/A';

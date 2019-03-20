@@ -7,6 +7,8 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ActaDigitalPage } from '../acta-digital/acta-digital';
+import { ApiProvider } from '../../providers/api/api';
+import { isArray } from 'ionic-angular/util/util';
 
 @Component({
   selector: 'page-servicio',
@@ -14,13 +16,17 @@ import { ActaDigitalPage } from '../acta-digital/acta-digital';
 })
 export class ServicioPage {
 
+  typeMaintenance: any;
+  list_necesidades: Array<any> = [];
+  list_items: Array<any> = [];
+  arregloExtra: Array<any> = [];
+  list_service_category: Array<any> = [];
+  list_spare_location: Array<any> = [];
   private oportunity: any;
   private necCliente: any;
   private idServicio: any;
-  public list_necesidades: Array<any> = [];
-  public list_items: Array<any> = [];
-  public list_service_category: Array<any> = [];
   private dataServicio: any;
+  private spare_location: any;
   private listProducts: Array<{
     id: number;
     name: String;
@@ -33,10 +39,16 @@ export class ServicioPage {
     cantidad: Number;
     service: number;
     ubication: String;
+    categ_id: Number;
+    categ_name: String;
+    equipment_id: Number;
+    equipment_name: String;
+    location_id: Number;
+    location_name: String;
   }> = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController, public api: ApiProvider) {
     this.dataServicio = {
       id: navParams.get("id"),
       issue_id: navParams.get("issue_id"),
@@ -54,29 +66,62 @@ export class ServicioPage {
       description: navParams.get("description"),
       sec: navParams.get("sec")
     };
-    this.get_necesidad_cliente();
+    // this.get_necesidad_cliente();
   }
+
+  /*******Primer Filtro********/
   private get_necesidad_cliente() {
+    this.list_service_category = [];
+    this.list_items = [];
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
+    let where = [];
     let table = "product.category"
-    this.odooRpc.searchRead(table, [], ["id", "name"], 0, 0, "").then((tags: any) => {
-      let json = JSON.parse(tags._body);
-      if (!json.error) {
-        this.list_necesidades = json["result"].records;
-        loading.dismiss();
-      }
-    });
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        where = [['is_electronic', '=', true], ['is_metalworking', '=', false]];
+        break;
+      case 'metalmecanico':
+        where = [['is_metalworking', '=', true], ['is_electronic', '=', false]];
+        break;
+
+      default:
+        break;
+    }
+    if (where != []) {
+      this.odooRpc.searchRead(table, where, ["id", "name"], 0, 0, "").then((tags: any) => {
+        let json = JSON.parse(tags._body);
+        if (!json.error) {
+          this.list_necesidades = json["result"].records;
+          loading.dismiss();
+        }
+      });
+    }
   }
+  /*******Segundo Filtro**************/
   private getServiceCategory(category) {
+    this.list_items = [];
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
-    let domain = [['product_category_id', '=', +category]];
-    let table = "product.service.category"
+    let domain = [];
+    let table = "";
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        domain = [['product_category_id', '=', +category]];
+        table = "product.service.category"
+        break;
+      case 'metalmecanico':
+        domain = [['equipment_category', '=', +category]]
+        table = "project.spare.equipment.type"
+        break;
+
+      default:
+        break;
+    }
     this.odooRpc.searchRead(table, domain, ["id", "name"], 0, 0, "").then((items: any) => {
       let json = JSON.parse(items._body);
       if (!json.error && json["result"].records.length > 0) {
@@ -85,25 +130,94 @@ export class ServicioPage {
       }
     });
   }
-  private get_productos(nec = "") {
+  /*Traemos la locaciones de los productos para equipo metalmecanicos (filtro intermedio entre filtro dos y tres)*/
+  private get_spare_location(subsistemas = "") {
     let loading = this.loadingCtrl.create({
       content: "Por Favor Espere..."
     });
     loading.present();
-    for (let index = 0; index < nec.length; index++) {
-      let domain = [['service_cat_id', '=', +nec[index]]]
-      // let domain = [['categ_id', '=', +nec[index]]]
-      let table = "product.template"
-      this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
-        let json = JSON.parse(items._body);
-        if (!json.error && json["result"].records.length > 0) {
-          json["result"].records.forEach(element => {
-            this.list_items.push(element);
+    this.list_spare_location = [];
+    let domain = [];
+    domain = [['equipment_type', '=', +subsistemas]];
+    this.odooRpc.searchRead("project.equipment.spare.location", domain, [], 0, 0, "").then((items: any) => {
+      let json = JSON.parse(items._body);
+      if (!json.error && json["result"].records.length > 0) {
+        json["result"].records.forEach(el => {
+          this.list_spare_location.push(el);
+        });
+      }
+    });
+    loading.dismiss();
+  }
+
+  /************Tercer Filtro*****************/
+  private get_productos(nec = []) {
+    let loading = this.loadingCtrl.create({
+      content: "Por Favor Espere..."
+    });
+    loading.present();
+    let table = "";
+    let domain = [];
+    this.list_items = [];
+    switch (this.typeMaintenance) {
+      case 'electronico':
+        for (let index = 0; index < nec.length; index++) {
+          domain = [['service_cat_id', '=', +nec[index]]];
+          this.odooRpc.searchRead("product.template", domain, [], 0, 0, "").then((items: any) => {
+            let json = JSON.parse(items._body);
+            if (!json.error && json["result"].records.length > 0) {
+              json["result"].records.forEach(element => {
+                this.list_items.push(element);
+              });
+            }
           });
         }
-      });
+        break;
+      case 'metalmecanico':
+        this.list_items = [];
+        let url = "https://erp.allser.com.co/web/dataset/spare_list";
+        let parametros = { "params": { "product_categ_id": +this.necCliente, "equipment_type_id": +this.idServicio, "spare_location_id": +this.spare_location } };
+        this.api.getData(url, parametros).subscribe(
+          data => {
+            data['result'].records.forEach(pro => {
+              let a = {
+                'id': pro.product_id,
+                'display_name': pro.product_name + ' [' + pro.location_name + '] [' + pro.equipment_name + ']',
+                'name': pro.product_name,
+                'categ_id': pro.categ_id,
+                'categ_name': pro.categ_name,
+                'equipment_id': pro.equipment_id,
+                'equipment_name': pro.equipment_name,
+                'location_id': pro.location_id,
+                'location_name': pro.location_name,
+              }
+
+              this.list_items.push(a);
+            });
+          },
+          error => {
+            console.log(error);
+          }
+        );
+        break;
+      default:
+        break;
     }
+
     loading.dismiss();
+  }
+  private getElementoMetalmecanico(category_line) {
+    let where = [['id', '=', category_line.product_id[0]]];
+    this.odooRpc.searchRead("product.template", where, [], 0, 0, "").then((j: any) => {
+      let consulta = JSON.parse(j._body);
+      if (!consulta.error && consulta["result"].records.length > 0) {
+        consulta["result"].records.forEach(el => {
+          if (!(el in this.list_items)) {
+            this.list_items.push(el);
+          }
+        });
+      }
+    });
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -115,7 +229,7 @@ export class ServicioPage {
     alerta.addInput({
       type: 'number',
       min: 0,
-      name:'cant'
+      name: 'cant'
     });
 
     alerta.addButton('Cancelar');
@@ -137,11 +251,16 @@ export class ServicioPage {
             display_name: a.display_name,
             image: a.image_medium,
             pictures: '',
-            // pictures: [],
             accion: 0,
             cantidad: 1,
-            service: a.service_cat_id,
-            ubication: ""
+            service: a.service_cat_id ? a.service_cat_id : a.equipment_type,
+            ubication: "",
+            categ_id: a.categ_id ? a.categ_id : null,
+            categ_name: a.categ_name ? a.categ_name : null,
+            equipment_id: a.equipment_id ? a.equipment_id : null,
+            equipment_name: a.equipment_name ? a.equipment_name : null,
+            location_id: a.location_id ? a.location_id : null,
+            location_name: a.location_name ? a.location_name : null
           })
         }
       });
@@ -160,7 +279,6 @@ export class ServicioPage {
     }
     this.camera.getPicture(options).then((imageData) => {
       this.listProducts[i].pictures = imageData;
-      // this.listProducts[i].pictures.push(imageData);
     }, (err) => {
       console.error(err);
     });
@@ -176,26 +294,44 @@ export class ServicioPage {
   }
   private continue_process() {
     let params = {};
-    params["necesidad"] = []
-    params["servicios"] = []
+    params["necesidad"] = [];
+    params["servicios"] = [];
+
+
+    /*data basica que ya viene del mantenimiento*/
     params["dataMantenimiento"] = this.dataServicio;
+
+    /*checknox de si es Electronico o metal mecanico*/
+    params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
+
+    /*lista de los productos que hace referencia a los equipos afectados*/
     params["productos"] = this.listProducts;
 
-    /************ Necesidad del cliente **********/
+    /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
+    if (this.typeMaintenance == 'metalmecanico') {
+      params["locacion"] = this.spare_location;
+    }
+
+    /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
     this.list_necesidades.forEach(nec => {
       if (nec.id == this.necCliente) {
         params["necesidad"] = nec;
 
       }
     });
-
-    /************ servicios del cliente **********/
+    /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
     this.list_service_category.forEach(ser => {
-      this.idServicio.forEach(idser => {
-        if (ser.id == idser) {
+      if (isArray(this.idServicio)) {
+        this.idServicio.forEach(idser => {
+          if (ser.id == idser) {
+            params["servicios"].push(ser);
+          }
+        });
+      } else {
+        if (ser.id == this.idServicio) {
           params["servicios"].push(ser);
         }
-      });
+      }
 
 
     });
