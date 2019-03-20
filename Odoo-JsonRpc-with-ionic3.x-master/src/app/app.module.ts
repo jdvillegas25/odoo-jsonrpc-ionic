@@ -27,6 +27,7 @@ import { HistorialServiciosPage } from '../pages/historial-servicios/historial-s
 import { OneSignal } from '@ionic-native/onesignal';
 import { ModalPage } from '../pages/modal/modal';
 import { HttpClientModule } from '@angular/common/http';
+import { ApiProvider } from '../providers/api/api';
 
 
 
@@ -51,7 +52,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -80,7 +81,8 @@ import { HttpClientModule } from '@angular/common/http';
     FileTransferObject,
     Camera,
     AndroidPermissions,
-    OneSignal
+    OneSignal,
+    ApiProvider
   ]
 })
 export class AppModule {}

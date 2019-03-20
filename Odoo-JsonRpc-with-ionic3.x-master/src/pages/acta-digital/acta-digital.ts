@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 import { ModalPage } from '../modal/modal';
 import { AddCustomerPage } from "../add-customer/add-customer";
+import { SafePropertyRead } from '@angular/compiler';
 
 /**
  * Generated class for the ActaDigitalPage page.
@@ -47,12 +48,6 @@ export class ActaDigitalPage {
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
      ***********************************************************************/
-    console.log(navParams.get("dataMantenimiento"));
-    console.log(navParams.get("necesidad"));
-    console.log(navParams.get("servicios"));
-    console.log(navParams.get("locacion"));
-    console.log(navParams.get("productos"));
-
     this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : {};
     this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : {};
     this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
@@ -143,7 +138,6 @@ export class ActaDigitalPage {
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
       }
-      console.log(data);
       this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
         if (query.ok) {
           salida = true;
@@ -164,15 +158,31 @@ export class ActaDigitalPage {
     this.productos.forEach(pro => {
       let data = {
         task_id: this.dataMantenimiento.id,
-        product_category_id: this.necesidad['id'],
-        product_service_cat_id: pro.service[0],
+        product_category_id: null,
+        product_service_cat_id: null,
         product_id: pro.id,
         quantity: pro.cantidad,
         replaced: (pro.accion == 1) ? true : false,
         asset_location: pro.ubication,
-        asset_image: pro.pictures
+        asset_image: pro.pictures,
+        spare_location_id: null,
+        equipment_type_id: null,
+        equipment_id: null
+      };
+      switch (this.dataMantenimiento.typeMaintenance) {
+        case 'electronico':
+          data.product_category_id = this.necesidad['id'];
+          data.product_service_cat_id = pro.service[0];
+          break;
+        case 'metalmecanico':
+          data.product_category_id = pro.categ_id;
+          data.spare_location_id = pro.location_id;
+          data.equipment_type_id = pro.equipment_id;
+          break;
+
+        default:
+          break;
       }
-      console.log(data);
       this.odooRpc.createRecord(table, data).then((res: any) => {
         if (res.ok === true) {
           contador++;
@@ -201,7 +211,7 @@ export class ActaDigitalPage {
         loading.dismiss();
       }
     });
-  } 
+  }
   public persistCliente() {
     if (this.cliente == 'addCustomer') {
       let alert = this.alertCtrl.create({
@@ -230,6 +240,7 @@ export class ActaDigitalPage {
 
   }
   private parseoClientes() {
+    console.log(this.listaClientes);
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
         this.functionary_vat = client.vat ? client.vat : 'N/A';
