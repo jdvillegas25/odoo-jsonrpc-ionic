@@ -16,14 +16,12 @@ import { OneSignal } from '@ionic-native/onesignal';
 export class HomePage {
   // splash = true;
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
+    this.listaOportunidades = [];
+    this.listaServicios = [];
     setTimeout(() => {
-      this.listaOportunidades = [];
-      this.listaServicios = [];
       this.display();
       refresher.complete();
-    }, 2000);
+    }, 1000);
   }
 
   private listaOportunidades: Array<{
@@ -91,7 +89,7 @@ export class HomePage {
 
   }
   ionViewDidLoad() {
-    
+
     let loading = this.loadingCtrl.create({
       content: "Estamos preparando todo..."
     });
