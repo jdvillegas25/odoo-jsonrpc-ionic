@@ -84,7 +84,7 @@ import { ApiProvider } from '../providers/api/api';
     AndroidPermissions,
     OneSignal,
     GoogleMaps,
-    ApiProvider
+    ApiProvider,
   ]
 })
 export class AppModule {}
