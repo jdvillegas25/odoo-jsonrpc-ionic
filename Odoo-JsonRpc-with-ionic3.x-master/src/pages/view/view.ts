@@ -5,6 +5,7 @@ import { Utils } from "../../services/utils";
 import { ProspectoPage } from "../prospecto/prospecto"
 import { ServicioPage } from "../servicio/servicio"
 import { DomSanitizer } from '@angular/platform-browser';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, StreetViewCameraPosition, GoogleMapOptions, Environment, LocationService, MyLocation, GoogleMapsMapTypeId } from '@ionic-native/google-maps';
 
 @Component({
   selector: "page-view",
@@ -16,6 +17,7 @@ export class ViewPage {
   private isMember: boolean;
   private name: string;
   private email: string;
+  map: GoogleMap;
 
   public data: Array<{
     id: number;
@@ -86,6 +88,40 @@ export class ViewPage {
       this.homeComercial = false;
     }
     this.display();
+  }
+  ionViewDidLoad(): void {
+    this.loadMap();
+
+  }
+  loadMap() {
+
+    // This code is necessary for browser
+    Environment.setEnv({
+      // 'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM',
+      'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM'
+    });
+
+    LocationService.getMyLocation().then((myLocation: MyLocation) => {
+
+      let mapOptions: GoogleMapOptions = {
+        mapType: GoogleMapsMapTypeId.HYBRID,
+        camera: {
+          target: myLocation.latLng,
+          zoom: 18,
+          tilt: 30
+        }
+      };
+      this.map = GoogleMaps.create('map', mapOptions);
+      let marker: Marker = this.map.addMarkerSync({
+        title: 'Ionic',
+        animation: 'DROP',
+        position: myLocation.latLng
+      });
+      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        alert('clicked');
+      });
+    });
+
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -179,7 +215,7 @@ export class ViewPage {
           functionary_name: data[record].functionary_name,
           functionary_email: data[record].functionary_email,
           finished: data[record].finished,
-          number_sap:data[record].number_sap
+          number_sap: data[record].number_sap
         });
         if (data[record].customer_asset_ids.length > 0) {
           this.get_detalle_task(data[record].id);
