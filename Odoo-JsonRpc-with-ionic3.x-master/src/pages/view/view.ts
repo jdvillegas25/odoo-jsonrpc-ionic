@@ -1,6 +1,6 @@
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
-import { NavController, NavParams, AlertController } from "ionic-angular";
+import { NavController, NavParams, AlertController, Platform } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { ProspectoPage } from "../prospecto/prospecto"
 import { ServicioPage } from "../servicio/servicio"
@@ -12,12 +12,12 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
   templateUrl: "view.html"
 })
 export class ViewPage {
+  map: GoogleMap;
   private oportunity: number;
   public imageSrc: string;
   private isMember: boolean;
   private name: string;
   private email: string;
-  map: GoogleMap;
 
   public data: Array<{
     id: number;
@@ -76,7 +76,14 @@ export class ViewPage {
   testRadioOpen: boolean;
   testRadioResult;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public odooRpc: OdooJsonRpc, public utils: Utils, public alertCtrl: AlertController, private sanitizer: DomSanitizer) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public odooRpc: OdooJsonRpc,
+    public utils: Utils,
+    public alertCtrl: AlertController,
+    private sanitizer: DomSanitizer,
+    private plt: Platform,
+    private googleMaps: GoogleMaps) {
     this.oportunity = navParams.get("id");
 
     if (JSON.parse(localStorage.getItem('token'))['salesman']) {
@@ -88,40 +95,88 @@ export class ViewPage {
       this.homeComercial = false;
     }
     this.display();
+    this.plt.ready().then((readySource) => {
+      console.log('Platform Ready from', readySource);
+      this.loadMap();
+    });
   }
-  ionViewDidLoad(): void {
-    this.loadMap();
-
+  ionViewDidLoad() {
   }
   loadMap() {
 
-    // This code is necessary for browser
-    Environment.setEnv({
-      // 'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM',
-      'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM'
-    });
+    let mapOptions: GoogleMapOptions = {
+      camera: {
+        target: {
+          lat: 43.0741904, // default location
+          lng: -89.3809802 // default location
+        },
+        zoom: 18,
+        tilt: 50,
+        bearing: 50
+      },
+      gestures: {
+        scroll: true,
+        tilt: true,
+        rotate: true,
+        zoom: true
+      },
+      controls: {
+        compass: true,
+        myLocationButton: true,
+        indoorPicker: true,
+        zoom: true,
+        mapToolbar: true
+      }
+    };
+    this.map = GoogleMaps.create('map', mapOptions);
 
-    LocationService.getMyLocation().then((myLocation: MyLocation) => {
-
-      let mapOptions: GoogleMapOptions = {
-        mapType: GoogleMapsMapTypeId.HYBRID,
-        camera: {
-          target: myLocation.latLng,
-          zoom: 18,
-          tilt: 30
-        }
-      };
-      this.map = GoogleMaps.create('map', mapOptions);
-      let marker: Marker = this.map.addMarkerSync({
-        title: 'Ionic',
-        animation: 'DROP',
-        position: myLocation.latLng
+    // Wait the MAP_READY before using any methods.
+    this.map.one(GoogleMapsEvent.MAP_READY)
+      .then(() => {
+        // Now you can use all methods safely.
+        this.getPosition();
+      })
+      .catch(error => {
+        console.log(error);
       });
-      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-        alert('clicked');
-      });
-    });
 
+    // LocationService.getMyLocation().then((myLocation: MyLocation) => {
+    //   let mapOptions: GoogleMapOptions = {
+    //     mapType: GoogleMapsMapTypeId.HYBRID,
+    //     camera: {
+    //       target: myLocation.latLng,
+    //       zoom: 18,
+    //       tilt: 30
+    //     }
+    //   };
+    //   this.map = GoogleMaps.create('map', mapOptions);
+    //   let marker: Marker = this.map.addMarkerSync({
+    //     title: 'Ionic',
+    //     animation: 'DROP',
+    //     position: myLocation.latLng
+    //   });
+    //   marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+    //     alert('clicked');
+    //   });
+    // });
+
+  }
+  getPosition(): void {
+    this.map.getMyLocation()
+      .then(response => {
+        this.map.moveCamera({
+          target: response.latLng
+        });
+        this.map.addMarker({
+          title: 'My Position',
+          icon: 'red',
+          animation: 'DROP',
+          position: response.latLng
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);

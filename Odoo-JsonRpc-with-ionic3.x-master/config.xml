@@ -91,14 +91,11 @@
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-filechooser" spec="1.2.0" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
-    <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.1.4" />
     <plugin name="cordova-plugin-googlemaps" spec="2.5.1">
-        <variable name="API_KEY_FOR_ANDROID" value="(AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM)" />
-        <variable name="API_KEY_FOR_IOS" value="(AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM)" />
+        <variable name="API_KEY_FOR_ANDROID" value="(AIzaSyCAY09GBOvtphUpzPH2Sjz_LHjLrZmfEWM)" />
         <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
-        <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="This app wants to get your location while this app runs only." />
-        <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="This app wants to get your location always, even this app runs in background." />
     </plugin>
+    <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="7.1.4" />
 </widget>

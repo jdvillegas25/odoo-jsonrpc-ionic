@@ -11,7 +11,8 @@
 
 
 <ion-content>
-  <ion-list *ngIf="homeComercial">
+    <div id="map" #map></div>
+  <!-- <ion-list *ngIf="homeComercial">
     <ion-card *ngFor="let item of data">
       <ion-card-content>
         <ion-row>
@@ -102,7 +103,6 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
-  <div *ngIf="homeMantemimiento" id="map" #map></div>
   <ion-list *ngIf="homeMantemimiento">
     <ion-card *ngFor="let i of dataMantenimiento">
       <ion-card-header>
@@ -167,5 +167,5 @@
         </ion-col>
       </ion-row>
     </ion-card>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

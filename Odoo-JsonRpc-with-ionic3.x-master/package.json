@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "4.4.4",
     "@ionic-native/android-permissions": "^3.14.0",
     "@ionic-native/camera": "^3.14.0",
-    "@ionic-native/core": "^5.3.0",
+    "@ionic-native/core": "^4.18.0",
     "@ionic-native/file": "^3.14.0",
     "@ionic-native/file-chooser": "^3.14.0",
     "@ionic-native/file-opener": "^4.20.0",
@@ -55,9 +55,10 @@
     "firebase": "^5.8.3",
     "install": "^0.12.2",
     "ionic": "^4.10.3",
-    "ionic-angular": "^3.9.3",
+    "ionic-angular": "3.9.4",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
+    "npm": "^6.9.0",
     "onesignal-cordova-plugin": "^2.4.6",
     "rxjs": "^5.5.12",
     "sw-toolbox": "3.6.0",
@@ -86,12 +87,9 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-filechooser": {},
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "(AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM)",
-        "API_KEY_FOR_IOS": "(AIzaSyDlpPcmsv7fboLsBVhZ61ElaRXBPxkWeWM)",
+        "API_KEY_FOR_ANDROID": "(AIzaSyCAY09GBOvtphUpzPH2Sjz_LHjLrZmfEWM)",
         "PLAY_SERVICES_VERSION": "15.0.1",
-        "ANDROID_SUPPORT_V4_VERSION": "27.+",
-        "LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",
-        "LOCATION_ALWAYS_USAGE_DESCRIPTION": "This app wants to get your location always, even this app runs in background."
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
       }
     },
     "platforms": [
