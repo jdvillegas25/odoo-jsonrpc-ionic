@@ -12,7 +12,6 @@ import { ParallaxDirective } from '../directives/parallax/parallax';
 import { ProfilePage } from '../pages/profile/profile';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { ViewPage } from '../pages/view/view';
 import { FormProbabilidadPage } from "../pages/form-probabilidad/form-probabilidad";
 import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { ServicioPage } from "../pages/servicio/servicio"
@@ -29,7 +28,7 @@ import { ModalPage } from '../pages/modal/modal';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiProvider } from '../providers/api/api';
-
+import { DetallePage } from '../pages/detalle/detalle';
 
 
 @NgModule({
@@ -37,7 +36,6 @@ import { ApiProvider } from '../providers/api/api';
     MyApp,
     HomePage,
     LoginPage,
-    ViewPage,
     ModalPage,
     ProfilePage,
     ParallaxDirective,
@@ -46,7 +44,8 @@ import { ApiProvider } from '../providers/api/api';
     ProspectoPage,
     ServicioPage,
     ActaDigitalPage,
-    HistorialServiciosPage
+    HistorialServiciosPage,
+    DetallePage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +59,6 @@ import { ApiProvider } from '../providers/api/api';
     MyApp,
     HomePage,
     LoginPage,
-    ViewPage,
     ModalPage,
     ProfilePage,
     AddCustomerPage,
@@ -68,7 +66,8 @@ import { ApiProvider } from '../providers/api/api';
     ProspectoPage,
     ServicioPage,
     ActaDigitalPage,
-    HistorialServiciosPage
+    HistorialServiciosPage,
+    DetallePage
   ],
   providers: [
     Network,

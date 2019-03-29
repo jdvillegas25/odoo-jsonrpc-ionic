@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
-import { ViewPage } from "../view/view";
+import { DetallePage } from "../detalle/detalle";
 
 /**
  * Generated class for the HistorialServiciosPage page.
@@ -109,7 +109,7 @@ export class HistorialServiciosPage {
     if (this.loginData['technician']) {
       params['id'] = this.list_servicios[idx].id
     }
-    this.navCtrl.push(ViewPage, params);
+    this.navCtrl.push(DetallePage, params);
   }
 
 }

@@ -1,0 +1,52 @@
+.ios,
+.md {
+  page-detalle {
+
+    .scroll {
+      height: 100%
+    }
+
+    #map {
+      position: relative;
+      width: 100%;
+      height: 60% !important;
+    }
+
+    #direccion {
+      max-height: 200px;
+      overflow: scroll;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bg-image {
+      background-color: #43A047;
+      height: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .round-image img {
+      background-position: center center;
+      background-size: cover;
+      border-radius: 50%;
+      border: 3px solid;
+      border-color: rgb(255, 255, 255);
+      height: 100%;
+      width: 100%;
+    }
+
+    .main-cnt {
+      width: 100%;
+      position: relative;
+    }
+
+    .spec {
+      font-family: "Times New Roman", Times, serif;
+      color: #000000;
+      font-weight: bolder;
+      font-size: 15px;
+    }
+
+  }
+}

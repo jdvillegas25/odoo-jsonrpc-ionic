@@ -11,6 +11,7 @@ import { Utils } from "../services/utils";
 import { ProfilePage } from "../pages/profile/profile";
 import { ActaDigitalPage } from "../pages/acta-digital/acta-digital"
 import { HistorialServiciosPage } from "../pages/historial-servicios/historial-servicios";
+import { DetallePage } from '../pages/detalle/detalle';
 
 @Component({
   templateUrl: "app.html",
@@ -22,7 +23,6 @@ export class MyApp {
   public homeMantenimiento: boolean = false;
 
   @ViewChild(Nav) nav: Nav;
-  //rootPage: any = ProspectoPage;
   rootPage: any = LoginPage;
   pagesSalesman: Array<{ title: string, component: any, icon: any }>;
   pagesTechnician: Array<{ title: string, component: any, icon: any }>;

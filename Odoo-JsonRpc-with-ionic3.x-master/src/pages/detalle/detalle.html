@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-navbar *ngIf="homeComercial" color="secundary">
+    <ion-title>Detalle {{name}}</ion-title>
+  </ion-navbar>
+  <ion-navbar *ngIf="homeMantenimiento" color="primary">
+    <ion-title>Detalle {{name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <div #map id="map"></div>
+  <ion-card id="direccion" #direccion>
+    <ion-card-content>
+      <div #directionsPanel></div>
+    </ion-card-content>
+  </ion-card>
+  <ion-list *ngIf="homeComercial">
+    <ion-card *ngFor="let item of data">
+      <ion-card-content>
+        <ion-row>
+          <ion-col col-12>
+            <h2><strong>Información Probabilidad:</strong></h2>
+          </ion-col>
+          <ion-col>
+            <strong>Oportunidad: </strong>
+            <p>{{item.name}}</p>
+          </ion-col>
+          <ion-col>
+            <strong>Probabilidad: </strong>
+            <h1 *ngIf="item.colorDanger">
+              <p style="color:#F44336;"> {{item.probability}}% </p>
+            </h1>
+            <h1 *ngIf="item.colorwarning">
+              <p style="color:#FF9800;"> {{item.probability}}% </p>
+            </h1>
+            <h1 *ngIf="item.colorSuccess">
+              <p style="color:#4CAF50;"> {{item.probability}}% </p>
+            </h1>
+          </ion-col>
+          <ion-col col-12>
+            <strong>Descripción: </strong>
+            <p>{{item.description}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Fecha Creación:</strong>
+            <p>{{item.create_date}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Fecha de Cierre:</strong>
+            <p>{{item.date_closed}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Dias de Cierre:</strong>
+            <p>{{item.day_close}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Ciudad:</strong>
+            <p>{{item.city}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <strong>Acción:</strong>
+            <p>{{item.title_action}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col col-12>
+            <h2><strong>Información Cliente:</strong></h2>
+          </ion-col>
+          <ion-col col-12>
+            <strong>Cliente: </strong>
+            <p>{{item.partner_name}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <strong>Contacto: </strong>
+            <p>{{item.contact_name}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <strong>eMail: </strong>
+            <p>{{item.email_from}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Teléfono: </strong>
+            <p>{{item.phone}}</p>
+          </ion-col>
+          <ion-col col-6>
+            <strong>Celular: </strong>
+            <p>{{item.mobile}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <strong>Dirección: </strong>
+            <p>{{item.street}}</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <button ion-fab color="secondary" (click)="addProspecto()">
+              <ion-icon name="md-add"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  <ion-list *ngIf="homeMantenimiento">
+    <ion-card *ngFor="let i of dataMantenimiento">
+      <ion-card-header>
+        <h1><strong>{{ i.name }}</strong></h1>
+      </ion-card-header>
+      <ion-card-content>
+        <h1 *ngIf="i.finished"><strong>Información General</strong></h1>
+        <p><strong>Resumen: </strong>{{i.issue_id[1]}}</p>
+        <p><strong>Número SAP: </strong>{{i.number_sap}}</p>
+        <p><strong>Identificación: </strong>{{i.sec}}</p>
+        <p><strong>Ciudad: </strong>{{i.city_id}}</p>
+        <p><strong>Tipo de Establecimiento: </strong>{{i.branch_type}}</p>
+        <p><strong>Cliente: </strong>{{i.partner_id[1]}}</p>
+        <p><strong>Locación: </strong>{{i.location_id}}</p>
+        <p><strong>Usuario: </strong>{{i.user_id[1]}}</p>
+        <p><strong>Fecha Inicial: </strong>{{i.date_start}}</p>
+        <p><strong>Descripción: </strong>{{i.description}}</p>
+        <br>
+        <h1 *ngIf="i.finished"><strong>Información del Sistema</strong></h1>
+        <p *ngIf="i.customer_asset_ids">
+          <strong>Sistema Afectado</strong>
+          {{i.customer_asset_ids[0].product_category_id[1]}}
+        </p>
+        <hr style="color: #212121 !important">
+        <div *ngFor="let p of i.customer_asset_ids">
+          <p *ngIf="i.finished">
+            <strong>Subsistema Afectado: </strong>
+            {{p.product_service_cat_id[1]}}
+          </p>
+          <p *ngIf="i.finished">
+            <strong>Equipo Afectado Afectado: </strong>
+            {{p.product_id[1]}}
+          </p>
+          <p *ngIf="p.replaced" style="color: #FF9800;">
+            <strong>Equipo Reparado</strong>
+          </p>
+          <p *ngIf="!p.replaced" style="color: #4CAF50;">
+            <strong>Equipo Nuevo</strong>
+          </p>
+          <hr style="color: #212121 !important">
+        </div>
+        <br>
+        <h1 *ngIf="i.finished"><strong>Información Del Funcionario</strong></h1>
+        <p *ngIf="i.finished"><strong>Observaciones: </strong>{{i.notes}}</p>
+        <p *ngIf="i.finished"><strong>Id Funcionario: </strong>{{i.functionary_vat}}</p>
+        <p *ngIf="i.finished"><strong>Funcionario: </strong>{{i.functionary_name}}</p>
+        <p *ngIf="i.finished"><strong>Email Funcionario: </strong>{{i.functionary_email}}</p>
+        <p *ngIf="i.finished">
+          <strong>Firma del Responsable: </strong>
+          <img [src]="sanitize('data:image/png;base64,'+i.customer_sign_image)">
+        </p>
+        <p *ngFor="let p of i.customer_asset_ids">
+          <strong>Sistema Afectado</strong>
+        </p>
+      </ion-card-content>
+      <ion-row no-padding *ngIf="!i.finished">
+        <ion-col text-right>
+          <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">
+            <ion-icon name='share-alt'></ion-icon>
+            Continuar Servicio
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </ion-list>
+  <!-- <div #map id="map"></div> -->
+</ion-content>

@@ -1,24 +1,30 @@
-import { OdooJsonRpc } from "../../services/odoojsonrpc";
-import { Component } from "@angular/core";
-import { NavController, NavParams, AlertController, Platform } from "ionic-angular";
-import { Utils } from "../../services/utils";
-import { ProspectoPage } from "../prospecto/prospecto"
-import { ServicioPage } from "../servicio/servicio"
+import { OdooJsonRpc } from '../../services/odoojsonrpc';
+import { Utils } from '../../services/utils';
+import { Component, ViewChild, ElementRef } from "@angular/core";
+import { IonicPage, NavController, NavParams, Platform, AlertController } from "ionic-angular";
+import { ProspectoPage } from '../prospecto/prospecto';
+import { ServicioPage } from '../servicio/servicio';
 import { DomSanitizer } from '@angular/platform-browser';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker, StreetViewCameraPosition, GoogleMapOptions, Environment, LocationService, MyLocation, GoogleMapsMapTypeId } from '@ionic-native/google-maps';
+
+declare var google;
 
 @Component({
-  selector: "page-view",
-  templateUrl: "view.html"
+  selector: "page-detalle",
+  templateUrl: "detalle.html"
 })
-export class ViewPage {
-  map: GoogleMap;
+export class DetallePage {
+
+  destino: any = "";
+  @ViewChild("map") mapElement: ElementRef;
+  @ViewChild("directionsPanel") directionsPanel: ElementRef;
+  map: any;
+
   private oportunity: number;
-  public imageSrc: string;
+  private imageSrc: string;
   private isMember: boolean;
   private name: string;
   private email: string;
-
+  /*Data para almacenar lo data que obtenemos de la base de datos*/
   public data: Array<{
     id: number;
     date_closed: string;
@@ -48,6 +54,7 @@ export class ViewPage {
     colorSuccess: boolean;
     contact_name: string;
   }> = [];
+  /* Data que vamos a usar para el paso de informacion al acta digital*/
   public dataMantenimiento: Array<{
     id: Number;
     issue_id: Array<any>;
@@ -71,122 +78,111 @@ export class ViewPage {
     finished: boolean;
     number_sap: String;
   }> = [];
+  /*Variables para habilitar modulo de comercial o modulo de mantenimientos*/
   public homeComercial: boolean = false;
-  public homeMantemimiento: boolean = false;
-  testRadioOpen: boolean;
-  testRadioResult;
+  public homeMantenimiento: boolean = false;
 
-  constructor(public navCtrl: NavController,
+  private session: any = JSON.parse(localStorage.getItem('token'));
+  constructor(
+    public navCtrl: NavController,
     public navParams: NavParams,
-    public odooRpc: OdooJsonRpc,
-    public utils: Utils,
-    public alertCtrl: AlertController,
-    private sanitizer: DomSanitizer,
     private plt: Platform,
-    private googleMaps: GoogleMaps) {
+    private odooRpc: OdooJsonRpc,
+    private alertCtrl: AlertController,
+    private sanitizer: DomSanitizer
+  ) {
     this.oportunity = navParams.get("id");
-
-    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
-      this.homeComercial = true;
-      this.homeMantemimiento = false;
-
-    } else {
-      this.homeMantemimiento = true;
-      this.homeComercial = false;
-    }
-    this.display();
-    this.plt.ready().then((readySource) => {
-      console.log('Platform Ready from', readySource);
-      this.loadMap();
-    });
   }
   ionViewDidLoad() {
+    this.valida_session();
+    this.carge_map();
+    this.display();
+  }
+  private carge_map(): void {
+    var _self = this;
+    _self.plt.ready().then(readySource => {
+      console.log("Platform ready from", readySource);
+      // Platform now ready, execute any required native code
+
+      _self.loadMap();
+      const currentposition = navigator.geolocation;
+      if (currentposition) {
+        currentposition.getCurrentPosition(function (position) {
+          let Mylat = position.coords.latitude;
+          let Mylon = position.coords.longitude;
+          let Inicio = Mylat + ',' + Mylon;
+          let end = '4.700481, -74.118522';
+          _self.startNavigating(Inicio, end);
+        });
+      }
+    });
+  }
+  private valida_session(): void {
+    if (this.session.salesman) {
+      this.homeComercial = true;
+      this.homeMantenimiento = false;
+    } else if (this.session.technician) {
+      this.homeMantenimiento = true;
+      this.homeComercial = false;
+    } else {
+      this.homeMantenimiento = false;
+      this.homeComercial = false;
+    }
   }
   loadMap() {
+    // let latLng = new google.maps.LatLng(-34.929, 138.601);
+    let pos: any;
+    navigator.geolocation.getCurrentPosition(function (position) {
+      pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+    }, function (error) {
+      console.log(error);
+    });
 
-    let mapOptions: GoogleMapOptions = {
-      camera: {
-        target: {
-          lat: 43.0741904, // default location
-          lng: -89.3809802 // default location
-        },
-        zoom: 18,
-        tilt: 50,
-        bearing: 50
-      },
-      gestures: {
-        scroll: true,
-        tilt: true,
-        rotate: true,
-        zoom: true
-      },
-      controls: {
-        compass: true,
-        myLocationButton: true,
-        indoorPicker: true,
-        zoom: true,
-        mapToolbar: true
-      }
+    let mapOptions = {
+      center: pos,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    this.map = GoogleMaps.create('map', mapOptions);
 
-    // Wait the MAP_READY before using any methods.
-    this.map.one(GoogleMapsEvent.MAP_READY)
-      .then(() => {
-        // Now you can use all methods safely.
-        this.getPosition();
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    // LocationService.getMyLocation().then((myLocation: MyLocation) => {
-    //   let mapOptions: GoogleMapOptions = {
-    //     mapType: GoogleMapsMapTypeId.HYBRID,
-    //     camera: {
-    //       target: myLocation.latLng,
-    //       zoom: 18,
-    //       tilt: 30
-    //     }
-    //   };
-    //   this.map = GoogleMaps.create('map', mapOptions);
-    //   let marker: Marker = this.map.addMarkerSync({
-    //     title: 'Ionic',
-    //     animation: 'DROP',
-    //     position: myLocation.latLng
-    //   });
-    //   marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-    //     alert('clicked');
-    //   });
-    // });
-
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
-  getPosition(): void {
-    this.map.getMyLocation()
-      .then(response => {
-        this.map.moveCamera({
-          target: response.latLng
-        });
-        this.map.addMarker({
-          title: 'My Position',
-          icon: 'red',
-          animation: 'DROP',
-          position: response.latLng
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+
+  startNavigating(start, end) {
+    
+    let directionsService = new google.maps.DirectionsService();
+    let directionsDisplay = new google.maps.DirectionsRenderer();
+
+    directionsDisplay.setMap(this.map);
+    directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+
+    directionsService.route(
+      {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode["DRIVING"]
+      },
+      (res, status) => {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(res);
+        } else {
+          console.warn(status);
+        }
+      }
+    );
   }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   private display(): void {
-
-    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
+    if (this.session.salesman) {
       this.getOportunidad();
-    } else {
+    } else if (this.session.technician) {
       this.getMantenimiento();
+    } else {
+      console.log('¡PARAMETRO DESCONOCIDO!');
     }
   }
   private addProspecto() {
@@ -195,7 +191,7 @@ export class ViewPage {
     };
     this.navCtrl.push(ProspectoPage, params);
   }
-  private getOportunidad() {
+  private getOportunidad(): void {
     let partner = "crm.lead";
     let fields = ["id", "date_closed", "create_date", "probability", "country_id", "day_close", "write_uid", "team_id", "partner_id", "city", "partner_name", "contact_name", "company_id", "description", "create_uid", "title_action", "phone", "name", "stage_id", "mobile", "street", "state_id", "email_from", "title"];
     let domain = [["id", "=", this.oportunity]];
@@ -239,7 +235,7 @@ export class ViewPage {
       }
     });
   }
-  private getMantenimiento() {
+  private getMantenimiento(): void {
     let partner = "project.task";
     let fields = [];
     let domain = [["id", "=", this.oportunity]];
@@ -249,6 +245,8 @@ export class ViewPage {
     this.odooRpc.searchRead(partner, domain, fields, limit, offset, sort).then((res: any) => {
       let data = JSON.parse(res._body)["result"].records;
       for (let record in data) {
+        this.name = data[record].name == false ? "N/A" : data[record].name;
+        this.email = data[record].email_from == false ? "N/A" : data[record].email;
         this.dataMantenimiento.push({
           id: data[record].id == false ? "N/A" : data[record].id,
           issue_id: data[record].issue_id == false ? "N/A" : data[record].issue_id,
@@ -278,7 +276,7 @@ export class ViewPage {
       }
     });
   }
-  private get_detalle_task(idTask) {
+  private get_detalle_task(idTask): void {
     let partner = "project.customer.asset";
     let fields = [];
     let domain = [["task_id", "=", idTask]];
@@ -290,7 +288,7 @@ export class ViewPage {
       this.dataMantenimiento[0]['customer_asset_ids'] = data;
     });
   }
-  private continuarServicio() {
+  private continuarServicio(): void {
     let params = {}
     params = this.dataMantenimiento[0];
     this.navCtrl.push(ServicioPage, params);

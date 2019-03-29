@@ -1,0 +1,56 @@
+.ios,
+.md {
+  page-view {
+    .bg-image {
+      background-color: #43A047;
+      height: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .round-image img {
+      background-position: center center;
+      background-size: cover;
+      border-radius: 50%;
+      border: 3px solid;
+      border-color: rgb(255, 255, 255);
+      height: 100%;
+      width: 100%;
+    }
+
+    .main-cnt {
+      width: 100%;
+      position: relative;
+    }
+
+    .spec {
+      font-family: "Times New Roman", Times, serif;
+      color: #000000;
+      font-weight: bolder;
+      font-size: 15px;
+    }
+
+    #map {
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
+    .scroll {
+      height: 100%
+    }
+  
+    #map {
+      width: 100%;
+      height: 80% !important;
+    }
+  
+    ion-card {
+      max-height: 200px;
+      overflow: scroll;
+      position: absolute;
+      z-index: 1;
+    }
+  }
+}
+
+  

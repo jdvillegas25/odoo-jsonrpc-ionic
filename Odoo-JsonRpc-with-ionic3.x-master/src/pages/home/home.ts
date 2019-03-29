@@ -1,6 +1,6 @@
 import { FormProbabilidadPage } from "../form-probabilidad/form-probabilidad";
 import { Utils } from "../../services/utils";
-import { ViewPage } from "../view/view";
+import { DetallePage } from "../detalle/detalle";
 import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
 import { NavController, AlertController, LoadingController, MenuController } from "ionic-angular";
@@ -191,7 +191,7 @@ export class HomePage {
     } else {
       params['id'] = this.listaServicios[idx].id
     }
-    this.navCtrl.push(ViewPage, params);
+    this.navCtrl.push(DetallePage, params);
   }
 
   initializeItems(): void {
