@@ -1,7 +1,0 @@
-{
-  "name": "OdooJSONRpc",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
-}
