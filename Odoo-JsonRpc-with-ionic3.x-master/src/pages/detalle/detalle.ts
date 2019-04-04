@@ -19,6 +19,13 @@ export class DetallePage {
   @ViewChild("directionsPanel") directionsPanel: ElementRef;
   map: any;
 
+  /*
+   * ubicationStart = Ubicacion desde donde el tecnico arranca para realizar el servicio.
+   * ubicationToGo = Ubicacion a la cual se dirige el tecnico
+   */
+  public ubicationStart: String = '';
+  public ubicationToGo: String = '';
+
   private oportunity: number;
   private imageSrc: string;
   private isMember: boolean;
@@ -101,19 +108,20 @@ export class DetallePage {
   private carge_map(): void {
     var _self = this;
     _self.plt.ready().then(readySource => {
-      console.log("Platform ready from", readySource);
       // Platform now ready, execute any required native code
-
       _self.loadMap();
       const currentposition = navigator.geolocation;
       if (currentposition) {
-        currentposition.getCurrentPosition(function (position) {
-          let Mylat = position.coords.latitude;
-          let Mylon = position.coords.longitude;
-          let Inicio = Mylat + ',' + Mylon;
-          let end = '4.700481, -74.118522';
-          _self.startNavigating(Inicio, end);
-        });
+        let end = 'Carrera 66 #4g-65, Colombia, Bogotá';
+        setTimeout(() => {
+          currentposition.getCurrentPosition(function (position) {
+            let start = position.coords.latitude + ',' + position.coords.longitude;
+            _self.startNavigating(start, end);
+          });
+        }, 1000);
+
+
+
       }
     });
   }
@@ -151,18 +159,29 @@ export class DetallePage {
   }
 
   startNavigating(start, end) {
-    
+
+    /*
+     * asignamos ubicationStart y ubicationToGo para luego poder enviarla al acta digital y que esta se encarge de hacer la insercion de dicha informacion para que podamos tener un control de los desplazamientos del tecnico
+     */
+    this.ubicationStart = start;
+    this.ubicationToGo = end;
     let directionsService = new google.maps.DirectionsService();
     let directionsDisplay = new google.maps.DirectionsRenderer();
+    let marker            = new google.maps.marker();
 
     directionsDisplay.setMap(this.map);
     directionsDisplay.setPanel(this.directionsPanel.nativeElement);
-
     directionsService.route(
       {
         origin: start,
         destination: end,
-        travelMode: google.maps.TravelMode["DRIVING"]
+        travelMode: google.maps.TravelMode["DRIVING"],
+        provideRouteAlternatives: true,
+        drivingOptions: {
+          departureTime: new Date(Date.now()),
+          trafficModel: 'pessimistic'
+        },
+        unitSystem: google.maps.UnitSystem.METRIC
       },
       (res, status) => {
         if (status == google.maps.DirectionsStatus.OK) {
@@ -291,6 +310,11 @@ export class DetallePage {
   private continuarServicio(): void {
     let params = {}
     params = this.dataMantenimiento[0];
+    params["pointA"] = this.ubicationStart;
+    params["pointB"] = this.ubicationToGo;
     this.navCtrl.push(ServicioPage, params);
+  }
+  private NotificarLlegada (){
+    
   }
 }

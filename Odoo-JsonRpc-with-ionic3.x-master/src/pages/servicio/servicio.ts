@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { ActaDigitalPage } from '../acta-digital/acta-digital';
 import { ApiProvider } from '../../providers/api/api';
 import { isArray } from 'ionic-angular/util/util';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'page-servicio',
@@ -27,6 +28,7 @@ export class ServicioPage {
   private idServicio: any;
   private dataServicio: any;
   private spare_location: any;
+  private pointC: any;
   private listProducts: Array<{
     id: number;
     name: String;
@@ -64,11 +66,27 @@ export class ServicioPage {
       date_start: navParams.get("date_start"),
       date_finish: navParams.get("date_finish"),
       description: navParams.get("description"),
-      sec: navParams.get("sec")
+      sec: navParams.get("sec"),
+      pointA: navParams.get("pointA"),
+      pointB: navParams.get("pointB")
     };
     // this.get_necesidad_cliente();
   }
-
+  ionViewDidLoad(){
+    this.getLocation();
+  }
+  private getLocation(){
+    var _self = this;
+    _self.plt.ready().then(readySource => {
+      const currentposition = navigator.geolocation;
+      if (currentposition) {
+          currentposition.getCurrentPosition(function (position) {
+            _self.pointC = position.coords.latitude+','+position.coords.longitude;
+            _self.dataServicio["pointC"] = _self.pointC;
+          });
+        }
+    });
+  }
   /*******Primer Filtro********/
   private get_necesidad_cliente() {
     this.list_service_category = [];
@@ -300,6 +318,7 @@ export class ServicioPage {
 
     /*data basica que ya viene del mantenimiento*/
     params["dataMantenimiento"] = this.dataServicio;
+    console.log(params);
 
     /*checknox de si es Electronico o metal mecanico*/
     params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
