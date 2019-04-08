@@ -84,6 +84,7 @@ export class DetallePage {
     functionary_email: String;
     finished: boolean;
     number_sap: String;
+    coordinate: String;
   }> = [];
   /*Variables para habilitar modulo de comercial o modulo de mantenimientos*/
   public homeComercial: boolean = false;
@@ -102,26 +103,21 @@ export class DetallePage {
   }
   ionViewDidLoad() {
     this.valida_session();
-    this.carge_map();
+    // this.carge_map();
     this.display();
   }
-  private carge_map(): void {
+  private carge_map(end: any) {
     var _self = this;
     _self.plt.ready().then(readySource => {
       // Platform now ready, execute any required native code
       _self.loadMap();
       const currentposition = navigator.geolocation;
       if (currentposition) {
-        let end = 'Carrera 66 #4g-65, Colombia, Bogotá';
-        setTimeout(() => {
-          currentposition.getCurrentPosition(function (position) {
-            let start = position.coords.latitude + ',' + position.coords.longitude;
-            _self.startNavigating(start, end);
-          });
-        }, 1000);
-
-
-
+        // let end = 'Carrera 66 #4g-65, Colombia, Bogotá';
+        currentposition.getCurrentPosition(function (position) {
+          let start = position.coords.latitude + ',' + position.coords.longitude;
+          _self.startNavigating(start, end);
+        });
       }
     });
   }
@@ -159,7 +155,6 @@ export class DetallePage {
   }
 
   startNavigating(start, end) {
-
     /*
      * asignamos ubicationStart y ubicationToGo para luego poder enviarla al acta digital y que esta se encarge de hacer la insercion de dicha informacion para que podamos tener un control de los desplazamientos del tecnico
      */
@@ -167,7 +162,6 @@ export class DetallePage {
     this.ubicationToGo = end;
     let directionsService = new google.maps.DirectionsService();
     let directionsDisplay = new google.maps.DirectionsRenderer();
-    let marker            = new google.maps.marker();
 
     directionsDisplay.setMap(this.map);
     directionsDisplay.setPanel(this.directionsPanel.nativeElement);
@@ -287,8 +281,10 @@ export class DetallePage {
           functionary_name: data[record].functionary_name,
           functionary_email: data[record].functionary_email,
           finished: data[record].finished,
-          number_sap: data[record].number_sap
+          number_sap: data[record].number_sap,
+          coordinate: data[record].coordinate
         });
+        this.carge_map(data[record].coordinate);
         if (data[record].customer_asset_ids.length > 0) {
           this.get_detalle_task(data[record].id);
         }
@@ -314,7 +310,7 @@ export class DetallePage {
     params["pointB"] = this.ubicationToGo;
     this.navCtrl.push(ServicioPage, params);
   }
-  private NotificarLlegada (){
-    
+  private NotificarLlegada() {
+
   }
 }
