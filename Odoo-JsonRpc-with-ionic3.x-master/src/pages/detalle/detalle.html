@@ -1,26 +1,20 @@
 <ion-header>
-  <ion-navbar *ngIf="homeComercial" color="secundary">
-    <ion-title>Detalle {{name}}</ion-title>
+  <ion-navbar *ngIf="homeComercial" color="secondary">
+    <ion-title>Detalle Oportunidad {{name}}</ion-title>
   </ion-navbar>
   <ion-navbar *ngIf="homeMantenimiento" color="primary">
-    <ion-title>Detalle {{name}}</ion-title>
+    <ion-title>Detalle Mantenimiento {{name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-
-  <div #map id="map"></div>
-  <ion-card id="direccion" #direccion>
-    <ion-card-content>
-      <div #directionsPanel></div>
-    </ion-card-content>
-  </ion-card>
-  <ion-list *ngIf="homeComercial">
+<!--Vista para comercial-->
+<ion-content *ngIf="homeComercial">
+  <ion-list>
     <ion-card *ngFor="let item of data">
       <ion-card-content>
         <ion-row>
           <ion-col col-12>
-            <h2><strong>Información Probabilidad:</strong></h2>
+            <h1><strong>Información Probabilidad:</strong></h1>
           </ion-col>
           <ion-col>
             <strong>Oportunidad: </strong>
@@ -64,12 +58,10 @@
           </ion-col>
         </ion-row>
       </ion-card-content>
-    </ion-card>
-    <ion-card>
       <ion-card-content>
         <ion-row>
           <ion-col col-12>
-            <h2><strong>Información Cliente:</strong></h2>
+            <h1><strong>Información Cliente:</strong></h1>
           </ion-col>
           <ion-col col-12>
             <strong>Cliente: </strong>
@@ -106,7 +98,17 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
-  <ion-list *ngIf="homeMantenimiento">
+</ion-content>
+
+<!--Vista para manenimiento-->
+<ion-content *ngIf="homeMantenimiento">
+  <div #map id="map"></div>
+  <ion-card id="direccion" #direccion>
+    <ion-card-content>
+      <div #directionsPanel></div>
+    </ion-card-content>
+  </ion-card>
+  <ion-list>
     <ion-card *ngFor="let i of dataMantenimiento">
       <ion-card-header>
         <h1><strong>{{ i.name }}</strong></h1>

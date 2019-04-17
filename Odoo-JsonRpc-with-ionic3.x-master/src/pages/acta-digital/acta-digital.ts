@@ -10,6 +10,9 @@ import { HomePage } from '../home/home';
 import { ModalPage } from '../modal/modal';
 import { AddCustomerPage } from "../add-customer/add-customer";
 import { SafePropertyRead } from '@angular/compiler';
+import { LatLng } from '@ionic-native/google-maps';
+
+declare var google;
 
 /**
  * Generated class for the ActaDigitalPage page.
@@ -125,6 +128,7 @@ export class ActaDigitalPage {
     }
   }
   async update_task() {
+    let _self = this;
     let salida = true;
     if (this.firma != "") {
 
@@ -137,13 +141,20 @@ export class ActaDigitalPage {
         functionary_vat: this.functionary_vat,
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
+        origin_tech_coord: this.dataMantenimiento.origin_tech_coord,
       }
-      this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then((query: any) => {
-        if (query.ok) {
-          salida = true;
-        }
-      }).catch((err: any) => {
-        salida = false;
+      let geocoder = new google.maps.Geocoder;
+      let latlngStr = this.dataMantenimiento.origin_tech_coord.split(',', 2);
+      var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+      geocoder.geocode({ 'location': latlng }, function (results, status) {
+        data['origin_address'] = results[0].formatted_address;
+        _self.odooRpc.updateRecord(table, _self.dataMantenimiento.id, data).then((query: any) => {
+          if (query.ok) {
+            salida = true;
+          }
+        }).catch((err: any) => {
+          salida = false;
+        });
       });
     } else {
       salida = false;
@@ -240,10 +251,9 @@ export class ActaDigitalPage {
 
   }
   private parseoClientes() {
-    console.log(this.listaClientes);
     for (let client of this.listaClientes) {
       if (this.cliente == client.id) {
-        this.functionary_vat = client.vat ? client.vat : 'N/A';
+        this.functionary_vat = client.vat_vd ? client.vat_vd : 'N/A';
         this.functionary_name = client.name ? client.name : 'N/A';
         this.functionary_email = client.email ? client.email : 'N/A';
       }

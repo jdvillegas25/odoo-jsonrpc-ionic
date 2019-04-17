@@ -185,11 +185,13 @@ export class HomePage {
   public view(idx: number): void {
     let params = {}
 
-    //Validacion para cargar causas de rol mantenimiento3
-    if (JSON.parse(localStorage.getItem('token'))['salesman']) {
-      params['id'] = this.listaOportunidades[idx].id
+    //Validacion para cargar causas de rol mantenimiento
+    if (this.logiData.salesman) {
+      params['id'] = this.listaOportunidades[idx].id;
+    } else if (this.logiData.technician) {
+      params['id'] = this.listaServicios[idx].id;
     } else {
-      params['id'] = this.listaServicios[idx].id
+      console.log('NO ESTA DEFINIDO EL ROL');
     }
     this.navCtrl.push(DetallePage, params);
   }

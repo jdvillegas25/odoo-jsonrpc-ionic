@@ -5,7 +5,8 @@ import { IonicPage, NavController, NavParams, Platform, AlertController } from "
 import { ProspectoPage } from '../prospecto/prospecto';
 import { ServicioPage } from '../servicio/servicio';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { LatLng } from '@ionic-native/google-maps';
+import { setTimeout } from 'timers';
 declare var google;
 
 @Component({
@@ -91,19 +92,11 @@ export class DetallePage {
   public homeMantenimiento: boolean = false;
 
   private session: any = JSON.parse(localStorage.getItem('token'));
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private plt: Platform,
-    private odooRpc: OdooJsonRpc,
-    private alertCtrl: AlertController,
-    private sanitizer: DomSanitizer
-  ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private plt: Platform, private odooRpc: OdooJsonRpc, private alertCtrl: AlertController, private sanitizer: DomSanitizer) {
     this.oportunity = navParams.get("id");
+    this.valida_session();
   }
   ionViewDidLoad() {
-    this.valida_session();
-    // this.carge_map();
     this.display();
   }
   private carge_map(end: any) {
@@ -113,7 +106,6 @@ export class DetallePage {
       _self.loadMap();
       const currentposition = navigator.geolocation;
       if (currentposition) {
-        // let end = 'Carrera 66 #4g-65, Colombia, Bogotá';
         currentposition.getCurrentPosition(function (position) {
           let start = position.coords.latitude + ',' + position.coords.longitude;
           _self.startNavigating(start, end);
@@ -121,7 +113,44 @@ export class DetallePage {
       }
     });
   }
-  private valida_session(): void {
+  startNavigating(start, end) {
+    /*
+     * asignamos ubicationStart y ubicationToGo para luego poder enviarla al acta digital y que esta se encarge de hacer la insercion de dicha informacion para que podamos tener un control de los desplazamientos del tecnico
+     */
+    if (start != '' && end != '') {
+      if (this.ubicationStart == '' && this.ubicationToGo == '') {
+        this.ubicationStart = start;
+        this.ubicationToGo = end;
+      }
+
+      let directionsService = new google.maps.DirectionsService();
+      let directionsDisplay = new google.maps.DirectionsRenderer();
+
+      directionsDisplay.setMap(this.map);
+      directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+      directionsService.route(
+        {
+          origin: start,
+          destination: end,
+          travelMode: google.maps.TravelMode["DRIVING"],
+          provideRouteAlternatives: true,
+          drivingOptions: {
+            departureTime: new Date(Date.now()),
+            trafficModel: 'pessimistic'
+          },
+          unitSystem: google.maps.UnitSystem.METRIC
+        },
+        (res, status) => {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(res);
+          } else {
+            console.warn(status);
+          }
+        }
+      );
+    }
+  }
+  public valida_session(): void{
     if (this.session.salesman) {
       this.homeComercial = true;
       this.homeMantenimiento = false;
@@ -129,8 +158,7 @@ export class DetallePage {
       this.homeMantenimiento = true;
       this.homeComercial = false;
     } else {
-      this.homeMantenimiento = false;
-      this.homeComercial = false;
+      console.log('NO ESTA DEFINIDO EL ROL');
     }
   }
   loadMap() {
@@ -153,43 +181,10 @@ export class DetallePage {
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
-
-  startNavigating(start, end) {
-    /*
-     * asignamos ubicationStart y ubicationToGo para luego poder enviarla al acta digital y que esta se encarge de hacer la insercion de dicha informacion para que podamos tener un control de los desplazamientos del tecnico
-     */
-    this.ubicationStart = start;
-    this.ubicationToGo = end;
-    let directionsService = new google.maps.DirectionsService();
-    let directionsDisplay = new google.maps.DirectionsRenderer();
-
-    directionsDisplay.setMap(this.map);
-    directionsDisplay.setPanel(this.directionsPanel.nativeElement);
-    directionsService.route(
-      {
-        origin: start,
-        destination: end,
-        travelMode: google.maps.TravelMode["DRIVING"],
-        provideRouteAlternatives: true,
-        drivingOptions: {
-          departureTime: new Date(Date.now()),
-          trafficModel: 'pessimistic'
-        },
-        unitSystem: google.maps.UnitSystem.METRIC
-      },
-      (res, status) => {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(res);
-        } else {
-          console.warn(status);
-        }
-      }
-    );
-  }
   public sanitize(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
-  private display(): void {
+  private display(): void{
     if (this.session.salesman) {
       this.getOportunidad();
     } else if (this.session.technician) {
@@ -306,8 +301,7 @@ export class DetallePage {
   private continuarServicio(): void {
     let params = {}
     params = this.dataMantenimiento[0];
-    params["pointA"] = this.ubicationStart;
-    params["pointB"] = this.ubicationToGo;
+    params["origin_tech_coord"] = this.ubicationStart;
     this.navCtrl.push(ServicioPage, params);
   }
   private NotificarLlegada() {

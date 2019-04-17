@@ -143,6 +143,7 @@ export class ProspectoPage {
         }
     }
     public habilita_formulario(necesidad) {
+        console.log(this.list_necesidades);
         this.toolbar = true;
         this.div_els = false;
         this.div_cctv = false;
@@ -168,7 +169,7 @@ export class ProspectoPage {
                     this.div_cae = true;
                     this.get_productos(nec);
                     break;
-                //Equipo loviano
+                //Equipo liviano
                 case "17":
                     this.div_els = true;
                     this.get_productos(nec);

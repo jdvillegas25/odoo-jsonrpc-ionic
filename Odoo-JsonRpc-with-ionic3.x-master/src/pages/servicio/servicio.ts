@@ -67,15 +67,20 @@ export class ServicioPage {
       date_finish: navParams.get("date_finish"),
       description: navParams.get("description"),
       sec: navParams.get("sec"),
-      pointA: navParams.get("pointA"),
-      pointB: navParams.get("pointB")
+      origin_tech_coord: navParams.get("origin_tech_coord")
     };
     // this.get_necesidad_cliente();
   }
-  ionViewDidLoad(){
-    this.getLocation();
+  ionViewDidLoad() {
+    /** 
+     * Función para generar al ubicacion real del tecnico y que no este mintiendo en su ubicacion
+     */
+    /* this.getLocation(); */
   }
-  private getLocation(){
+  /** 
+   * Función para generar al ubicacion real del tecnico y que no este mintiendo en su ubicacion
+   */
+  /* private getLocation(){
     var _self = this;
     _self.plt.ready().then(readySource => {
       const currentposition = navigator.geolocation;
@@ -86,7 +91,7 @@ export class ServicioPage {
           });
         }
     });
-  }
+  } */
   /*******Primer Filtro********/
   private get_necesidad_cliente() {
     this.list_service_category = [];
@@ -318,7 +323,6 @@ export class ServicioPage {
 
     /*data basica que ya viene del mantenimiento*/
     params["dataMantenimiento"] = this.dataServicio;
-    console.log(params);
 
     /*checknox de si es Electronico o metal mecanico*/
     params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
