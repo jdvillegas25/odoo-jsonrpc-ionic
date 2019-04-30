@@ -11,6 +11,7 @@ import { File } from '@ionic-native/file';
     templateUrl: 'prospecto.html',
 })
 export class ProspectoPage {
+    base64: any;
     //Div a habilitar segun categoria del producto
     public div_cctv: boolean;
     public div_eps: boolean;
@@ -143,7 +144,6 @@ export class ProspectoPage {
         }
     }
     public habilita_formulario(necesidad) {
-        console.log(this.list_necesidades);
         this.toolbar = true;
         this.div_els = false;
         this.div_cctv = false;
@@ -152,47 +152,59 @@ export class ProspectoPage {
         this.div_alarmas = false;
         this.div_incendios = false;
         this.div_cae = false;
-        for (let nec of necesidad) {
-            switch (nec) {
-                //cctv
-                case "6":
-                    this.div_cctv = true;
-                    this.get_productos(nec);
-                    break;
-                //eps
-                case "8":
-                    this.div_eps = true;
-                    this.get_productos(nec);
-                    break;
-                //cae
-                case "7":
-                    this.div_cae = true;
-                    this.get_productos(nec);
-                    break;
-                //Equipo liviano
-                case "17":
-                    this.div_els = true;
-                    this.get_productos(nec);
-                    break;
-                //Alarmas
-                case "3":
-                    this.div_alarmas = true;
-                    this.get_productos(nec);
-                    break;
-                //Incendios
-                case "18":
-                    this.div_incendios = true;
-                    this.get_productos(nec);
-                    break;
-                default:
-                    this.div_els = false;
-                    this.div_cctv = false;
-                    this.div_eps = false;
-                    this.toolbar = false;
-                    this.div_alarmas = false;
-                    this.div_incendios = false;
-                    break;
+        if (necesidad.length > 0) {
+            for (let nec of necesidad) {
+                switch (nec) {
+                    //cctv
+                    case "7":
+                        this.div_cctv = true;
+                        this.get_productos(nec);
+                        break;
+                    //eps
+                    case "8":
+                        this.div_eps = true;
+                        this.get_productos(nec);
+                        break;
+                    //cae
+                    case "5":
+                        this.div_cae = true;
+                        this.get_productos(nec);
+                        break;
+                    //Equipo liviano
+                    case "9":
+                        this.div_els = true;
+                        this.get_productos(nec);
+                        break;
+                    //Alarmas
+                    case "4":
+                        this.div_alarmas = true;
+                        this.get_productos(nec);
+                        break;
+                    //Incendios
+                    case "6":
+                        this.div_incendios = true;
+                        this.get_productos(nec);
+                        break;
+                    default:
+                        this.div_els = false;
+                        this.div_cctv = false;
+                        this.div_eps = false;
+                        this.toolbar = false;
+                        this.div_alarmas = false;
+                        this.div_incendios = false;
+                        this.list_items = [];
+                        break;
+
+                }
             }
+        } else {
+            this.div_els = false;
+            this.div_cctv = false;
+            this.div_eps = false;
+            this.toolbar = false;
+            this.div_alarmas = false;
+            this.div_incendios = false;
+            this.list_items = [];
         }
     }
     private take_pictures(carProd, picturezona) {
@@ -233,8 +245,9 @@ export class ProspectoPage {
         });
         loading.present();
         // let domain = (nec != "") ? [['categ_id', '=', +nec], ['qty_available', '>', 0]] : [['qty_available', '>', 0]]
-        let domain = (nec != "") ? [['categ_id', '=', +nec]] : []
-        let table = "product.template"
+        this.list_items = [];
+        let domain = (nec != "") ? [['categ_id', '=', +nec]] : [];
+        let table = "product.template";
         this.odooRpc.searchRead(table, domain, [], 0, 0, "").then((items: any) => {
             let json = JSON.parse(items._body);
             if (!json.error && json["result"].records != []) {
@@ -265,44 +278,36 @@ export class ProspectoPage {
         this.total = (this.subTotal + (this.subTotal * 19 / 100));
 
     }
-    public adjuntar_archivo(tipo) {
-        this.fileChooser.open().then((uri) => {
-            this.file.resolveLocalFilesystemUrl(uri).then((newUrl) => {
-                let dirPath = newUrl.nativeURL;
-                let dirPathSegments = dirPath.split('/');
-                dirPathSegments.pop();
-                dirPath = dirPathSegments.join('/');
-                alert(dirPath);
-                alert(newUrl.name);
-                this.file.readAsArrayBuffer(dirPath, newUrl.name).then((buffer) => {
-                    alert(dirPath);
-                    alert(newUrl.name);
-                    alert(buffer);
-                }).catch((error) => {
-                    console.log(error);
-                })
-            }).catch((error) => {
-                console.log(error)
-            })
-            // switch (tipo) {
-            //     case 'cctv':
-            //         this.adjuntosCCTV.push(uri);
-            //         break;
-            //     case 'cae':
-            //         this.adjuntosCAE.push(`data:application/pdf;base64,${uri}`);
-            //         break;
-            //     case 'alarma':
-            //         this.adjuntosAlarmas.push(`data:application/pdf;base64,${uri}`);
-            //         break;
-            //     case 'incendio':
-            //         this.adjuntosIncendio.push(`data:application/pdf;base64,${uri}`);
-            //         break; 
+    public adjuntar_archivo($event, tipo): void {
+        this.readThis($event.target, tipo);
+    }
+    readThis(inputValue: any, tipo: String): void {
+        var file = inputValue.files[0];
+        var myReader: FileReader = new FileReader();
 
-            //     default:
-            //         break;
-            // }
+        myReader.onloadend = (e) => {
+            this.base64 = myReader.result;
+            switch (tipo) {
+                case 'cctv':
+                    this.adjuntosCCTV.push(this.base64);
+                    break;
+                case 'cae':
+                    this.adjuntosCAE.push(this.base64);
+                    break;
+                case 'alarma':
+                    this.adjuntosAlarmas.push(this.base64);
+                    break;
+                case 'incendio':
+                    this.adjuntosIncendio.push(this.base64);
+                    break;
 
-        }).catch(e => console.log(e));
+                default:
+                    console.log('PARAMETRO PARA ADJUNTAR ARCHIVO NO ESTA DEFINIDO');
+                    break;
+            }
+            console.log(this.base64);
+        }
+        myReader.readAsDataURL(file);
     }
     public habilitarSensor(camaraZona) {
         console.log(camaraZona)

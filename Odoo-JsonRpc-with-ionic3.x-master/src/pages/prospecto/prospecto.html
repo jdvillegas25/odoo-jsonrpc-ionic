@@ -24,8 +24,8 @@
   <ion-list>
     <ion-item>
       <ion-label stacked>Necesidad del Cliente</ion-label>
-      <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="habilita_formulario(necesidad.value)"
-        multiple="true">
+      <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad
+        (ngModelChange)="habilita_formulario(necesidad.value)" multiple="true">
         <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -36,8 +36,8 @@
         <h3>CCTV</h3><br>
         <ion-item>
           <ion-label stacked>Habitaciones a Proteger</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="habitacionesCCTV" #zona (change)="habilitarHabitacionesCCTV(zona.value)"
-            name="habitacionesCCTV"></ion-input>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesCCTV" #zona
+            (change)="habilitarHabitacionesCCTV(zona.value)" name="habitacionesCCTV"></ion-input>
         </ion-item>
 
         <div *ngFor="let i of listaHabitacionesCCTV">
@@ -64,7 +64,8 @@
           </ion-item>
           <ion-item>
             <ion-label floating>Observaciones para la zona.</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="obserZonaCCTV[i.id]" name="obserZonaCCTV_{{i.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaCCTV[i.id]" name="obserZonaCCTV_{{i.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('cctv',i.id)">Tomar Fotos para Zona #{{i.id}}</button>
@@ -142,7 +143,8 @@
           </ion-item>
         </ion-list>
         <ion-item>
-          <button ion-button (click)="adjuntar_archivo('cctv')" clear color="danger">Adjuntar Archivo</button>
+          <label class="item item-input"><input type="file" id="" (change)="adjuntar_archivo($event,'cctv')"
+              name="uploadfile" clear color="danger"></label>
         </ion-item>
         <ion-grid>
           <ion-row>
@@ -159,8 +161,8 @@
         <ion-list>
           <ion-item>
             <ion-label stacked>Puntos que Desea Controlar</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="habitacionesCAE" #habitacionCAE (change)="habilitarHabitacionesCAE(habitacionCAE.value)"
-              name="zonasControlar"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="habitacionesCAE" #habitacionCAE
+              (change)="habilitarHabitacionesCAE(habitacionCAE.value)" name="zonasControlar"></ion-input>
           </ion-item>
 
 
@@ -172,7 +174,8 @@
             </ion-item>
             <ion-item>
               <ion-label stacked>Tipo Puerta de la Habitación a Protejer # {{ l.id }}</ion-label>
-              <ion-input [(ngModel)]="tipoPuertaHabitacionCAE[l.id]" name="tipoPuertaHabitacionCAE_{{l.id}}"></ion-input>
+              <ion-input [(ngModel)]="tipoPuertaHabitacionCAE[l.id]" name="tipoPuertaHabitacionCAE_{{l.id}}">
+              </ion-input>
             </ion-item>
             <ion-item>
               <ion-label floating>Entrada Habitación #{{l.id}}</ion-label>
@@ -196,7 +199,8 @@
             </ion-item>
             <ion-item>
               <ion-label floating>Observaciones para la zona.</ion-label>
-              <ion-input type="number" min="0" [(ngModel)]="obserZonaCAE[l.id]" name="obserZonaCAE_{{l.id}}"></ion-input>
+              <ion-input type="number" min="0" [(ngModel)]="obserZonaCAE[l.id]" name="obserZonaCAE_{{l.id}}">
+              </ion-input>
             </ion-item>
           </div>
           <ion-item>
@@ -204,7 +208,8 @@
             <ion-input type="number" [(ngModel)]="cantAccesosHabitacion" name="cantAccesosHabitacion"></ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button (click)="adjuntar_archivo('cae')" clear color="danger">Adjuntar Archivo</button>
+            <label class="item item-input"><input type="file" id="" (change)="adjuntar_archivo($event,'cae')"
+                name="uploadfile" clear color="danger"></label>
           </ion-item>
         </ion-list>
       </ion-list>
@@ -213,8 +218,8 @@
         <h3>Alarmas</h3>
         <ion-item>
           <ion-label stacked>Habitaciones a Cuidar</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="habitacionesAlarmas" #habitacionAlarmas (change)="habilitarHabitacionesAlarmas(habitacionAlarmas.value)"
-            name="habitacionesAlarmas"></ion-input>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesAlarmas" #habitacionAlarmas
+            (change)="habilitarHabitacionesAlarmas(habitacionAlarmas.value)" name="habitacionesAlarmas"></ion-input>
         </ion-item>
 
         <div *ngFor="let a of listaHabitacionesAlarmas">
@@ -225,27 +230,33 @@
           </ion-item>
           <ion-item>
             <ion-label floating>Cuantos Sensores Necesita la Habitación #{{a.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="alarmasHabitacion[a.id]" name="alarmasHabitacion_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="alarmasHabitacion[a.id]" name="alarmasHabitacion_{{a.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Tipo de Pared de la Habitación #{{a.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionAlarma[a.id]" name="tipoParedHabitacionAlarma_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionAlarma[a.id]"
+              name="tipoParedHabitacionAlarma_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Tipo de Puerta de la Habitación #{{a.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="tipoPuertaHabitacionAlarma[a.id]" name="tipoPuertaHabitacionAlarma_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="tipoPuertaHabitacionAlarma[a.id]"
+              name="tipoPuertaHabitacionAlarma_{{a.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Aproximidad en Mts² Habitación #{{a.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[a.id]" name="aproMtsAlarmas_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsAlarmas[a.id]" name="aproMtsAlarmas_{{a.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² Habitación #{{a.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[a.id]" name="altMtsAlarmas_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsAlarmas[a.id]" name="altMtsAlarmas_{{a.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Observaciones para la zona.</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="obserZonaAlarmas[a.id]" name="obserZonaAlarmas_{{a.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaAlarmas[a.id]" name="obserZonaAlarmas_{{a.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('alarma',a.id)">Tomar Fotos para Zona #{{a.id}}</button>
@@ -311,7 +322,8 @@
           </ion-item>
         </ion-list>
         <ion-item>
-          <button ion-button (click)="adjuntar_archivo('alarma')" clear color="danger">Adjuntar Archivo</button>
+          <label class="item item-input"><input type="file" id="" (change)="adjuntar_archivo($event,'alarma')"
+              name="uploadfile" clear color="danger"></label>
         </ion-item>
       </ion-list>
 
@@ -319,35 +331,42 @@
         <h3>Incendios</h3>
         <ion-item>
           <ion-label stacked>Zonas a Cuidar</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="habitacionesIncendios" #habitacionIncendios (change)="habilitarHabitacionesIncendios(habitacionIncendios.value)"
-            name="habitacionesIncendios"></ion-input>
+          <ion-input type="number" min="0" [(ngModel)]="habitacionesIncendios" #habitacionIncendios
+            (change)="habilitarHabitacionesIncendios(habitacionIncendios.value)" name="habitacionesIncendios">
+          </ion-input>
         </ion-item>
 
         <div *ngFor="let in of listaHabitacionesIncendios">
           <strong style="color:#E53935">Habitaciones #{{in.id}}</strong>
           <ion-item>
             <ion-label floating>Nombre de Habitación a Cuidar #{{in.id}}</ion-label>
-            <ion-input [(ngModel)]="nombreHabitacionIncendios[in.id]" name="nombreHabitacionIncendios_{{in.id}}"></ion-input>
+            <ion-input [(ngModel)]="nombreHabitacionIncendios[in.id]" name="nombreHabitacionIncendios_{{in.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label stacked>Cuantos Sensores Necesita la Habitacion #{{in.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="sensoresIncendio[in.id]" name="sensoresIncendio_{{in.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="sensoresIncendio[in.id]" name="sensoresIncendio_{{in.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label stacked>Tipo de Pared de la Habitacion #{{in.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionIncendio[in.id]" name="tipoParedHabitacionIncendio_{{in.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="tipoParedHabitacionIncendio[in.id]"
+              name="tipoParedHabitacionIncendio_{{in.id}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Aproximidad en Mts² de la Habitación #{{in.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="aproMtsIncendio[in.id]" name="aproMtsIncendio_{{in.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="aproMtsIncendio[in.id]" name="aproMtsIncendio_{{in.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>ALtura Maxima en Mts² de la Habitación #{{in.id}}</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[in.id]" name="altMtsIncendio_{{in.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="altMtsIncendio[in.id]" name="altMtsIncendio_{{in.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label floating>Observaciones para la zona.</ion-label>
-            <ion-input type="number" min="0" [(ngModel)]="obserZonaIncendio[in.id]" name="obserZonaIncendio_{{in.id}}"></ion-input>
+            <ion-input type="number" min="0" [(ngModel)]="obserZonaIncendio[in.id]" name="obserZonaIncendio_{{in.id}}">
+            </ion-input>
           </ion-item>
           <ion-item>
             <button ion-button (click)="take_pictures('incendio',in.id)">Tomar Fotos para Zona #{{in.id}}</button>
@@ -421,7 +440,8 @@
           </ion-item>
         </ion-list>
         <ion-item>
-          <button ion-button (click)="adjuntar_archivo('incendio')" clear color="danger">Adjuntar Archivo</button>
+          <label class="item item-input"><input type="file" id="" (change)="adjuntar_archivo($event,'incendio')"
+              name="uploadfile" clear color="danger"></label>
         </ion-item>
       </ion-list>
 
@@ -529,7 +549,8 @@
           </ion-item>
         </ion-list>
         <ion-item>
-          <button ion-button (click)="adjuntar_archivo('cctv')" clear color="danger">Adjuntar Archivo</button>
+          <label class="item item-input"><input type="file" id="" (change)="adjuntar_archivo($event,'epc')"
+              name="uploadfile" clear color="danger"></label>
         </ion-item>
 
       </ion-list>
@@ -632,37 +653,55 @@
         </ion-list>
       </ion-list>
     </ion-list>
-
     <ion-list no-list *ngSwitchCase="'catalogo'">
       <h1>Posibles Opciones</h1>
-      <ion-card *ngFor="let item of list_items">
-        <img [src]="sanitize('data:image/jpeg;base64,'+item.image_medium)" alt="{{item.name}}">
-        <ion-card-content>
-          <ion-item>
-            <ion-icon name="information" color="danger" item-start></ion-icon>
-            Nombre:
-            <ion-badge color="danger" item-end>{{item.name}}</ion-badge>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="checkmark" color="danger" item-start></ion-icon>
-            Disponibles:
-            <ion-badge color="danger" item-end>{{item.qty_available}}</ion-badge>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
-            Precio:
-            <ion-badge color="danger" item-end>{{ item.currency_id[1] }} {{ item.list_price | number:'3.2-5'}}</ion-badge>
-          </ion-item>
-          <button ion-button color="danger" (click)="agregaCarrito(item)">
-            <ion-icon name="cart"></ion-icon>
-          </button>
-        </ion-card-content>
-      </ion-card>
+      <div *ngIf="list_items.length > 0; else elseItems">
+
+
+        <ion-card *ngFor="let item of list_items">
+          <ion-card-content>
+            <div *ngIf="item.image_medium;else elseimg">
+              <img [src]="sanitize('data:image/jpeg;base64,'+item.image_medium)" alt="{{item.name}}">
+            </div>
+            <ng-template #elseimg>
+              <img src="assets/imgs/picture.png" width="50%">
+            </ng-template>
+            <ion-item>
+              <ion-icon name="information" color="danger" item-start></ion-icon>
+              Nombre:
+              <ion-badge color="danger" item-end>{{item.name}}</ion-badge>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="checkmark" color="danger" item-start></ion-icon>
+              Disponibles:
+              <ion-badge color="danger" item-end>{{item.qty_available}}</ion-badge>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
+              Precio:
+              <ion-badge color="danger" item-end>{{ item.currency_id[1] }} {{ item.list_price | number:'3.2-5'}}
+              </ion-badge>
+            </ion-item>
+            <button ion-button color="danger" (click)="agregaCarrito(item)">
+              <ion-icon name="cart"></ion-icon>
+            </button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <ng-template #elseItems>
+        <h1>Por favor seleccione mínimo una necesidad del cliente</h1>
+      </ng-template>
+
     </ion-list>
     <ion-list no-list *ngSwitchCase="'cotizacion'">
       <h1>Cotización</h1>
       <ion-card *ngFor="let itc of list_items_carrito">
-        <img [src]="sanitize('data:image/jpeg;base64,'+itc.image_medium)" alt="{{itc.name}}">
+        <div *ngIf="itc.image_medium;else elseimgc">
+          <img [src]="sanitize('data:image/jpeg;base64,'+itc.image_medium)" alt="{{itc.name}}">
+        </div>
+        <ng-template #elseimgc>
+          <img src="assets/imgs/picture.png" width="50%">
+        </ng-template>
         <ion-card-content>
           <ion-item>
             <ion-icon name="information" color="danger" item-start></ion-icon>
@@ -681,8 +720,8 @@
           </ion-item>
           <ion-item>
             <ion-label stacked> % Utilidad</ion-label>
-            <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar" #sdefdef (ngModelChange)="cambiaUtilidad()"
-              value="0">
+            <ion-select [(ngModel)]="porcentajeUtilidad[itc.id]" cancelText="Cancelar" #sdefdef
+              (ngModelChange)="cambiaUtilidad()" value="0">
               <ion-option value="0">Seleccione...</ion-option>
               <ion-option value="25">25%</ion-option>
               <ion-option value="50">50%</ion-option>
@@ -695,11 +734,12 @@
             Precio:
             <ion-badge color="danger" item-end *ngIf="porcentajeUtilidad[itc.id]">{{itc.list_price + (itc.list_price *
               porcentajeUtilidad[itc.id] / 100) | number:'3.2-5'}}</ion-badge>
-            <ion-badge color="danger" item-end *ngIf="!porcentajeUtilidad[itc.id]">{{itc.list_price | number:'3.2-5'}}</ion-badge>
+            <ion-badge color="danger" item-end *ngIf="!porcentajeUtilidad[itc.id]">{{itc.list_price | number:'3.2-5'}}
+            </ion-badge>
           </ion-item>
         </ion-card-content>
       </ion-card>
-      <ion-card>
+      <ion-card *ngIf="list_items_carrito.length > 0; else elseItemsCarrito">
         <ion-card-content>
           <ion-item>
             <ion-icon name="logo-usd" color="danger" item-start></ion-icon>
@@ -720,6 +760,10 @@
           </ion-item>
         </ion-card-content>
       </ion-card>
+      <ng-template #elseItemsCarrito>
+        <h1>El carrito esta vacío</h1>
+      </ng-template>
+
     </ion-list>
   </div>
 </ion-content>
