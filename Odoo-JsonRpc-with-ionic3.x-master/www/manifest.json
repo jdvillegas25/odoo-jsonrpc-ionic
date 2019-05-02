@@ -1,0 +1,13 @@
+{
+  "name": "Odoo Mobile",
+  "short_name": "Odoo",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/imgs/logoallservice.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#92AD24",
+  "theme_color": "#92AD24"
+}
