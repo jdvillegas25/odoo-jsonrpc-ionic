@@ -142,7 +142,10 @@ export class ActaDigitalPage {
         functionary_name: this.functionary_name,
         functionary_email: this.functionary_email,
         origin_tech_coord: this.dataMantenimiento.origin_tech_coord,
+        entry_time: this.dataMantenimiento.entry_time,
+        departure_time: new Date()
       }
+      console.log(data);
       let geocoder = new google.maps.Geocoder;
       let latlngStr = this.dataMantenimiento.origin_tech_coord.split(',', 2);
       var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };

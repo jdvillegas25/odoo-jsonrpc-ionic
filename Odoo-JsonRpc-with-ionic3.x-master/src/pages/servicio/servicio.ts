@@ -67,7 +67,8 @@ export class ServicioPage {
       date_finish: navParams.get("date_finish"),
       description: navParams.get("description"),
       sec: navParams.get("sec"),
-      origin_tech_coord: navParams.get("origin_tech_coord")
+      origin_tech_coord: navParams.get("origin_tech_coord"),
+      entry_time: navParams.get("entry_time")
     };
     // this.get_necesidad_cliente();
   }
@@ -358,6 +359,7 @@ export class ServicioPage {
 
 
     });
+    console.log(params);
     this.navCtrl.push(ActaDigitalPage, params);
   }
 

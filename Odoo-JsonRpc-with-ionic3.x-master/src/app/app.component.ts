@@ -1,17 +1,16 @@
 import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
-import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { OdooJsonRpc } from "../services/odoojsonrpc";
 import { Component, ViewChild } from "@angular/core";
-import { AlertController, Platform, Nav, MenuController } from "ionic-angular";
+import { AlertController, Platform, Nav, MenuController, Events } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { Network } from "@ionic-native/network";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Utils } from "../services/utils";
 import { ProfilePage } from "../pages/profile/profile";
-import { ActaDigitalPage } from "../pages/acta-digital/acta-digital"
 import { HistorialServiciosPage } from "../pages/historial-servicios/historial-servicios";
-import { DetallePage } from '../pages/detalle/detalle';
+import { DataBaseProvider } from '../providers/data-base/data-base';
+import { NetworkProvider } from '../providers/network/network';
 
 @Component({
   templateUrl: "app.html",
@@ -23,12 +22,12 @@ export class MyApp {
   public homeMantenimiento: boolean = false;
 
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = LoginPage;
+  rootPage: any = LoginPage;;
   pagesSalesman: Array<{ title: string, component: any, icon: any }>;
   pagesTechnician: Array<{ title: string, component: any, icon: any }>;
-  constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network, public menu: MenuController) {
+  constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, public odooRpc: OdooJsonRpc, public alert: AlertController, private network: Network, public menu: MenuController, public events: Events, private database: DataBaseProvider, private proNet: NetworkProvider) {
 
-    this.initializeApp();
+    this.getNetwork();
     this.initLogin();
     this.pagesTechnician = [
       { title: 'Perfil', component: ProfilePage, icon: 'contact' },
@@ -40,6 +39,10 @@ export class MyApp {
       { title: 'Oportunidades', component: HomePage, icon: 'stats' }
     ];
   }
+  openPage(page) {
+    this.nav.setRoot(page.component);
+  }
+
   initLogin() {
     if (localStorage.getItem("token")) {
       let response = window.localStorage.getItem("token");
@@ -55,7 +58,7 @@ export class MyApp {
       this.odooRpc.login(db, username, pass).catch((error: any) => {
         let alrt = this.alert.create({
           title: "Server Status",
-          message: "The connection to " + url + " is refused!!",
+          message: "La conexión a  " + url + " fue rechazada!!",
           buttons: ["Ok"]
         });
         alrt.present();
@@ -74,11 +77,26 @@ export class MyApp {
       this.statusBar.backgroundColorByHexString("#00FFFFFF");
     });
   }
+  getNetwork() {
+    this.proNet.validarConexion(this.initializeApp(), function () { console.log('Función de desconexión'); });
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
   }
+  /* getuser() {
+    let dataUser = '';
+    DataBaseProvider.select('res_user',[],'','').then(res => {
+      dataUser = res;
+
+      if (dataUser[0]['id'] != null) {
+        //	  alert('array con datos')
+        this.rootPage.setRoot(HomePage);
+      } else {
+        //	alert('array vacio')
+
+        //this.navCtrl.setRoot(LoginPage);
+      }
+    }).catch(e => {
+      console.log(e);
+    });
+  } */
 
 }

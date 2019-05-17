@@ -1,7 +1,7 @@
 import { OdooJsonRpc } from '../../services/odoojsonrpc';
 import { Utils } from '../../services/utils';
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { IonicPage, NavController, NavParams, Platform, AlertController } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Platform, AlertController, DateTime } from "ionic-angular";
 import { ProspectoPage } from '../prospecto/prospecto';
 import { ServicioPage } from '../servicio/servicio';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -300,8 +300,11 @@ export class DetallePage {
   }
   private continuarServicio(): void {
     let params = {}
+    let date = new Date().valueOf();
     params = this.dataMantenimiento[0];
     params["origin_tech_coord"] = this.ubicationStart;
+    params["entry_time"] = date;
+    // params["entry_time"] = date.getDay()+"-"+date.getMonth()+"-"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds();
     this.navCtrl.push(ServicioPage, params);
   }
   private NotificarLlegada() {

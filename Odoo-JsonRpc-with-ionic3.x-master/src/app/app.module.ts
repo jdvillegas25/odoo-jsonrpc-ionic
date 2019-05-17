@@ -17,7 +17,7 @@ import { ProspectoPage } from "../pages/prospecto/prospecto";
 import { ServicioPage } from "../pages/servicio/servicio"
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
-import { FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { IonicStorageModule } from '@ionic/storage';
@@ -29,7 +29,9 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiProvider } from '../providers/api/api';
 import { DetallePage } from '../pages/detalle/detalle';
-
+import { DataBaseProvider } from '../providers/data-base/data-base';
+import { NetworkProvider } from '../providers/network/network';
+import { SQLite} from '@ionic-native/sqlite';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,7 @@ import { DetallePage } from '../pages/detalle/detalle';
     StatusBar,
     SplashScreen,
     OdooJsonRpc,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     File,
     FileChooser,
     FileTransfer,
@@ -84,6 +86,9 @@ import { DetallePage } from '../pages/detalle/detalle';
     OneSignal,
     GoogleMaps,
     ApiProvider,
+    DataBaseProvider,
+    NetworkProvider, 
+    SQLite
   ]
 })
-export class AppModule {}
+export class AppModule { }

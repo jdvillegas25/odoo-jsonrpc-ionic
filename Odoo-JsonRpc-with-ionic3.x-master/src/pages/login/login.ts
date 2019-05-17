@@ -5,8 +5,9 @@ import { Component } from "@angular/core";
 import { NavController, NavParams, LoadingController, AlertController, MenuController } from "ionic-angular";
 import { Utils } from "../../services/utils";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-
 import { OneSignal } from '@ionic-native/onesignal';
+import { Network } from '@ionic-native/network';
+import { NetworkProvider } from '../../providers/network/network';
 
 @Component({
   selector: "page-login",
@@ -14,7 +15,7 @@ import { OneSignal } from '@ionic-native/onesignal';
 })
 export class LoginPage {
   // private listForProtocol: Array<{protocol: string;}> = [];
-  public perfectUrl: boolean = false;
+  public perfectUrl: boolean = true;
   public odooUrl;
   public selectedProtocol;
   private dbList: Array<{ dbName: string; }> = [];
@@ -24,10 +25,13 @@ export class LoginPage {
   private arregloPermisos: any;
   public logiData: any;
 
-  constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, ) {
-    this.checkUrl();
-    this.menu.enable(false,'salesman');
-    this.menu.enable(false,'technician');
+  constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, public network: Network, public proNet: NetworkProvider) {
+    this.getNetwork();
+    this.menu.enable(false, 'salesman');
+    this.menu.enable(false, 'technician');
+  }
+  getNetwork() {
+    this.proNet.validarConexion(this.checkUrl(),function(){console.log('Funcion de desconexion');});
   }
   public checkUrl() {
     let loading = this.loadingCtrl.create({
@@ -39,16 +43,10 @@ export class LoginPage {
       http_auth: "username:password" // optional
     });
     this.odooRpc.getDbList().then((dbList: any) => {
-      this.perfectUrl = true;
-      this.utils.dismissLoading();
       this.fillData(dbList);
+      this.perfectUrl = true;
+      loading.dismiss();
     }).catch((err: any) => {
-      // this.utils.presentAlert("Error", "Por favor revice su conexión a internet", [
-      //   {
-      //     text: "Ok"
-      //   }
-      // ]);
-      // this.utils.dismissLoading();
       loading.dismiss();
     });
     loading.dismiss();
@@ -91,17 +89,17 @@ export class LoginPage {
         );
       }
     }).catch(err => {
-        loading.dismissAll();
-        this.utils.presentAlert(
-          "Error",
-          "Usuario o Contraseña Incorrecta",
-          [
-            {
-              text: "Ok"
-            }
-          ]
-        );
-      });
+      loading.dismissAll();
+      this.utils.presentAlert(
+        "Error",
+        "Usuario o Contraseña Incorrecta",
+        [
+          {
+            text: "Ok"
+          }
+        ]
+      );
+    });
   }
   private permisos(): void {
     let domain = [['partner_id', '=', this.logiData["partner_id"]]]

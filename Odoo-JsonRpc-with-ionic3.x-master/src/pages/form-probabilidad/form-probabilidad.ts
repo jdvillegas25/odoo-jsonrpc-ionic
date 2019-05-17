@@ -284,11 +284,11 @@ export class FormProbabilidadPage {
         state_id: this.city[0],
         city: this.city[1],
         email_from: this.email,
+        cat_names: null
 
       };
       let model = "crm.lead";
       if (this.idOportunidad == '') {
-        alert('crear')
         this.odooRpc.createRecord(model, params).then((res: any) => {
           let json = JSON.parse(res._body);
           if (!json.error) {
@@ -301,7 +301,6 @@ export class FormProbabilidadPage {
         loading.dismiss();
         this.navCtrl.setRoot(HomePage);
       } else {
-        alert('modificar')
         this.odooRpc.updateRecord(model, this.idOportunidad, params).then((res: any) => {
           let json = JSON.parse(res._body);
           if (!json.error) {

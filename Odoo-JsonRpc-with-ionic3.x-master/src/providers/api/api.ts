@@ -10,10 +10,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello ApiProvider Provider');
-  }
-  getData(url, parametros){
+  constructor(public http: HttpClient) {}
+
+  getData(url, parametros) {
     return this.http.post(url, parametros);
   }
 
