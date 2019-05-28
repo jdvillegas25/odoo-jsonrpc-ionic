@@ -300,11 +300,15 @@ export class DetallePage {
   }
   private continuarServicio(): void {
     let params = {}
-    let date = new Date().valueOf();
+    let date:Date = new Date();
+    //console.log(new Date().toLocaleString("es-CO", {timeZone: "America/Bogota"}));
+    let day = date.getDate();
+    let month = (date.getMonth()+1 < 10)?"0"+Number(date.getMonth()+1):date.getMonth()+1;
+    let year = date.getFullYear();
     params = this.dataMantenimiento[0];
     params["origin_tech_coord"] = this.ubicationStart;
-    params["entry_time"] = date;
-    // params["entry_time"] = date.getDay()+"-"+date.getMonth()+"-"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds();
+    //params["entry_time"] = date;
+    params["entry_time"] = year+"-"+month+"-"+day+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     this.navCtrl.push(ServicioPage, params);
   }
   private NotificarLlegada() {

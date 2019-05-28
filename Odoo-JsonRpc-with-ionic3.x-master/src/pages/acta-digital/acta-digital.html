@@ -46,40 +46,60 @@
       <ion-col><strong>Falla Reportada:</strong></ion-col>
       <ion-col>{{dataMantenimiento.description}}</ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col><strong>Trabajo Realizado sobre:</strong></ion-col>
-      <ion-col>{{necesidad.name}}</ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col><strong>Trabajo Realizado:</strong></ion-col>
-      <ion-col>
-        <p *ngFor="let ser of servicios">{{ser.name}}</p>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col><strong>Repuestos y/o suministros Reparados:</strong></ion-col>
-      <ion-col>
-        <ion-row *ngFor="let prod of productos">
-          <ion-col *ngIf="prod.accion == 1"><strong>Producto: </strong>{{prod.name}}</ion-col>
-          <ion-col *ngIf="prod.accion == 1"><strong>Cantidad: </strong>{{prod.cantidad}}</ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col><strong>Repuestos y/o suministros nuevos:</strong></ion-col>
-      <ion-col>
-        <ion-row *ngFor="let pro of productos">
-          <ion-col *ngIf="pro.accion == 2"><strong>Producto: </strong>{{pro.name}}</ion-col>
-          <ion-col *ngIf="pro.accion == 2"><strong>Cantidad: </strong>{{pro.cantidad}}</ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col><strong>Nombre del Técnico:</strong></ion-col>
-      <ion-col>{{username}}</ion-col>
-    </ion-row>
+
+
+    <div *ngIf="necesidad.length == 0; else elseNec">
+      <ion-row>
+        <ion-col><strong>Motivo de cita fallida: </strong></ion-col>
+        <ion-col>{{data.fail_cause_id[1]}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><strong>Detalle de cita fallida : </strong></ion-col>
+        <ion-col>{{data.fail_description_id[1]}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><strong>Nombre del Técnico:</strong></ion-col>
+        <ion-col>{{username}}</ion-col>
+      </ion-row>
+    </div>
+
+    <ng-template #elseNec>
+      <ion-row>
+        <ion-col><strong>Trabajo Realizado sobre: </strong></ion-col>
+        <ion-col>{{necesidad.name}}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><strong>Trabajo Realizado:</strong></ion-col>
+        <ion-col>
+          <p *ngFor="let ser of servicios">{{ser.name}}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><strong>Repuestos y/o suministros Reparados:</strong></ion-col>
+        <ion-col>
+          <ion-row *ngFor="let prod of productos">
+            <ion-col *ngIf="prod.accion == 1"><strong>Producto: </strong>{{prod.name}}</ion-col>
+            <ion-col *ngIf="prod.accion == 1"><strong>Cantidad: </strong>{{prod.cantidad}}</ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><strong>Repuestos y/o suministros nuevos:</strong></ion-col>
+        <ion-col>
+          <ion-row *ngFor="let pro of productos">
+            <ion-col *ngIf="pro.accion == 2"><strong>Producto: </strong>{{pro.name}}</ion-col>
+            <ion-col *ngIf="pro.accion == 2"><strong>Cantidad: </strong>{{pro.cantidad}}</ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><strong>Nombre del Técnico:</strong></ion-col>
+        <ion-col>{{username}}</ion-col>
+      </ion-row>
+    </ng-template>
   </ion-grid>
-  <div align="left">
+  <div align="left" *ngIf="necesidad.length != 0">
     <ion-item>
       <ion-label stacked>Observaciones del Técnico</ion-label>
       <ion-input type="text" [(ngModel)]="observation_user"></ion-input>
@@ -87,7 +107,9 @@
     <ion-item>
       <ion-label stacked>Cliente</ion-label>
       <ion-select [(ngModel)]="cliente" #cli id="cli" (ionChange)="persistCliente()">
-        <ion-option value="addCustomer"> <--CREAR CLIENTE NUEVO--> </ion-option>
+        <ion-option value="addCustomer">
+          <--CREAR CLIENTE NUEVO-->
+        </ion-option>
         <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -104,7 +126,7 @@
       <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>
     </ion-item>
     <ion-item *ngIf="!finish">
-        <button ion-button color="danger" full (click)="openModal()">Crear Firma</button>
+      <button ion-button color="danger" full (click)="openModal()">Crear Firma</button>
     </ion-item>
   </div>
   <ion-list *ngIf="firma">

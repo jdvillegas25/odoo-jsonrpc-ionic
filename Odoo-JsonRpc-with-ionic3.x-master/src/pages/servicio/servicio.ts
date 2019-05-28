@@ -359,7 +359,6 @@ export class ServicioPage {
 
 
     });
-    console.log(params);
     this.navCtrl.push(ActaDigitalPage, params);
   }
 

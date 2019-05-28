@@ -34,6 +34,8 @@ export class ActaDigitalPage {
   private necesidad: Array<any> = [];
   private servicios: Array<any> = [];
   private productos: Array<any> = [];
+  /*Esta variable solo se usa cuando se genera acta digital desde cita fallida*/
+  private data: Array<any> = [];
   private firma: String = "";
   private Datafirma: String = "";
   private observation_user: any;
@@ -51,10 +53,12 @@ export class ActaDigitalPage {
      * Autor: Brayan Gonzalez
      * Descripcion:Asignaremos las variables que llegan desde ServicioPage
      ***********************************************************************/
-    this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : {};
-    this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : {};
-    this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
-    this.productos = (navParams.get("productos")) ? navParams.get("productos") : {};
+    this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : [];
+    this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : [];
+    this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : [];
+    this.productos = (navParams.get("productos")) ? navParams.get("productos") : [];
+    /*Esta variable solo se usa cuando se genera acta digital desde cita fallida*/
+    this.data = (navParams.get("data")) ? navParams.get("data") : [];
     this.firma = "";
     this.getClientes();
   }
@@ -73,6 +77,13 @@ export class ActaDigitalPage {
     });
   }
   private save_acta() {
+    if (Object.keys(this.necesidad).length > 0 && Object.keys(this.servicios).length > 0 && Object.keys(this.productos).length > 0) {
+      this.acta_servicio();
+    } else if (Object.keys(this.data).length > 0) {
+      this.acta_cita_fallida();
+    }
+  }
+  private acta_servicio() {
     if (this.Datafirma == "") {
       const alert = this.alertCtrl.create({
         title: 'ERROR',
@@ -108,7 +119,6 @@ export class ActaDigitalPage {
       if (this.update_task()) {
         if (this.insert_services_task()) {
           this.navCtrl.setRoot(HomePage);
-          // this.navCtrl.push(HomePage);
         } else {
           const alert = this.alertCtrl.create({
             title: 'ERROR',
@@ -127,9 +137,27 @@ export class ActaDigitalPage {
       }
     }
   }
+  private acta_cita_fallida() {
+    let table = "";
+    let data = {
+      fail_cause_id: this.data['fail_cause_id'][1],
+      assignment_status: this.data['assignment_status'],
+      fail_description_id: this.data['fail_description_id'][1],
+      finished: this.data['finished'],
+      kanban_state: this.data['kanban_state']
+    }
+    this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then(() => {
+      this.navCtrl.setRoot(HomePage);
+    });
+  }
   async update_task() {
     let _self = this;
     let salida = true;
+    let date: Date = new Date();
+    let day = date.getDate();
+    let month = (date.getMonth() + 1 < 10) ? "0" + Number(date.getMonth() + 1) : date.getMonth() + 1;
+    let year = date.getFullYear();
+
     if (this.firma != "") {
 
       let table = "project.task"
@@ -143,9 +171,8 @@ export class ActaDigitalPage {
         functionary_email: this.functionary_email,
         origin_tech_coord: this.dataMantenimiento.origin_tech_coord,
         entry_time: this.dataMantenimiento.entry_time,
-        departure_time: new Date()
+        departure_time: year + "-" + month + "-" + day + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
       }
-      console.log(data);
       let geocoder = new google.maps.Geocoder;
       let latlngStr = this.dataMantenimiento.origin_tech_coord.split(',', 2);
       var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };

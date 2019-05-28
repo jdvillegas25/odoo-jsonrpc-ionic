@@ -8,8 +8,8 @@ webpackJsonp([0],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__prospecto_prospecto__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__servicio_servicio__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__prospecto_prospecto__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__servicio_servicio__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -257,11 +257,15 @@ var DetallePage = (function () {
     };
     DetallePage.prototype.continuarServicio = function () {
         var params = {};
-        var date = new Date().valueOf();
+        var date = new Date();
+        //console.log(new Date().toLocaleString("es-CO", {timeZone: "America/Bogota"}));
+        var day = date.getDate();
+        var month = (date.getMonth() + 1 < 10) ? "0" + Number(date.getMonth() + 1) : date.getMonth() + 1;
+        var year = date.getFullYear();
         params = this.dataMantenimiento[0];
         params["origin_tech_coord"] = this.ubicationStart;
-        params["entry_time"] = date;
-        // params["entry_time"] = date.getDay()+"-"+date.getMonth()+"-"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds();
+        //params["entry_time"] = date;
+        params["entry_time"] = year + "-" + month + "-" + day + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__servicio_servicio__["a" /* ServicioPage */], params);
     };
     DetallePage.prototype.NotificarLlegada = function () {
@@ -291,8 +295,396 @@ DetallePage = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActaDigitalPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__home_home__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modal_modal__ = __webpack_require__(361);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__add_customer_add_customer__ = __webpack_require__(99);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the ActaDigitalPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var ActaDigitalPage = (function () {
+    function ActaDigitalPage(navCtrl, navParams, odooRpc, loadingCtrl, platform, toastCtrl, camera, sanitizer, fileChooser, file, storage, renderer, plt, alertCtrl, rendere, modal) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.odooRpc = odooRpc;
+        this.loadingCtrl = loadingCtrl;
+        this.toastCtrl = toastCtrl;
+        this.camera = camera;
+        this.sanitizer = sanitizer;
+        this.fileChooser = fileChooser;
+        this.file = file;
+        this.storage = storage;
+        this.renderer = renderer;
+        this.plt = plt;
+        this.alertCtrl = alertCtrl;
+        this.rendere = rendere;
+        this.modal = modal;
+        /***********************************************************************
+         * Autor: Brayan Gonzalez
+         * Descripcion: Variables necesarios para el proceso de acta digital
+         **********************************************************************/
+        this.dataMantenimiento = [];
+        this.necesidad = [];
+        this.servicios = [];
+        this.productos = [];
+        /*Esta variable solo se usa cuando se genera acta digital desde cita fallida*/
+        this.data = [];
+        this.firma = "";
+        this.Datafirma = "";
+        this.username = JSON.parse(localStorage.getItem('token'))['username'];
+        this.finish = false;
+        /**********************************************************************
+         * Autor: Brayan Gonzalez
+         * Descripcion:Asignaremos las variables que llegan desde ServicioPage
+         ***********************************************************************/
+        this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : [];
+        this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : [];
+        this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : [];
+        this.productos = (navParams.get("productos")) ? navParams.get("productos") : [];
+        /*Esta variable solo se usa cuando se genera acta digital desde cita fallida*/
+        this.data = (navParams.get("data")) ? navParams.get("data") : [];
+        this.firma = "";
+        this.getClientes();
+    }
+    ActaDigitalPage.prototype.openModal = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var myModal;
+            return __generator(this, function (_a) {
+                myModal = this.modal.create(__WEBPACK_IMPORTED_MODULE_9__modal_modal__["a" /* ModalPage */]);
+                myModal.present();
+                myModal.onDidDismiss(function (data) {
+                    _this.firma = data.firma;
+                    _this.Datafirma = data.Datafirma;
+                    _this.finish = data.finish;
+                });
+                myModal.onWillDismiss(function (data) {
+                    _this.firma = data.firma;
+                    _this.Datafirma = data.Datafirma;
+                    _this.finish = data.finish;
+                });
+                return [2 /*return*/];
+            });
+        });
+    };
+    ActaDigitalPage.prototype.save_acta = function () {
+        if (Object.keys(this.necesidad).length > 0 && Object.keys(this.servicios).length > 0 && Object.keys(this.productos).length > 0) {
+            this.acta_servicio();
+        }
+        else if (Object.keys(this.data).length > 0) {
+            this.acta_cita_fallida();
+        }
+    };
+    ActaDigitalPage.prototype.acta_servicio = function () {
+        if (this.Datafirma == "") {
+            var alert_1 = this.alertCtrl.create({
+                title: 'ERROR',
+                subTitle: 'Por favor agregue la firma del encargado',
+                buttons: ['OK']
+            });
+            alert_1.present();
+        }
+        else if (this.functionary_vat === undefined) {
+            var alert_2 = this.alertCtrl.create({
+                title: 'ERROR',
+                subTitle: 'Por favor el documento del encargado',
+                buttons: ['OK']
+            });
+            alert_2.present();
+        }
+        else if (this.functionary_name === undefined) {
+            var alert_3 = this.alertCtrl.create({
+                title: 'ERROR',
+                subTitle: 'Por favor agregue el nombre del encargado',
+                buttons: ['OK']
+            });
+            alert_3.present();
+        }
+        else if (this.functionary_email === undefined) {
+            var alert_4 = this.alertCtrl.create({
+                title: 'ERROR',
+                subTitle: 'Por favor agregue el email del encargado',
+                buttons: ['OK']
+            });
+            alert_4.present();
+        }
+        else {
+            /*************Data a almacenar para equipos electronicos***********/
+            if (this.update_task()) {
+                if (this.insert_services_task()) {
+                    this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__home_home__["a" /* HomePage */]);
+                }
+                else {
+                    var alert_5 = this.alertCtrl.create({
+                        title: 'ERROR',
+                        subTitle: 'Se han presentado fallas para generar los productos en el acta digital',
+                        buttons: ['OK']
+                    });
+                    alert_5.present();
+                }
+            }
+            else {
+                var alert_6 = this.alertCtrl.create({
+                    title: 'ERROR',
+                    subTitle: 'Se han presentado fallas para generar la firma digital',
+                    buttons: ['OK']
+                });
+                alert_6.present();
+            }
+        }
+    };
+    ActaDigitalPage.prototype.acta_cita_fallida = function () {
+        var _this = this;
+        var table = "";
+        var data = {
+            fail_cause_id: this.data['fail_cause_id'][1],
+            assignment_status: this.data['assignment_status'],
+            fail_description_id: this.data['fail_description_id'][1],
+            finished: this.data['finished'],
+            kanban_state: this.data['kanban_state']
+        };
+        this.odooRpc.updateRecord(table, this.dataMantenimiento.id, data).then(function () {
+            _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__home_home__["a" /* HomePage */]);
+        });
+    };
+    ActaDigitalPage.prototype.update_task = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _self, salida, date, day, month, year, table_1, data_1, geocoder, latlngStr, latlng;
+            return __generator(this, function (_a) {
+                _self = this;
+                salida = true;
+                date = new Date();
+                day = date.getDate();
+                month = (date.getMonth() + 1 < 10) ? "0" + Number(date.getMonth() + 1) : date.getMonth() + 1;
+                year = date.getFullYear();
+                if (this.firma != "") {
+                    table_1 = "project.task";
+                    data_1 = {
+                        notes: this.observation_user,
+                        customer_sign_image: this.Datafirma,
+                        finished: true,
+                        kanban_state: 'done',
+                        functionary_vat: this.functionary_vat,
+                        functionary_name: this.functionary_name,
+                        functionary_email: this.functionary_email,
+                        origin_tech_coord: this.dataMantenimiento.origin_tech_coord,
+                        entry_time: this.dataMantenimiento.entry_time,
+                        departure_time: year + "-" + month + "-" + day + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+                    };
+                    geocoder = new google.maps.Geocoder;
+                    latlngStr = this.dataMantenimiento.origin_tech_coord.split(',', 2);
+                    latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+                    geocoder.geocode({ 'location': latlng }, function (results, status) {
+                        data_1['origin_address'] = results[0].formatted_address;
+                        _self.odooRpc.updateRecord(table_1, _self.dataMantenimiento.id, data_1).then(function (query) {
+                            if (query.ok) {
+                                salida = true;
+                            }
+                        }).catch(function (err) {
+                            salida = false;
+                        });
+                    });
+                }
+                else {
+                    salida = false;
+                }
+                return [2 /*return*/, salida];
+            });
+        });
+    };
+    ActaDigitalPage.prototype.insert_services_task = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var salida, contador, table;
+            return __generator(this, function (_a) {
+                salida = true;
+                contador = 0;
+                table = 'project.customer.asset';
+                this.productos.forEach(function (pro) {
+                    var data = {
+                        task_id: _this.dataMantenimiento.id,
+                        product_category_id: null,
+                        product_service_cat_id: null,
+                        product_id: pro.id,
+                        quantity: pro.cantidad,
+                        replaced: (pro.accion == 1) ? true : false,
+                        asset_location: pro.ubication,
+                        asset_image: pro.pictures,
+                        spare_location_id: null,
+                        equipment_type_id: null,
+                        equipment_id: null
+                    };
+                    switch (_this.dataMantenimiento.typeMaintenance) {
+                        case 'electronico':
+                            data.product_category_id = _this.necesidad['id'];
+                            data.product_service_cat_id = pro.service[0];
+                            break;
+                        case 'metalmecanico':
+                            data.product_category_id = pro.categ_id;
+                            data.spare_location_id = pro.location_id;
+                            data.equipment_type_id = pro.equipment_id;
+                            break;
+                        default:
+                            break;
+                    }
+                    _this.odooRpc.createRecord(table, data).then(function (res) {
+                        if (res.ok === true) {
+                            contador++;
+                            if (contador == _this.productos.length) {
+                                salida = true;
+                            }
+                        }
+                    }).catch(function (err) {
+                        salida = false;
+                    });
+                });
+                salida = true;
+                return [2 /*return*/, salida];
+            });
+        });
+    };
+    ActaDigitalPage.prototype.getClientes = function () {
+        var _this = this;
+        var loading = this.loadingCtrl.create({
+            content: "Por Favor Espere..."
+        });
+        loading.present();
+        var table_cliente = "res.partner";
+        var domain = [["active", "=", "t"], ["parent_id", "=", this.dataMantenimiento.partner_id[0]]];
+        this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then(function (partner) {
+            var json = JSON.parse(partner._body);
+            if (!json.error) {
+                _this.listaClientes = json["result"].records;
+                loading.dismiss();
+            }
+        });
+    };
+    ActaDigitalPage.prototype.persistCliente = function () {
+        var _this = this;
+        if (this.cliente == 'addCustomer') {
+            var alert_7 = this.alertCtrl.create({
+                title: 'Confirmación de crear cliente',
+                message: '¿Esta seguro que quiere crear un cliente nuevo?',
+                buttons: [
+                    {
+                        text: 'No',
+                        role: 'cancel',
+                        handler: function () {
+                            console.log('Cancel clicked');
+                        }
+                    },
+                    {
+                        text: 'Si',
+                        handler: function () {
+                            _this.addCustomer();
+                        }
+                    }
+                ]
+            });
+            alert_7.present();
+        }
+        else {
+            this.parseoClientes();
+        }
+    };
+    ActaDigitalPage.prototype.parseoClientes = function () {
+        for (var _i = 0, _a = this.listaClientes; _i < _a.length; _i++) {
+            var client = _a[_i];
+            if (this.cliente == client.id) {
+                this.functionary_vat = client.vat_vd ? client.vat_vd : 'N/A';
+                this.functionary_name = client.name ? client.name : 'N/A';
+                this.functionary_email = client.email ? client.email : 'N/A';
+            }
+        }
+    };
+    ActaDigitalPage.prototype.addCustomer = function () {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_10__add_customer_add_customer__["a" /* AddCustomerPage */]);
+    };
+    return ActaDigitalPage;
+}());
+ActaDigitalPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
+        selector: 'page-acta-digital',template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\acta-digital\acta-digital.html"*/'<!--\n\n  Generated template for the ActaDigitalPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n    <ion-title>Acta Digital</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n<ion-content padding no-bounce>\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col>\n\n        <h1 align="center">Acta Digital</h1>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Nombre Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.name}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Número Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.sec}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Cliente:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.partner_id[1]}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Ciudad del Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.city_id}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Código Oficina:</strong></ion-col>\n\n      <ion-col>827</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Nombre Oficina:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.branch_type}} {{dataMantenimiento.location_id}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Falla Reportada:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.description}}</ion-col>\n\n    </ion-row>\n\n\n\n\n\n    <div *ngIf="necesidad.length == 0; else elseNec">\n\n      <ion-row>\n\n        <ion-col><strong>Motivo de cita fallida: </strong></ion-col>\n\n        <ion-col>{{data.fail_cause_id[1]}}</ion-col>\n\n      </ion-row>\n\n      <ion-row>\n\n        <ion-col><strong>Detalle de cita fallida : </strong></ion-col>\n\n        <ion-col>{{data.fail_description_id[1]}}</ion-col>\n\n      </ion-row>\n\n      <ion-row>\n\n        <ion-col><strong>Nombre del Técnico:</strong></ion-col>\n\n        <ion-col>{{username}}</ion-col>\n\n      </ion-row>\n\n    </div>\n\n\n\n    <ng-template #elseNec>\n\n      <ion-row>\n\n        <ion-col><strong>Trabajo Realizado sobre: </strong></ion-col>\n\n        <ion-col>{{necesidad.name}}</ion-col>\n\n      </ion-row>\n\n\n\n      <ion-row>\n\n        <ion-col><strong>Trabajo Realizado:</strong></ion-col>\n\n        <ion-col>\n\n          <p *ngFor="let ser of servicios">{{ser.name}}</p>\n\n        </ion-col>\n\n      </ion-row>\n\n      <ion-row>\n\n        <ion-col><strong>Repuestos y/o suministros Reparados:</strong></ion-col>\n\n        <ion-col>\n\n          <ion-row *ngFor="let prod of productos">\n\n            <ion-col *ngIf="prod.accion == 1"><strong>Producto: </strong>{{prod.name}}</ion-col>\n\n            <ion-col *ngIf="prod.accion == 1"><strong>Cantidad: </strong>{{prod.cantidad}}</ion-col>\n\n          </ion-row>\n\n        </ion-col>\n\n      </ion-row>\n\n      <ion-row>\n\n        <ion-col><strong>Repuestos y/o suministros nuevos:</strong></ion-col>\n\n        <ion-col>\n\n          <ion-row *ngFor="let pro of productos">\n\n            <ion-col *ngIf="pro.accion == 2"><strong>Producto: </strong>{{pro.name}}</ion-col>\n\n            <ion-col *ngIf="pro.accion == 2"><strong>Cantidad: </strong>{{pro.cantidad}}</ion-col>\n\n          </ion-row>\n\n        </ion-col>\n\n      </ion-row>\n\n      <ion-row>\n\n        <ion-col><strong>Nombre del Técnico:</strong></ion-col>\n\n        <ion-col>{{username}}</ion-col>\n\n      </ion-row>\n\n    </ng-template>\n\n  </ion-grid>\n\n  <div align="left" *ngIf="necesidad.length != 0">\n\n    <ion-item>\n\n      <ion-label stacked>Observaciones del Técnico</ion-label>\n\n      <ion-input type="text" [(ngModel)]="observation_user"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Cliente</ion-label>\n\n      <ion-select [(ngModel)]="cliente" #cli id="cli" (ionChange)="persistCliente()">\n\n        <ion-option value="addCustomer">\n\n          <--CREAR CLIENTE NUEVO-->\n\n        </ion-option>\n\n        <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Identificación del Contacto</ion-label>\n\n      <ion-input type="number" [(ngModel)]="functionary_vat"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Nombre del Funcionario</ion-label>\n\n      <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Email del Funcionario</ion-label>\n\n      <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>\n\n    </ion-item>\n\n    <ion-item *ngIf="!finish">\n\n      <button ion-button color="danger" full (click)="openModal()">Crear Firma</button>\n\n    </ion-item>\n\n  </div>\n\n  <ion-list *ngIf="firma">\n\n    <ion-list-header>Firma del Responsable</ion-list-header>\n\n    <ion-card>\n\n      <ion-card-content>\n\n        <img src="{{firma}}">\n\n      </ion-card-content>\n\n    </ion-card>\n\n  </ion-list>\n\n  <button ion-button color="secondary" full (click)="save_acta()">Finalizar Proceso</button>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\acta-digital\acta-digital.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__["a" /* Camera */], __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__["a" /* FileChooser */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* ModalController */]])
+], ActaDigitalPage);
+
+//# sourceMappingURL=acta-digital.js.map
+
+/***/ }),
+
+/***/ 163:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfilePage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login_login__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login_login__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_odoojsonrpc__ = __webpack_require__(22);
@@ -402,7 +794,7 @@ ProfilePage = __decorate([
 
 /***/ }),
 
-/***/ 163:
+/***/ 164:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -413,9 +805,9 @@ ProfilePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_utils__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_android_permissions__ = __webpack_require__(363);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_onesignal__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_onesignal__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_network__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_network_network__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_network_network__ = __webpack_require__(166);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -573,7 +965,7 @@ LoginPage = __decorate([
 
 /***/ }),
 
-/***/ 165:
+/***/ 166:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -626,7 +1018,7 @@ NetworkProvider = __decorate([
 
 /***/ }),
 
-/***/ 176:
+/***/ 177:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -639,7 +1031,7 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 176;
+webpackEmptyAsyncContext.id = 177;
 
 /***/ }),
 
@@ -648,11 +1040,11 @@ webpackEmptyAsyncContext.id = 176;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OdooJsonRpc; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise__ = __webpack_require__(178);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(375);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -969,7 +1361,7 @@ OdooJsonRpc = __decorate([
 
 /***/ }),
 
-/***/ 316:
+/***/ 317:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -982,11 +1374,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 316;
+webpackEmptyAsyncContext.id = 317;
 
 /***/ }),
 
-/***/ 356:
+/***/ 357:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1353,7 +1745,7 @@ FormProbabilidadPage = __decorate([
 
 /***/ }),
 
-/***/ 357:
+/***/ 358:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1681,7 +2073,7 @@ ProspectoPage = __decorate([
 
 /***/ }),
 
-/***/ 359:
+/***/ 360:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1694,7 +2086,7 @@ ProspectoPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__acta_digital_acta_digital__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__acta_digital_acta_digital__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_api_api__ = __webpack_require__(362);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ionic_angular_util_util__ = __webpack_require__(3);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2040,7 +2432,6 @@ var ServicioPage = (function () {
                 }
             }
         });
-        console.log(params);
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__acta_digital_acta_digital__["a" /* ActaDigitalPage */], params);
     };
     return ServicioPage;
@@ -2053,366 +2444,6 @@ ServicioPage = __decorate([
 ], ServicioPage);
 
 //# sourceMappingURL=servicio.js.map
-
-/***/ }),
-
-/***/ 360:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActaDigitalPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__home_home__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modal_modal__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__add_customer_add_customer__ = __webpack_require__(99);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Generated class for the ActaDigitalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var ActaDigitalPage = (function () {
-    function ActaDigitalPage(navCtrl, navParams, odooRpc, loadingCtrl, platform, toastCtrl, camera, sanitizer, fileChooser, file, storage, renderer, plt, alertCtrl, rendere, modal) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.odooRpc = odooRpc;
-        this.loadingCtrl = loadingCtrl;
-        this.toastCtrl = toastCtrl;
-        this.camera = camera;
-        this.sanitizer = sanitizer;
-        this.fileChooser = fileChooser;
-        this.file = file;
-        this.storage = storage;
-        this.renderer = renderer;
-        this.plt = plt;
-        this.alertCtrl = alertCtrl;
-        this.rendere = rendere;
-        this.modal = modal;
-        /***********************************************************************
-         * Autor: Brayan Gonzalez
-         * Descripcion: Variables necesarios para el proceso de acta digital
-         **********************************************************************/
-        this.dataMantenimiento = [];
-        this.necesidad = [];
-        this.servicios = [];
-        this.productos = [];
-        this.firma = "";
-        this.Datafirma = "";
-        this.username = JSON.parse(localStorage.getItem('token'))['username'];
-        this.finish = false;
-        /**********************************************************************
-         * Autor: Brayan Gonzalez
-         * Descripcion:Asignaremos las variables que llegan desde ServicioPage
-         ***********************************************************************/
-        this.dataMantenimiento = (navParams.get("dataMantenimiento")) ? navParams.get("dataMantenimiento") : {};
-        this.necesidad = (navParams.get("necesidad")) ? navParams.get("necesidad") : {};
-        this.servicios = (navParams.get("servicios")) ? navParams.get("servicios") : {};
-        this.productos = (navParams.get("productos")) ? navParams.get("productos") : {};
-        this.firma = "";
-        this.getClientes();
-    }
-    ActaDigitalPage.prototype.openModal = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            var myModal;
-            return __generator(this, function (_a) {
-                myModal = this.modal.create(__WEBPACK_IMPORTED_MODULE_9__modal_modal__["a" /* ModalPage */]);
-                myModal.present();
-                myModal.onDidDismiss(function (data) {
-                    _this.firma = data.firma;
-                    _this.Datafirma = data.Datafirma;
-                    _this.finish = data.finish;
-                });
-                myModal.onWillDismiss(function (data) {
-                    _this.firma = data.firma;
-                    _this.Datafirma = data.Datafirma;
-                    _this.finish = data.finish;
-                });
-                return [2 /*return*/];
-            });
-        });
-    };
-    ActaDigitalPage.prototype.save_acta = function () {
-        if (this.Datafirma == "") {
-            var alert_1 = this.alertCtrl.create({
-                title: 'ERROR',
-                subTitle: 'Por favor agregue la firma del encargado',
-                buttons: ['OK']
-            });
-            alert_1.present();
-        }
-        else if (this.functionary_vat === undefined) {
-            var alert_2 = this.alertCtrl.create({
-                title: 'ERROR',
-                subTitle: 'Por favor el documento del encargado',
-                buttons: ['OK']
-            });
-            alert_2.present();
-        }
-        else if (this.functionary_name === undefined) {
-            var alert_3 = this.alertCtrl.create({
-                title: 'ERROR',
-                subTitle: 'Por favor agregue el nombre del encargado',
-                buttons: ['OK']
-            });
-            alert_3.present();
-        }
-        else if (this.functionary_email === undefined) {
-            var alert_4 = this.alertCtrl.create({
-                title: 'ERROR',
-                subTitle: 'Por favor agregue el email del encargado',
-                buttons: ['OK']
-            });
-            alert_4.present();
-        }
-        else {
-            /*************Data a almacenar para equipos electronicos***********/
-            if (this.update_task()) {
-                if (this.insert_services_task()) {
-                    this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__home_home__["a" /* HomePage */]);
-                    // this.navCtrl.push(HomePage);
-                }
-                else {
-                    var alert_5 = this.alertCtrl.create({
-                        title: 'ERROR',
-                        subTitle: 'Se han presentado fallas para generar los productos en el acta digital',
-                        buttons: ['OK']
-                    });
-                    alert_5.present();
-                }
-            }
-            else {
-                var alert_6 = this.alertCtrl.create({
-                    title: 'ERROR',
-                    subTitle: 'Se han presentado fallas para generar la firma digital',
-                    buttons: ['OK']
-                });
-                alert_6.present();
-            }
-        }
-    };
-    ActaDigitalPage.prototype.update_task = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _self, salida, table_1, data_1, geocoder, latlngStr, latlng;
-            return __generator(this, function (_a) {
-                _self = this;
-                salida = true;
-                if (this.firma != "") {
-                    table_1 = "project.task";
-                    data_1 = {
-                        notes: this.observation_user,
-                        customer_sign_image: this.Datafirma,
-                        finished: true,
-                        kanban_state: 'done',
-                        functionary_vat: this.functionary_vat,
-                        functionary_name: this.functionary_name,
-                        functionary_email: this.functionary_email,
-                        origin_tech_coord: this.dataMantenimiento.origin_tech_coord,
-                        entry_time: this.dataMantenimiento.entry_time,
-                        departure_time: new Date()
-                    };
-                    console.log(data_1);
-                    geocoder = new google.maps.Geocoder;
-                    latlngStr = this.dataMantenimiento.origin_tech_coord.split(',', 2);
-                    latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-                    geocoder.geocode({ 'location': latlng }, function (results, status) {
-                        data_1['origin_address'] = results[0].formatted_address;
-                        _self.odooRpc.updateRecord(table_1, _self.dataMantenimiento.id, data_1).then(function (query) {
-                            if (query.ok) {
-                                salida = true;
-                            }
-                        }).catch(function (err) {
-                            salida = false;
-                        });
-                    });
-                }
-                else {
-                    salida = false;
-                }
-                return [2 /*return*/, salida];
-            });
-        });
-    };
-    ActaDigitalPage.prototype.insert_services_task = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            var salida, contador, table;
-            return __generator(this, function (_a) {
-                salida = true;
-                contador = 0;
-                table = 'project.customer.asset';
-                this.productos.forEach(function (pro) {
-                    var data = {
-                        task_id: _this.dataMantenimiento.id,
-                        product_category_id: null,
-                        product_service_cat_id: null,
-                        product_id: pro.id,
-                        quantity: pro.cantidad,
-                        replaced: (pro.accion == 1) ? true : false,
-                        asset_location: pro.ubication,
-                        asset_image: pro.pictures,
-                        spare_location_id: null,
-                        equipment_type_id: null,
-                        equipment_id: null
-                    };
-                    switch (_this.dataMantenimiento.typeMaintenance) {
-                        case 'electronico':
-                            data.product_category_id = _this.necesidad['id'];
-                            data.product_service_cat_id = pro.service[0];
-                            break;
-                        case 'metalmecanico':
-                            data.product_category_id = pro.categ_id;
-                            data.spare_location_id = pro.location_id;
-                            data.equipment_type_id = pro.equipment_id;
-                            break;
-                        default:
-                            break;
-                    }
-                    _this.odooRpc.createRecord(table, data).then(function (res) {
-                        if (res.ok === true) {
-                            contador++;
-                            if (contador == _this.productos.length) {
-                                salida = true;
-                            }
-                        }
-                    }).catch(function (err) {
-                        salida = false;
-                    });
-                });
-                salida = true;
-                return [2 /*return*/, salida];
-            });
-        });
-    };
-    ActaDigitalPage.prototype.getClientes = function () {
-        var _this = this;
-        var loading = this.loadingCtrl.create({
-            content: "Por Favor Espere..."
-        });
-        loading.present();
-        var table_cliente = "res.partner";
-        var domain = [["active", "=", "t"], ["parent_id", "=", this.dataMantenimiento.partner_id[0]]];
-        this.odooRpc.searchRead(table_cliente, domain, [], 0, 0, "").then(function (partner) {
-            var json = JSON.parse(partner._body);
-            if (!json.error) {
-                _this.listaClientes = json["result"].records;
-                loading.dismiss();
-            }
-        });
-    };
-    ActaDigitalPage.prototype.persistCliente = function () {
-        var _this = this;
-        if (this.cliente == 'addCustomer') {
-            var alert_7 = this.alertCtrl.create({
-                title: 'Confirmación de crear cliente',
-                message: '¿Esta seguro que quiere crear un cliente nuevo?',
-                buttons: [
-                    {
-                        text: 'No',
-                        role: 'cancel',
-                        handler: function () {
-                            console.log('Cancel clicked');
-                        }
-                    },
-                    {
-                        text: 'Si',
-                        handler: function () {
-                            _this.addCustomer();
-                        }
-                    }
-                ]
-            });
-            alert_7.present();
-        }
-        else {
-            this.parseoClientes();
-        }
-    };
-    ActaDigitalPage.prototype.parseoClientes = function () {
-        for (var _i = 0, _a = this.listaClientes; _i < _a.length; _i++) {
-            var client = _a[_i];
-            if (this.cliente == client.id) {
-                this.functionary_vat = client.vat_vd ? client.vat_vd : 'N/A';
-                this.functionary_name = client.name ? client.name : 'N/A';
-                this.functionary_email = client.email ? client.email : 'N/A';
-            }
-        }
-    };
-    ActaDigitalPage.prototype.addCustomer = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_10__add_customer_add_customer__["a" /* AddCustomerPage */]);
-    };
-    return ActaDigitalPage;
-}());
-ActaDigitalPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
-        selector: 'page-acta-digital',template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\acta-digital\acta-digital.html"*/'<!--\n\n  Generated template for the ActaDigitalPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n    <ion-title>Acta Digital</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n<ion-content padding no-bounce>\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col>\n\n        <h1 align="center">Acta Digital</h1>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Nombre Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.name}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Número Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.sec}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Cliente:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.partner_id[1]}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Ciudad del Aviso:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.city_id}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Código Oficina:</strong></ion-col>\n\n      <ion-col>827</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Nombre Oficina:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.branch_type}} {{dataMantenimiento.location_id}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Falla Reportada:</strong></ion-col>\n\n      <ion-col>{{dataMantenimiento.description}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Trabajo Realizado sobre:</strong></ion-col>\n\n      <ion-col>{{necesidad.name}}</ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Trabajo Realizado:</strong></ion-col>\n\n      <ion-col>\n\n        <p *ngFor="let ser of servicios">{{ser.name}}</p>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Repuestos y/o suministros Reparados:</strong></ion-col>\n\n      <ion-col>\n\n        <ion-row *ngFor="let prod of productos">\n\n          <ion-col *ngIf="prod.accion == 1"><strong>Producto: </strong>{{prod.name}}</ion-col>\n\n          <ion-col *ngIf="prod.accion == 1"><strong>Cantidad: </strong>{{prod.cantidad}}</ion-col>\n\n        </ion-row>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Repuestos y/o suministros nuevos:</strong></ion-col>\n\n      <ion-col>\n\n        <ion-row *ngFor="let pro of productos">\n\n          <ion-col *ngIf="pro.accion == 2"><strong>Producto: </strong>{{pro.name}}</ion-col>\n\n          <ion-col *ngIf="pro.accion == 2"><strong>Cantidad: </strong>{{pro.cantidad}}</ion-col>\n\n        </ion-row>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-col><strong>Nombre del Técnico:</strong></ion-col>\n\n      <ion-col>{{username}}</ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n  <div align="left">\n\n    <ion-item>\n\n      <ion-label stacked>Observaciones del Técnico</ion-label>\n\n      <ion-input type="text" [(ngModel)]="observation_user"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Cliente</ion-label>\n\n      <ion-select [(ngModel)]="cliente" #cli id="cli" (ionChange)="persistCliente()">\n\n        <ion-option value="addCustomer"> <--CREAR CLIENTE NUEVO--> </ion-option>\n\n        <ion-option *ngFor="let i of listaClientes" value="{{i.id}}">{{i.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Identificación del Contacto</ion-label>\n\n      <ion-input type="number" [(ngModel)]="functionary_vat"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Nombre del Funcionario</ion-label>\n\n      <ion-input type="text" [(ngModel)]="functionary_name"></ion-input>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label stacked>Email del Funcionario</ion-label>\n\n      <ion-input type="email" [(ngModel)]="functionary_email"></ion-input>\n\n    </ion-item>\n\n    <ion-item *ngIf="!finish">\n\n        <button ion-button color="danger" full (click)="openModal()">Crear Firma</button>\n\n    </ion-item>\n\n  </div>\n\n  <ion-list *ngIf="firma">\n\n    <ion-list-header>Firma del Responsable</ion-list-header>\n\n    <ion-card>\n\n      <ion-card-content>\n\n        <img src="{{firma}}">\n\n      </ion-card-content>\n\n    </ion-card>\n\n  </ion-list>\n\n  <button ion-button color="secondary" full (click)="save_acta()">Finalizar Proceso</button>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\acta-digital\acta-digital.html"*/,
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__["a" /* Camera */], __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__["a" /* FileChooser */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_1" /* Renderer2 */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* ModalController */]])
-], ActaDigitalPage);
-
-//# sourceMappingURL=acta-digital.js.map
 
 /***/ }),
 
@@ -2952,35 +2983,35 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_home_home__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(698);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_network__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_odoojsonrpc__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__directives_parallax_parallax__ = __webpack_require__(699);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_profile_profile__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_profile_profile__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_splash_screen__ = __webpack_require__(365);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__ = __webpack_require__(364);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_form_probabilidad_form_probabilidad__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_prospecto_prospecto__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_servicio_servicio__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_form_probabilidad_form_probabilidad__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_prospecto_prospecto__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_servicio_servicio__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_camera__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_file_chooser__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_file_transfer__ = __webpack_require__(700);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_file__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_android_permissions__ = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_storage__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_acta_digital_acta_digital__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_acta_digital_acta_digital__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_historial_servicios_historial_servicios__ = __webpack_require__(366);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_onesignal__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_onesignal__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pages_modal_modal__ = __webpack_require__(361);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_google_maps__ = __webpack_require__(701);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__angular_common_http__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_api_api__ = __webpack_require__(362);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pages_detalle_detalle__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_data_base_data_base__ = __webpack_require__(367);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_network_network__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_network_network__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ionic_native_sqlite__ = __webpack_require__(368);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3183,15 +3214,16 @@ Utils = __decorate([
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_probabilidad_form_probabilidad__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_probabilidad_form_probabilidad__ = __webpack_require__(357);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_utils__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__detalle_detalle__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_odoojsonrpc__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__profile_profile__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_onesignal__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__profile_profile__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_onesignal__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__acta_digital_acta_digital__ = __webpack_require__(162);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3201,6 +3233,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -3438,7 +3471,7 @@ var HomePage = (function () {
                 alerta.addButton({
                     text: 'OK',
                     handler: function (dataDesc) {
-                        _this.update_mantenimiento('cancel', data, dataDesc, servicio);
+                        _this.generateActaDigital('cancel', data, dataDesc, servicio);
                     }
                 });
                 alerta.present();
@@ -3461,7 +3494,7 @@ var HomePage = (function () {
                 });
             }
         }
-        alert.addButton('Cancel');
+        alert.addButton('Cancelar');
         alert.addButton({
             text: 'OK',
             handler: function (data) {
@@ -3477,11 +3510,11 @@ var HomePage = (function () {
                         checked: false
                     });
                 }
-                alerta.addButton('Cancel');
+                alerta.addButton('Cancelar');
                 alerta.addButton({
                     text: 'OK',
                     handler: function (dataDesc) {
-                        _this.update_mantenimiento('fail', data, dataDesc, servicio);
+                        _this.generateActaDigital('fail', data, dataDesc, servicio);
                     }
                 });
                 alerta.present();
@@ -3513,17 +3546,32 @@ var HomePage = (function () {
             }
         });
     };
-    HomePage.prototype.update_mantenimiento = function (motivo, cause, desc, servicio) {
+    HomePage.prototype.generateActaDigital = function (motivo, causa, detalleCausa, servicio) {
+        var infoCausa = [];
+        var infoDetalleCausa = [];
+        for (var i = 0; i < this.list_cause.length; i++) {
+            if (this.list_cause[i].id == causa) {
+                infoCausa[0] = this.list_cause[i].id;
+                infoCausa[1] = this.list_cause[i].name;
+            }
+        }
+        for (var j = 0; j < this.list_description.length; j++) {
+            if (this.list_description[j].id == detalleCausa) {
+                infoDetalleCausa[0] = this.list_description[j].id;
+                infoDetalleCausa[1] = this.list_description[j].name;
+            }
+        }
         var data = {
-            fail_cause_id: cause,
+            fail_cause_id: infoCausa,
             assignment_status: motivo,
-            fail_description_id: desc,
+            fail_description_id: infoDetalleCausa,
             finished: 'true',
             kanban_state: 'blocked'
         };
-        this.odooRpc.updateRecord(this.tableServicios, this.listaServicios[servicio].id, data);
-        this.utils.presentToast(this.listaServicios[servicio].name + " se Elimino con Exito", 5000, true, "top");
-        this.listaServicios.splice(servicio, 1);
+        var params = [];
+        params['dataMantenimiento'] = this.listaServicios[servicio];
+        params['data'] = data;
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__acta_digital_acta_digital__["a" /* ActaDigitalPage */], params);
     };
     return HomePage;
 }());
@@ -3544,7 +3592,7 @@ HomePage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_home_home__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_login_login__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_login_login__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_odoojsonrpc__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(18);
@@ -3552,10 +3600,10 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_splash_screen__ = __webpack_require__(365);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_utils__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_profile_profile__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_profile_profile__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_historial_servicios_historial_servicios__ = __webpack_require__(366);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_data_base_data_base__ = __webpack_require__(367);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_network_network__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_network_network__ = __webpack_require__(166);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
