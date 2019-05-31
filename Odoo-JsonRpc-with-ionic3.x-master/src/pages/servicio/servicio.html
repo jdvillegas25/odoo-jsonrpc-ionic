@@ -64,7 +64,7 @@
     <ion-item *ngIf="list_items.length > 0">
       <ion-label stacked>Equipo Afectado: </ion-label>
       <ion-select [(ngModel)]="products" cancelText="Cancelar" #product id="product"
-        (ngModelChange)="setCantidadItem(product.value)" interface="action-sheet">
+        (ngModelChange)="setCantidadItem(product.value)">
         <ion-option *ngFor="let item of list_items" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>

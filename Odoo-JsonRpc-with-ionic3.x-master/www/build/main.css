@@ -27986,6 +27986,14 @@ ion-navbar.toolbar {
   min-height: 46px;
 }
 
+.alert-md .alert-radio-label {
+  white-space: normal !important;
+}
+
+.alert-ios .alert-md .alert-checkbox-label {
+  white-space: normal !important;
+}
+
 page-acta-digital canvas {
   display: block;
   border: 1px solid #bbb2b2;
