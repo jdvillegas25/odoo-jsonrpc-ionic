@@ -282,7 +282,7 @@ __decorate([
 ], DetallePage.prototype, "directionsPanel", void 0);
 DetallePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
-        selector: "page-detalle",template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\detalle\detalle.html"*/'<ion-header>\n  <ion-navbar *ngIf="homeComercial" color="secondary">\n    <ion-title>Detalle Oportunidad {{name}}</ion-title>\n  </ion-navbar>\n  <ion-navbar *ngIf="homeMantenimiento" color="primary">\n    <ion-title>Detalle Mantenimiento {{name}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<!--Vista para comercial-->\n<ion-content *ngIf="homeComercial">\n  <ion-list>\n    <ion-card *ngFor="let item of data">\n      <ion-card-content>\n        <ion-row>\n          <ion-col col-12>\n            <h1><strong>Información Probabilidad:</strong></h1>\n          </ion-col>\n          <ion-col>\n            <strong>Oportunidad: </strong>\n            <p>{{item.name}}</p>\n          </ion-col>\n          <ion-col>\n            <strong>Probabilidad: </strong>\n            <h1 *ngIf="item.colorDanger">\n              <p style="color:#F44336;"> {{item.probability}}% </p>\n            </h1>\n            <h1 *ngIf="item.colorwarning">\n              <p style="color:#FF9800;"> {{item.probability}}% </p>\n            </h1>\n            <h1 *ngIf="item.colorSuccess">\n              <p style="color:#4CAF50;"> {{item.probability}}% </p>\n            </h1>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Descripción: </strong>\n            <p>{{item.description}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Fecha Creación:</strong>\n            <p>{{item.create_date}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Fecha de Cierre:</strong>\n            <p>{{item.date_closed}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Dias de Cierre:</strong>\n            <p>{{item.day_close}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Ciudad:</strong>\n            <p>{{item.city}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Acción:</strong>\n            <p>{{item.title_action}}</p>\n          </ion-col>\n        </ion-row>\n      </ion-card-content>\n      <ion-card-content>\n        <ion-row>\n          <ion-col col-12>\n            <h1><strong>Información Cliente:</strong></h1>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Cliente: </strong>\n            <p>{{item.partner_name}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Contacto: </strong>\n            <p>{{item.contact_name}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>eMail: </strong>\n            <p>{{item.email_from}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Teléfono: </strong>\n            <p>{{item.phone}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Celular: </strong>\n            <p>{{item.mobile}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Dirección: </strong>\n            <p>{{item.street}}</p>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col>\n            <button ion-fab color="secondary" (click)="addProspecto()">\n              <ion-icon name="md-add"></ion-icon>\n            </button>\n          </ion-col>\n        </ion-row>\n      </ion-card-content>\n    </ion-card>\n  </ion-list>\n</ion-content>\n\n<!--Vista para manenimiento-->\n<ion-content *ngIf="homeMantenimiento">\n  <div #map id="map"></div>\n  <ion-card id="direccion" #direccion>\n    <ion-card-content>\n      <div #directionsPanel></div>\n    </ion-card-content>\n  </ion-card>\n  <ion-list>\n    <ion-card *ngFor="let i of dataMantenimiento">\n      <ion-card-header>\n        <h1><strong>{{ i.name }}</strong></h1>\n      </ion-card-header>\n      <ion-card-content>\n        <h1 *ngIf="i.finished"><strong>Información General</strong></h1>\n        <p><strong>Resumen: </strong>{{i.issue_id[1]}}</p>\n        <p><strong>Número SAP: </strong>{{i.number_sap}}</p>\n        <p><strong>Identificación: </strong>{{i.sec}}</p>\n        <p><strong>Ciudad: </strong>{{i.city_id}}</p>\n        <p><strong>Tipo de Establecimiento: </strong>{{i.branch_type}}</p>\n        <p><strong>Cliente: </strong>{{i.partner_id[1]}}</p>\n        <p><strong>Locación: </strong>{{i.location_id}}</p>\n        <p><strong>Usuario: </strong>{{i.user_id[1]}}</p>\n        <p><strong>Fecha Inicial: </strong>{{i.date_start}}</p>\n        <p><strong>Descripción: </strong>{{i.description}}</p>\n        <br>\n        <h1 *ngIf="i.finished"><strong>Información del Sistema</strong></h1>\n        <p *ngIf="i.customer_asset_ids">\n          <strong>Sistema Afectado</strong>\n          {{i.customer_asset_ids[0].product_category_id[1]}}\n        </p>\n        <hr style="color: #212121 !important">\n        <div *ngFor="let p of i.customer_asset_ids">\n          <p *ngIf="i.finished">\n            <strong>Subsistema Afectado: </strong>\n            {{p.product_service_cat_id[1]}}\n          </p>\n          <p *ngIf="i.finished">\n            <strong>Equipo Afectado Afectado: </strong>\n            {{p.product_id[1]}}\n          </p>\n          <p *ngIf="p.replaced" style="color: #FF9800;">\n            <strong>Equipo Reparado</strong>\n          </p>\n          <p *ngIf="!p.replaced" style="color: #4CAF50;">\n            <strong>Equipo Nuevo</strong>\n          </p>\n          <hr style="color: #212121 !important">\n        </div>\n        <br>\n        <h1 *ngIf="i.finished"><strong>Información Del Funcionario</strong></h1>\n        <p *ngIf="i.finished"><strong>Observaciones: </strong>{{i.notes}}</p>\n        <p *ngIf="i.finished"><strong>Id Funcionario: </strong>{{i.functionary_vat}}</p>\n        <p *ngIf="i.finished"><strong>Funcionario: </strong>{{i.functionary_name}}</p>\n        <p *ngIf="i.finished"><strong>Email Funcionario: </strong>{{i.functionary_email}}</p>\n        <p *ngIf="i.finished">\n          <strong>Firma del Responsable: </strong>\n          <img [src]="sanitize(\'data:image/png;base64,\'+i.customer_sign_image)">\n        </p>\n        <p *ngFor="let p of i.customer_asset_ids">\n          <strong>Sistema Afectado</strong>\n        </p>\n      </ion-card-content>\n      <ion-row no-padding *ngIf="!i.finished">\n        <ion-col text-right>\n          <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">\n            <ion-icon name=\'share-alt\'></ion-icon>\n            Continuar Servicio\n          </button>\n          <button ion-button clear small color="danger" icon-start *ngIf="!i.finished" (click)="NotificarLlegada()">\n            <ion-icon name=\'notifications\'></ion-icon>\n            Notificar llegada\n          </button>\n        </ion-col>\n      </ion-row>\n    </ion-card>\n  </ion-list>\n  <!-- <div #map id="map"></div> -->\n</ion-content>\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\detalle\detalle.html"*/
+        selector: "page-detalle",template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\detalle\detalle.html"*/'<ion-header>\n  <ion-navbar *ngIf="homeComercial" color="secondary">\n    <ion-title>Detalle Oportunidad {{name}}</ion-title>\n  </ion-navbar>\n  <ion-navbar *ngIf="homeMantenimiento" color="primary">\n    <ion-title>Detalle Mantenimiento {{name}}</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<!--Vista para comercial-->\n<ion-content *ngIf="homeComercial">\n  <ion-list>\n    <ion-card *ngFor="let item of data">\n      <ion-card-content>\n        <ion-row>\n          <ion-col col-12>\n            <h1><strong>Información Probabilidad:</strong></h1>\n          </ion-col>\n          <ion-col>\n            <strong>Oportunidad: </strong>\n            <p>{{item.name}}</p>\n          </ion-col>\n          <ion-col>\n            <strong>Probabilidad: </strong>\n            <h1 *ngIf="item.colorDanger">\n              <p style="color:#F44336;"> {{item.probability}}% </p>\n            </h1>\n            <h1 *ngIf="item.colorwarning">\n              <p style="color:#FF9800;"> {{item.probability}}% </p>\n            </h1>\n            <h1 *ngIf="item.colorSuccess">\n              <p style="color:#4CAF50;"> {{item.probability}}% </p>\n            </h1>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Descripción: </strong>\n            <p>{{item.description}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Fecha Creación:</strong>\n            <p>{{item.create_date}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Fecha de Cierre:</strong>\n            <p>{{item.date_closed}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Dias de Cierre:</strong>\n            <p>{{item.day_close}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Ciudad:</strong>\n            <p>{{item.city}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Acción:</strong>\n            <p>{{item.title_action}}</p>\n          </ion-col>\n        </ion-row>\n      </ion-card-content>\n      <ion-card-content>\n        <ion-row>\n          <ion-col col-12>\n            <h1><strong>Información Cliente:</strong></h1>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Cliente: </strong>\n            <p>{{item.partner_name}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Contacto: </strong>\n            <p>{{item.contact_name}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>eMail: </strong>\n            <p>{{item.email_from}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Teléfono: </strong>\n            <p>{{item.phone}}</p>\n          </ion-col>\n          <ion-col col-6>\n            <strong>Celular: </strong>\n            <p>{{item.mobile}}</p>\n          </ion-col>\n          <ion-col col-12>\n            <strong>Dirección: </strong>\n            <p>{{item.street}}</p>\n          </ion-col>\n        </ion-row>\n        <ion-row>\n          <ion-col>\n            <button ion-fab color="secondary" (click)="addProspecto()">\n              <ion-icon name="md-add"></ion-icon>\n            </button>\n          </ion-col>\n        </ion-row>\n      </ion-card-content>\n    </ion-card>\n  </ion-list>\n</ion-content>\n\n<!--Vista para manenimiento-->\n<ion-content *ngIf="homeMantenimiento">\n  <div #map id="map"></div>\n  <ion-card id="direccion" #direccion>\n    <ion-card-content>\n      <div #directionsPanel></div>\n    </ion-card-content>\n  </ion-card>\n  <ion-list>\n    <ion-card *ngFor="let i of dataMantenimiento">\n      <ion-card-header>\n        <h1><strong>{{ i.name }}</strong></h1>\n      </ion-card-header>\n      <ion-card-content>\n        <h1 *ngIf="i.finished"><strong>Información General</strong></h1>\n        <p><strong>Resumen: </strong>{{i.issue_id[1]}}</p>\n        <p><strong>Número SAP: </strong>{{i.number_sap}}</p>\n        <p><strong>Identificación: </strong>{{i.sec}}</p>\n        <p><strong>Ciudad: </strong>{{i.city_id}}</p>\n        <p><strong>Tipo de Establecimiento: </strong>{{i.branch_type}}</p>\n        <p><strong>Cliente: </strong>{{i.partner_id[1]}}</p>\n        <p><strong>Locación: </strong>{{i.location_id}}</p>\n        <p><strong>Usuario: </strong>{{i.user_id[1]}}</p>\n        <p><strong>Fecha Inicial: </strong>{{i.date_start}}</p>\n        <p><strong>Descripción: </strong>{{i.description}}</p>\n        <br>\n        <h1 *ngIf="i.finished"><strong>Información del Sistema</strong></h1>\n        <p *ngIf="i.customer_asset_ids">\n          <strong>Sistema Afectado</strong>\n          {{i.customer_asset_ids[0].product_category_id[1]}}\n        </p>\n        <hr style="color: #212121 !important">\n        <div *ngFor="let p of i.customer_asset_ids">\n          <p *ngIf="i.finished">\n            <strong>Subsistema Afectado: </strong>\n            {{p.product_service_cat_id[1]}}\n          </p>\n          <p *ngIf="i.finished">\n            <strong>Equipo Afectado Afectado: </strong>\n            {{p.product_id[1]}}\n          </p>\n          <p *ngIf="p.replaced" style="color: #FF9800;">\n            <strong>Equipo Reparado</strong>\n          </p>\n          <p *ngIf="!p.replaced" style="color: #4CAF50;">\n            <strong>Equipo Nuevo</strong>\n          </p>\n          <hr style="color: #212121 !important">\n        </div>\n        <br>\n        <h1 *ngIf="i.finished"><strong>Información Del Funcionario</strong></h1>\n        <p *ngIf="i.finished"><strong>Observaciones: </strong>{{i.notes}}</p>\n        <p *ngIf="i.finished"><strong>Id Funcionario: </strong>{{i.functionary_vat}}</p>\n        <p *ngIf="i.finished"><strong>Funcionario: </strong>{{i.functionary_name}}</p>\n        <p *ngIf="i.finished"><strong>Email Funcionario: </strong>{{i.functionary_email}}</p>\n        <p *ngIf="i.finished">\n          <strong>Firma del Responsable: </strong>\n          <img [src]="sanitize(\'data:image/png;base64,\'+i.customer_sign_image)">\n        </p>\n        <p *ngFor="let p of i.customer_asset_ids">\n          <strong>Sistema Afectado</strong>\n        </p>\n      </ion-card-content>\n      <ion-row no-padding *ngIf="!i.finished">\n        <ion-col text-right>\n          <button ion-button clear small color="primary" icon-start *ngIf="!i.finished" (click)="continuarServicio()">\n            <ion-icon name=\'share-alt\'></ion-icon>\n            Continuar Servicio\n          </button>\n          <!-- <button ion-button clear small color="danger" icon-start *ngIf="!i.finished" (click)="NotificarLlegada()">\n            <ion-icon name=\'notifications\'></ion-icon>\n            Notificar llegada\n          </button> -->\n        </ion-col>\n      </ion-row>\n    </ion-card>\n  </ion-list>\n  <!-- <div #map id="map"></div> -->\n</ion-content>\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\detalle\detalle.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__["c" /* DomSanitizer */]])
 ], DetallePage);
@@ -575,6 +575,7 @@ var ActaDigitalPage = (function () {
                         quantity: pro.cantidad,
                         replaced: (pro.accion == 1) ? true : false,
                         asset_location: pro.ubication,
+                        serial_number: pro.serial_number,
                         asset_image: pro.pictures,
                         spare_location_id: null,
                         equipment_type_id: null,
@@ -804,10 +805,9 @@ ProfilePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_utils__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_android_permissions__ = __webpack_require__(363);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_onesignal__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_network__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_network_network__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_onesignal__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_network_network__ = __webpack_require__(166);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -825,15 +825,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var LoginPage = (function () {
-    function LoginPage(menu, navCtrl, navParams, odooRpc, utils, androidPermissions, oneSignal, loadingCtrl, alertCtrl, network, proNet) {
+    function LoginPage(menu, navCtrl, navParams, odooRpc, utils, oneSignal, loadingCtrl, alertCtrl, network, proNet) {
         this.menu = menu;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.odooRpc = odooRpc;
         this.utils = utils;
-        this.androidPermissions = androidPermissions;
         this.oneSignal = oneSignal;
         this.loadingCtrl = loadingCtrl;
         this.alertCtrl = alertCtrl;
@@ -958,7 +956,7 @@ LoginPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */])({
         selector: "page-login",template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\login\login.html"*/'<ion-content class="background grid-basic-page" text-center align-center>\n\n  <ion-grid style="margin:25% 0 25% 0">\n\n    <ion-row align-items-start>\n\n      <ion-col>\n\n        <div>\n\n          <ion-img chache bounds class="img-logo" src="assets/imgs/logo_login.png" alt="Logo All Service"></ion-img>\n\n        </div>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row text-center>\n\n      <ion-col col-12>\n\n        <ion-card>\n\n          <ion-card-content>\n\n            <div class="spacer" style="height: 10px;"></div>\n\n            <div [hidden]="!perfectUrl">\n\n              <form (ngSubmit)="login()" #registerForm="ngForm">\n\n                <div class="spacer" style="height: 10px;"></div>\n\n                <ion-item>\n\n                  <ion-input type="email" [(ngModel)]="email" name="email" placeholder="Correo o Usuario" required></ion-input>\n\n                </ion-item>\n\n                <div class="spacer" style="height: 5px;"></div>\n\n                <ion-item>\n\n                  <ion-input type="password" [(ngModel)]="password" name="pass" placeholder="Contraseña" required></ion-input>\n\n                </ion-item>\n\n                <div class="spacer" style="height: 10px;"></div>\n\n                <div class="spacer" style="height: 10px;"></div>\n\n                <!-- <ion-item>\n\n                  <ion-label style="color: #818181">Seleccion Base de Datos</ion-label>\n\n                  <ion-select [(ngModel)]="selectedDatabase" name="selectDatabase" style="color: #818181" required>\n\n                    <ion-option *ngFor="let item of dbList" value="{{item.dbName}}">{{item.dbName}}</ion-option>\n\n                  </ion-select>\n\n                </ion-item> -->\n\n                <button ion-button block round color="secondary" [disabled]="!registerForm.form.valid" (click)="login()">Ingresar</button>\n\n              </form>\n\n            </div>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\login\login.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* MenuController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_4__services_utils__["a" /* Utils */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_android_permissions__["a" /* AndroidPermissions */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_onesignal__["a" /* OneSignal */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_network__["a" /* Network */], __WEBPACK_IMPORTED_MODULE_8__providers_network_network__["a" /* NetworkProvider */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* MenuController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_4__services_utils__["a" /* Utils */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_onesignal__["a" /* OneSignal */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__["a" /* Network */], __WEBPACK_IMPORTED_MODULE_7__providers_network_network__["a" /* NetworkProvider */]])
 ], LoginPage);
 
 //# sourceMappingURL=login.js.map
@@ -1042,7 +1040,7 @@ webpackEmptyAsyncContext.id = 177;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OdooJsonRpc; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise__ = __webpack_require__(178);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(375);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(374);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(43);
@@ -2110,7 +2108,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ServicioPage = (function () {
-    function ServicioPage(navCtrl, navParams, odooRpc, loadingCtrl, platform, toastCtrl, camera, sanitizer, fileChooser, file, storage, renderer, plt, alert, api) {
+    function ServicioPage(navCtrl, navParams, odooRpc, loadingCtrl, platform, toastCtrl, camera, sanitizer, fileChooser, file, storage, renderer, plt, alert, api, alertCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.odooRpc = odooRpc;
@@ -2125,6 +2123,7 @@ var ServicioPage = (function () {
         this.plt = plt;
         this.alert = alert;
         this.api = api;
+        this.alertCtrl = alertCtrl;
         this.list_necesidades = [];
         this.list_items = [];
         this.arregloExtra = [];
@@ -2363,7 +2362,8 @@ var ServicioPage = (function () {
                         equipment_id: a.equipment_id ? a.equipment_id : null,
                         equipment_name: a.equipment_name ? a.equipment_name : null,
                         location_id: a.location_id ? a.location_id : null,
-                        location_name: a.location_name ? a.location_name : null
+                        location_name: a.location_name ? a.location_name : null,
+                        serial_number: ""
                     });
                 }
             });
@@ -2396,8 +2396,12 @@ var ServicioPage = (function () {
     ServicioPage.prototype.change_ubication = function (value, position) {
         this.listProducts[position].ubication = value;
     };
+    ServicioPage.prototype.change_serial = function (value, position) {
+        this.listProducts[position].serial_number = value;
+    };
     ServicioPage.prototype.continue_process = function () {
         var _this = this;
+        var bandera = true;
         var params = {};
         params["necesidad"] = [];
         params["servicios"] = [];
@@ -2407,40 +2411,54 @@ var ServicioPage = (function () {
         params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
         /*lista de los productos que hace referencia a los equipos afectados*/
         params["productos"] = this.listProducts;
-        /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
-        if (this.typeMaintenance == 'metalmecanico') {
-            params["locacion"] = this.spare_location;
-        }
-        /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
-        this.list_necesidades.forEach(function (nec) {
-            if (nec.id == _this.necCliente) {
-                params["necesidad"] = nec;
-            }
+        this.listProducts.forEach(function (produc) {
+            if (produc.pictures == "" || produc.accion == 0 || produc.ubication == "" || produc.serial_number == "")
+                bandera = false;
         });
-        /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
-        this.list_service_category.forEach(function (ser) {
-            if (Object(__WEBPACK_IMPORTED_MODULE_10_ionic_angular_util_util__["e" /* isArray */])(_this.idServicio)) {
-                _this.idServicio.forEach(function (idser) {
-                    if (ser.id == idser) {
+        if (bandera) {
+            /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
+            if (this.typeMaintenance == 'metalmecanico') {
+                params["locacion"] = this.spare_location;
+            }
+            /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
+            this.list_necesidades.forEach(function (nec) {
+                if (nec.id == _this.necCliente) {
+                    params["necesidad"] = nec;
+                }
+            });
+            /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
+            this.list_service_category.forEach(function (ser) {
+                if (Object(__WEBPACK_IMPORTED_MODULE_10_ionic_angular_util_util__["e" /* isArray */])(_this.idServicio)) {
+                    _this.idServicio.forEach(function (idser) {
+                        if (ser.id == idser) {
+                            params["servicios"].push(ser);
+                        }
+                    });
+                }
+                else {
+                    if (ser.id == _this.idServicio) {
                         params["servicios"].push(ser);
                     }
-                });
-            }
-            else {
-                if (ser.id == _this.idServicio) {
-                    params["servicios"].push(ser);
                 }
-            }
-        });
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__acta_digital_acta_digital__["a" /* ActaDigitalPage */], params);
+            });
+            this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__acta_digital_acta_digital__["a" /* ActaDigitalPage */], params);
+        }
+        else {
+            var alert_1 = this.alertCtrl.create({
+                title: 'ERROR',
+                subTitle: 'Por favor agregue la firma del encargado',
+                buttons: ['OK']
+            });
+            alert_1.present();
+        }
     };
     return ServicioPage;
 }());
 ServicioPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
-        selector: 'page-servicio',template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\servicio\servicio.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>Servicio</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding class="cards-bg">\n\n  <ion-list radio-group [(ngModel)]="typeMaintenance" #mantenimiento (ngModelChange)="get_necesidad_cliente()">\n\n    <ion-label>\n\n      Tipo De Mantenimiento\n\n    </ion-label>\n\n    <ion-item>\n\n      <ion-label>Electronico</ion-label>\n\n      <ion-radio value="electronico"></ion-radio>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label>Metal Mecanico</ion-label>\n\n      <ion-radio value="metalmecanico"></ion-radio>\n\n    </ion-item>\n\n  </ion-list>\n\n  <ion-list>\n\n\n\n    <!--Sistema Intervenido-->\n\n    <ion-item *ngIf="list_necesidades?.length > 0">\n\n      <ion-label stacked>Sistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad (ngModelChange)="getServiceCategory(necesidad.value)">\n\n        <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Subsistema Intervenido-->\n\n\n\n    <!--Para electronicos-->\n\n    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == \'electronico\'">\n\n      <ion-label stacked>Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_productos(servicioCatego.value)" multiple="true">\n\n        <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Para metalmecanicos-->\n\n    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == \'metalmecanico\'">\n\n      <ion-label stacked>Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego (ngModelChange)="get_spare_location(servicioCatego.value)">\n\n        <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n    \n\n    <!--Tercer Filtro en caso de ser equipos metalmecanicos-->\n\n    <ion-item *ngIf="list_spare_location?.length > 0 && typeMaintenance == \'metalmecanico\'">\n\n      <ion-label stacked> Locación del Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="spare_location" cancelText="Cancelar" #idspare_location (ngModelChange)="get_productos(idspare_location.value)">\n\n        <ion-option *ngFor="let sq of list_spare_location" value="{{sq.id}}">{{sq.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Equipo Afectado-->\n\n    <ion-item *ngIf="list_items.length > 0">\n\n      <ion-label stacked>Equipo Afectado: </ion-label>\n\n      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product (ngModelChange)="setCantidadItem(product.value)">\n\n        <ion-option *ngFor="let item of list_items" value="{{item.id}}"><ion-scroll scrollx="true"> {{item.name}}</ion-scroll></ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n  </ion-list>\n\n  <hr>\n\n  <!--Tarjetas de los productos usados-->\n\n  <ion-card *ngFor="let item of listProducts; let i = index">\n\n    <img *ngIf="item.image" [src]="sanitize(\'data:image/jpeg;base64,\'+item.image)" alt="{{item.name}}" />\n\n    <ion-card-content>\n\n      <ion-card-title>\n\n        {{item.name}}\n\n      </ion-card-title>\n\n      <p>\n\n        {{item.display_name}}\n\n      </p>\n\n      <ion-list radio-group>\n\n        <ion-list-header>\n\n          Acción\n\n        </ion-list-header>\n\n        <ion-item>\n\n          <ion-label>Reparación</ion-label>\n\n          <ion-radio value="1" (click)="change_action(1,i)"></ion-radio>\n\n        </ion-item>\n\n        <ion-item>\n\n          <ion-label>Cambio</ion-label>\n\n          <ion-radio value="2" (click)="change_action(2,i)"></ion-radio>\n\n        </ion-item>\n\n      </ion-list>\n\n      <ion-list>\n\n        <!-- <ion-item>\n\n          <ion-label floating>Cantidad: </ion-label>\n\n          <ion-input type="number" #cantidad (change)="change_cant(cantidad.value,i)"></ion-input>\n\n        </ion-item> -->\n\n        <ion-item>\n\n          <ion-label floating>Ubicación: </ion-label>\n\n          <ion-input type="text" #ubication (change)="change_ubication(ubication.value,i)"></ion-input>\n\n        </ion-item>\n\n      </ion-list>\n\n    </ion-card-content>\n\n    <ion-row no-padding>\n\n      <ion-col col-12>\n\n        <button ion-button clear full color="danger" icon-start (click)="take_pictures(i)">\n\n          <ion-icon name=\'camera\'></ion-icon>\n\n          Tomar Fotos\n\n        </button>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <!-- <ion-col col-4 *ngFor="let image of item.pictures">\n\n        <img src="data:image/jpeg;base64,{{image}}">\n\n      </ion-col> -->\n\n      <ion-col col-12>\n\n        <img *ngIf="item.pictures.length" src="data:image/jpeg;base64,{{item.pictures}}">\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-card>\n\n  <button *ngIf="listProducts?.length > 0" ion-button full color="secundary" (click)="continue_process()">Continuar\n\n    Proceso <ion-icon name=\'share-alt\'></ion-icon></button>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\servicio\servicio.html"*/,
+        selector: 'page-servicio',template:/*ion-inline-start:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\servicio\servicio.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>Servicio</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding class="cards-bg">\n\n  <ion-list radio-group [(ngModel)]="typeMaintenance" #mantenimiento (ngModelChange)="get_necesidad_cliente()">\n\n    <ion-label>\n\n      Tipo De Mantenimiento\n\n    </ion-label>\n\n    <ion-item>\n\n      <ion-label>Electronico</ion-label>\n\n      <ion-radio value="electronico"></ion-radio>\n\n    </ion-item>\n\n    <ion-item>\n\n      <ion-label>Metal Mecanico</ion-label>\n\n      <ion-radio value="metalmecanico"></ion-radio>\n\n    </ion-item>\n\n  </ion-list>\n\n  <ion-list>\n\n\n\n    <!--Sistema Intervenido-->\n\n    <ion-item *ngIf="list_necesidades?.length > 0">\n\n      <ion-label stacked>Sistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="necCliente" cancelText="Cancelar" #necesidad\n\n        (ngModelChange)="getServiceCategory(necesidad.value)">\n\n        <ion-option *ngFor="let necesidad of list_necesidades" value="{{necesidad.id}}">{{necesidad.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Subsistema Intervenido-->\n\n\n\n    <!--Para electronicos-->\n\n    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == \'electronico\'">\n\n      <ion-label stacked>Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego\n\n        (ngModelChange)="get_productos(servicioCatego.value)" multiple="true">\n\n        <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}\n\n        </ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Para metalmecanicos-->\n\n    <ion-item *ngIf="list_service_category?.length > 0 && typeMaintenance == \'metalmecanico\'">\n\n      <ion-label stacked>Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="idServicio" cancelText="Cancelar" #servicioCatego\n\n        (ngModelChange)="get_spare_location(servicioCatego.value)">\n\n        <ion-option *ngFor="let servicio of list_service_category" value="{{servicio.id}}">{{servicio.name}}\n\n        </ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Tercer Filtro en caso de ser equipos metalmecanicos-->\n\n    <ion-item *ngIf="list_spare_location?.length > 0 && typeMaintenance == \'metalmecanico\'">\n\n      <ion-label stacked> Locación del Subsistema Intervenido: </ion-label>\n\n      <ion-select [(ngModel)]="spare_location" cancelText="Cancelar" #idspare_location\n\n        (ngModelChange)="get_productos(idspare_location.value)">\n\n        <ion-option *ngFor="let sq of list_spare_location" value="{{sq.id}}">{{sq.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n\n\n    <!--Equipo Afectado-->\n\n    <!-- <ion-item> -->\n\n    <ion-item *ngIf="list_items.length > 0">\n\n      <ion-label stacked>Equipo Afectado: </ion-label>\n\n      <ion-select [(ngModel)]="products" cancelText="Cancelar" #product id="product"\n\n        (ngModelChange)="setCantidadItem(product.value)" interface="action-sheet">\n\n        <ion-option *ngFor="let item of list_items" value="{{item.id}}">{{item.name}}</ion-option>\n\n      </ion-select>\n\n    </ion-item>\n\n  </ion-list>\n\n  <hr>\n\n  <!--Tarjetas de los productos usados-->\n\n  <ion-card *ngFor="let item of listProducts; let i = index">\n\n    <img *ngIf="item.image" [src]="sanitize(\'data:image/jpeg;base64,\'+item.image)" alt="{{item.name}}" />\n\n    <ion-card-content>\n\n      <ion-card-title>\n\n        {{item.name}}\n\n      </ion-card-title>\n\n      <p>\n\n        {{item.display_name}}\n\n      </p>\n\n      <ion-list radio-group>\n\n        <ion-list-header>\n\n          Acción\n\n        </ion-list-header>\n\n        <ion-item>\n\n          <ion-label>Reparación</ion-label>\n\n          <ion-radio value="1" (click)="change_action(1,i)"></ion-radio>\n\n        </ion-item>\n\n        <ion-item>\n\n          <ion-label>Cambio</ion-label>\n\n          <ion-radio value="2" (click)="change_action(2,i)"></ion-radio>\n\n        </ion-item>\n\n      </ion-list>\n\n      <ion-list>\n\n        <ion-item>\n\n          <ion-label floating>Observaciones: </ion-label>\n\n          <ion-input type="text" #ubication (change)="change_ubication(ubication.value,i)"></ion-input>\n\n        </ion-item>\n\n      </ion-list>\n\n    </ion-card-content>\n\n    <ion-row no-padding>\n\n      <ion-col col-12>\n\n        <button ion-button clear full color="danger" icon-start (click)="take_pictures(i)">\n\n          <ion-icon name=\'camera\'></ion-icon>\n\n          Tomar Fotos\n\n        </button>\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <!-- <ion-col col-4 *ngFor="let image of item.pictures">\n\n        <img src="data:image/jpeg;base64,{{image}}">\n\n      </ion-col> -->\n\n      <ion-col col-12>\n\n        <img *ngIf="item.pictures.length" src="data:image/jpeg;base64,{{item.pictures}}">\n\n      </ion-col>\n\n    </ion-row>\n\n    <ion-row>\n\n      <ion-list>\n\n        <ion-item>\n\n          <ion-label floating>Serial: </ion-label>\n\n          <ion-input type="text" #serial (change)="change_serial(serial.value,i)"></ion-input>\n\n        </ion-item>\n\n      </ion-list>\n\n    </ion-row>\n\n  </ion-card>\n\n  <button *ngIf="listProducts?.length > 0" ion-button full color="secundary" (click)="continue_process()">Continuar\n\n    Proceso <ion-icon name=\'share-alt\'></ion-icon></button>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\xampp\htdocs\odoo-jsonrpc-ionic\Odoo-JsonRpc-with-ionic3.x-master\src\pages\servicio\servicio.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__["a" /* Camera */], __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__["a" /* FileChooser */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_9__providers_api_api__["a" /* ApiProvider */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__services_odoojsonrpc__["a" /* OdooJsonRpc */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* ToastController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__["a" /* Camera */], __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser__["c" /* DomSanitizer */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_chooser__["a" /* FileChooser */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__["a" /* File */], __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* Renderer */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_9__providers_api_api__["a" /* ApiProvider */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* AlertController */]])
 ], ServicioPage);
 
 //# sourceMappingURL=servicio.js.map
@@ -2669,7 +2687,7 @@ ApiProvider = __decorate([
 
 /***/ }),
 
-/***/ 366:
+/***/ 365:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2790,14 +2808,14 @@ HistorialServiciosPage = __decorate([
 
 /***/ }),
 
-/***/ 367:
+/***/ 366:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataBaseProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(368);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_sqlite__ = __webpack_require__(367);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2960,13 +2978,13 @@ DataBaseProvider = __decorate([
 
 /***/ }),
 
-/***/ 369:
+/***/ 368:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(370);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(374);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(369);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(373);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -2974,7 +2992,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 374:
+/***/ 373:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2986,40 +3004,38 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(164);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(698);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(697);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_network__ = __webpack_require__(68);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_odoojsonrpc__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__directives_parallax_parallax__ = __webpack_require__(699);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__directives_parallax_parallax__ = __webpack_require__(698);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_profile_profile__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_splash_screen__ = __webpack_require__(365);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_splash_screen__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__ = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_form_probabilidad_form_probabilidad__ = __webpack_require__(357);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_prospecto_prospecto__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_servicio_servicio__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_camera__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_file_chooser__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_file_transfer__ = __webpack_require__(700);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_file_transfer__ = __webpack_require__(699);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_file__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_android_permissions__ = __webpack_require__(363);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_storage__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_acta_digital_acta_digital__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_historial_servicios_historial_servicios__ = __webpack_require__(366);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_onesignal__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pages_modal_modal__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_google_maps__ = __webpack_require__(701);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__angular_common_http__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_api_api__ = __webpack_require__(362);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pages_detalle_detalle__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_data_base_data_base__ = __webpack_require__(367);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_network_network__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__ionic_native_sqlite__ = __webpack_require__(368);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_storage__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_acta_digital_acta_digital__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_historial_servicios_historial_servicios__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_onesignal__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_modal_modal__ = __webpack_require__(361);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_google_maps__ = __webpack_require__(700);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__angular_common_http__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__providers_api_api__ = __webpack_require__(362);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pages_detalle_detalle__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__providers_data_base_data_base__ = __webpack_require__(366);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_network_network__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_sqlite__ = __webpack_require__(367);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
 
 
 
@@ -3064,16 +3080,16 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* MyApp */],
             __WEBPACK_IMPORTED_MODULE_3__pages_home_home__["a" /* HomePage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_login_login__["a" /* LoginPage */],
-            __WEBPACK_IMPORTED_MODULE_26__pages_modal_modal__["a" /* ModalPage */],
+            __WEBPACK_IMPORTED_MODULE_25__pages_modal_modal__["a" /* ModalPage */],
             __WEBPACK_IMPORTED_MODULE_11__pages_profile_profile__["a" /* ProfilePage */],
             __WEBPACK_IMPORTED_MODULE_10__directives_parallax_parallax__["a" /* ParallaxDirective */],
             __WEBPACK_IMPORTED_MODULE_0__pages_add_customer_add_customer__["a" /* AddCustomerPage */],
             __WEBPACK_IMPORTED_MODULE_14__pages_form_probabilidad_form_probabilidad__["a" /* FormProbabilidadPage */],
             __WEBPACK_IMPORTED_MODULE_15__pages_prospecto_prospecto__["a" /* ProspectoPage */],
             __WEBPACK_IMPORTED_MODULE_16__pages_servicio_servicio__["a" /* ServicioPage */],
-            __WEBPACK_IMPORTED_MODULE_23__pages_acta_digital_acta_digital__["a" /* ActaDigitalPage */],
-            __WEBPACK_IMPORTED_MODULE_24__pages_historial_servicios_historial_servicios__["a" /* HistorialServiciosPage */],
-            __WEBPACK_IMPORTED_MODULE_30__pages_detalle_detalle__["a" /* DetallePage */]
+            __WEBPACK_IMPORTED_MODULE_22__pages_acta_digital_acta_digital__["a" /* ActaDigitalPage */],
+            __WEBPACK_IMPORTED_MODULE_23__pages_historial_servicios_historial_servicios__["a" /* HistorialServiciosPage */],
+            __WEBPACK_IMPORTED_MODULE_29__pages_detalle_detalle__["a" /* DetallePage */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -3081,23 +3097,23 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["g" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* MyApp */], {}, {
                 links: []
             }),
-            __WEBPACK_IMPORTED_MODULE_22__ionic_storage__["a" /* IonicStorageModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_28__angular_common_http__["b" /* HttpClientModule */],
+            __WEBPACK_IMPORTED_MODULE_21__ionic_storage__["a" /* IonicStorageModule */].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_27__angular_common_http__["b" /* HttpClientModule */],
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5_ionic_angular__["e" /* IonicApp */]],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* MyApp */],
             __WEBPACK_IMPORTED_MODULE_3__pages_home_home__["a" /* HomePage */],
             __WEBPACK_IMPORTED_MODULE_6__pages_login_login__["a" /* LoginPage */],
-            __WEBPACK_IMPORTED_MODULE_26__pages_modal_modal__["a" /* ModalPage */],
+            __WEBPACK_IMPORTED_MODULE_25__pages_modal_modal__["a" /* ModalPage */],
             __WEBPACK_IMPORTED_MODULE_11__pages_profile_profile__["a" /* ProfilePage */],
             __WEBPACK_IMPORTED_MODULE_0__pages_add_customer_add_customer__["a" /* AddCustomerPage */],
             __WEBPACK_IMPORTED_MODULE_14__pages_form_probabilidad_form_probabilidad__["a" /* FormProbabilidadPage */],
             __WEBPACK_IMPORTED_MODULE_15__pages_prospecto_prospecto__["a" /* ProspectoPage */],
             __WEBPACK_IMPORTED_MODULE_16__pages_servicio_servicio__["a" /* ServicioPage */],
-            __WEBPACK_IMPORTED_MODULE_23__pages_acta_digital_acta_digital__["a" /* ActaDigitalPage */],
-            __WEBPACK_IMPORTED_MODULE_24__pages_historial_servicios_historial_servicios__["a" /* HistorialServiciosPage */],
-            __WEBPACK_IMPORTED_MODULE_30__pages_detalle_detalle__["a" /* DetallePage */]
+            __WEBPACK_IMPORTED_MODULE_22__pages_acta_digital_acta_digital__["a" /* ActaDigitalPage */],
+            __WEBPACK_IMPORTED_MODULE_23__pages_historial_servicios_historial_servicios__["a" /* HistorialServiciosPage */],
+            __WEBPACK_IMPORTED_MODULE_29__pages_detalle_detalle__["a" /* DetallePage */]
         ],
         providers: [
             __WEBPACK_IMPORTED_MODULE_8__ionic_native_network__["a" /* Network */],
@@ -3110,13 +3126,12 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_19__ionic_native_file_transfer__["a" /* FileTransfer */],
             __WEBPACK_IMPORTED_MODULE_19__ionic_native_file_transfer__["b" /* FileTransferObject */],
             __WEBPACK_IMPORTED_MODULE_17__ionic_native_camera__["a" /* Camera */],
-            __WEBPACK_IMPORTED_MODULE_21__ionic_native_android_permissions__["a" /* AndroidPermissions */],
-            __WEBPACK_IMPORTED_MODULE_25__ionic_native_onesignal__["a" /* OneSignal */],
-            __WEBPACK_IMPORTED_MODULE_27__ionic_native_google_maps__["a" /* GoogleMaps */],
-            __WEBPACK_IMPORTED_MODULE_29__providers_api_api__["a" /* ApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_31__providers_data_base_data_base__["a" /* DataBaseProvider */],
-            __WEBPACK_IMPORTED_MODULE_32__providers_network_network__["a" /* NetworkProvider */],
-            __WEBPACK_IMPORTED_MODULE_33__ionic_native_sqlite__["a" /* SQLite */]
+            __WEBPACK_IMPORTED_MODULE_24__ionic_native_onesignal__["a" /* OneSignal */],
+            __WEBPACK_IMPORTED_MODULE_26__ionic_native_google_maps__["a" /* GoogleMaps */],
+            __WEBPACK_IMPORTED_MODULE_28__providers_api_api__["a" /* ApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_30__providers_data_base_data_base__["a" /* DataBaseProvider */],
+            __WEBPACK_IMPORTED_MODULE_31__providers_network_network__["a" /* NetworkProvider */],
+            __WEBPACK_IMPORTED_MODULE_32__ionic_native_sqlite__["a" /* SQLite */]
         ]
     })
 ], AppModule);
@@ -3586,7 +3601,7 @@ HomePage = __decorate([
 
 /***/ }),
 
-/***/ 698:
+/***/ 697:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3596,13 +3611,13 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_odoojsonrpc__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_splash_screen__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_splash_screen__ = __webpack_require__(364);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_utils__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_profile_profile__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_historial_servicios_historial_servicios__ = __webpack_require__(366);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_data_base_data_base__ = __webpack_require__(367);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_historial_servicios_historial_servicios__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_data_base_data_base__ = __webpack_require__(366);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_network_network__ = __webpack_require__(166);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3712,7 +3727,7 @@ MyApp = __decorate([
 
 /***/ }),
 
-/***/ 699:
+/***/ 698:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3909,5 +3924,5 @@ AddCustomerPage = __decorate([
 
 /***/ })
 
-},[369]);
+},[368]);
 //# sourceMappingURL=main.js.map

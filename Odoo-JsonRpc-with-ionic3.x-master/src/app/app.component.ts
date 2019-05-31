@@ -12,6 +12,7 @@ import { HistorialServiciosPage } from "../pages/historial-servicios/historial-s
 import { DataBaseProvider } from '../providers/data-base/data-base';
 import { NetworkProvider } from '../providers/network/network';
 
+
 @Component({
   templateUrl: "app.html",
   providers: [OdooJsonRpc, Utils]

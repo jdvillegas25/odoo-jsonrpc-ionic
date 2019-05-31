@@ -4,7 +4,6 @@ import { OdooJsonRpc } from "../../services/odoojsonrpc";
 import { Component } from "@angular/core";
 import { NavController, NavParams, LoadingController, AlertController, MenuController } from "ionic-angular";
 import { Utils } from "../../services/utils";
-import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { OneSignal } from '@ionic-native/onesignal';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../../providers/network/network';
@@ -25,7 +24,7 @@ export class LoginPage {
   private arregloPermisos: any;
   public logiData: any;
 
-  constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private androidPermissions: AndroidPermissions, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, public network: Network, public proNet: NetworkProvider) {
+  constructor(public menu: MenuController, public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, private utils: Utils, private oneSignal: OneSignal, private loadingCtrl: LoadingController, private alertCtrl: AlertController, public network: Network, public proNet: NetworkProvider) {
     this.getNetwork();
     this.menu.enable(false, 'salesman');
     this.menu.enable(false, 'technician');

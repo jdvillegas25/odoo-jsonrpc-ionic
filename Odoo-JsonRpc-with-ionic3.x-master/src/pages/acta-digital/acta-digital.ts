@@ -205,6 +205,7 @@ export class ActaDigitalPage {
         quantity: pro.cantidad,
         replaced: (pro.accion == 1) ? true : false,
         asset_location: pro.ubication,
+        serial_number: pro.serial_number,
         asset_image: pro.pictures,
         spare_location_id: null,
         equipment_type_id: null,

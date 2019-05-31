@@ -20,7 +20,7 @@
     "@angular/http": "4.4.4",
     "@angular/platform-browser": "4.4.4",
     "@angular/platform-browser-dynamic": "4.4.4",
-    "@ionic-native/android-permissions": "^3.14.0",
+    "@ionic-native/android-permissions": "^5.6.1",
     "@ionic-native/camera": "^3.14.0",
     "@ionic-native/core": "^3.14.0",
     "@ionic-native/file": "^3.14.0",

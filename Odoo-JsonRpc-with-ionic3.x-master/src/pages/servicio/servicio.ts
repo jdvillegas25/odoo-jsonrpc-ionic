@@ -47,10 +47,11 @@ export class ServicioPage {
     equipment_name: String;
     location_id: Number;
     location_name: String;
+    serial_number: String;
   }> = [];
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController, public api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private odooRpc: OdooJsonRpc, public loadingCtrl: LoadingController, platform: Platform, public toastCtrl: ToastController, private camera: Camera, private sanitizer: DomSanitizer, private fileChooser: FileChooser, private file: File, private storage: Storage, public renderer: Renderer, private plt: Platform, private alert: AlertController, public api: ApiProvider, private alertCtrl: AlertController) {
     this.dataServicio = {
       id: navParams.get("id"),
       issue_id: navParams.get("issue_id"),
@@ -284,7 +285,8 @@ export class ServicioPage {
             equipment_id: a.equipment_id ? a.equipment_id : null,
             equipment_name: a.equipment_name ? a.equipment_name : null,
             location_id: a.location_id ? a.location_id : null,
-            location_name: a.location_name ? a.location_name : null
+            location_name: a.location_name ? a.location_name : null,
+            serial_number: ""
           })
         }
       });
@@ -316,7 +318,11 @@ export class ServicioPage {
   private change_ubication(value, position) {
     this.listProducts[position].ubication = value;
   }
+  private change_serial(value, position) {
+    this.listProducts[position].serial_number = value;
+  }
   private continue_process() {
+    let bandera = true;
     let params = {};
     params["necesidad"] = [];
     params["servicios"] = [];
@@ -329,37 +335,53 @@ export class ServicioPage {
     params["dataMantenimiento"]["typeMaintenance"] = this.typeMaintenance;
 
     /*lista de los productos que hace referencia a los equipos afectados*/
+
     params["productos"] = this.listProducts;
+    this.listProducts.forEach(produc => {
 
-    /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
-    if (this.typeMaintenance == 'metalmecanico') {
-      params["locacion"] = this.spare_location;
-    }
+      if (produc.pictures == "" || produc.accion == 0 || produc.ubication == "" || produc.serial_number == "")
+        bandera = false;
 
-    /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
-    this.list_necesidades.forEach(nec => {
-      if (nec.id == this.necCliente) {
-        params["necesidad"] = nec;
-
-      }
     });
-    /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
-    this.list_service_category.forEach(ser => {
-      if (isArray(this.idServicio)) {
-        this.idServicio.forEach(idser => {
-          if (ser.id == idser) {
+    if (bandera) {
+      /*Si es metalmecanico, agrega un campo que se llama locacion que hace referencia al tercer filtro de metalmecanicos*/
+      if (this.typeMaintenance == 'metalmecanico') {
+        params["locacion"] = this.spare_location;
+      }
+
+      /*Necesidad del cliente o categoria del servicio que hace referencia al filtro de sistemas intervenidos*/
+      this.list_necesidades.forEach(nec => {
+        if (nec.id == this.necCliente) {
+          params["necesidad"] = nec;
+
+        }
+      });
+      /*servicios del cliente o subsistemas intervenidos que hace referencia al filtro de subsistemas intervenidos*/
+      this.list_service_category.forEach(ser => {
+        if (isArray(this.idServicio)) {
+          this.idServicio.forEach(idser => {
+            if (ser.id == idser) {
+              params["servicios"].push(ser);
+            }
+          });
+        } else {
+          if (ser.id == this.idServicio) {
             params["servicios"].push(ser);
           }
-        });
-      } else {
-        if (ser.id == this.idServicio) {
-          params["servicios"].push(ser);
         }
-      }
 
 
-    });
-    this.navCtrl.push(ActaDigitalPage, params);
+      });
+      this.navCtrl.push(ActaDigitalPage, params);
+    } else {
+      const alert = this.alertCtrl.create({
+        title: 'ERROR',
+        subTitle: 'Por favor agregue la firma del encargado',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
+
   }
 
 }

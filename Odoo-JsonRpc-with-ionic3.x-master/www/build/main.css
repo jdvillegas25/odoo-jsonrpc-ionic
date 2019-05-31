@@ -28005,7 +28005,7 @@ page-acta-digital .color-block {
 .md page-detalle #map {
   position: relative;
   width: 100%;
-  height: 100% !important;
+  height: 50% !important;
 }
 
 .ios page-detalle #direccion,
